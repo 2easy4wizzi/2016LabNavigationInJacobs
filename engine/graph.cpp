@@ -30,7 +30,7 @@ void Graph::ParseXml(string xmlPath)
     // Iterate over the nodes
     int nodeFloor = -1;
     string nodeName = "\0";
-    neighborPair neighbors[NUMOFNEIGBHORS];
+    neighborPair neighbors[NUM_OF_NEIGBHORS];
     Direction neighborDir;
     string neighborName = "\0";
     for (xml_node<> * vertex_node = root_node->first_node("Node"); vertex_node; vertex_node = vertex_node->next_sibling())
