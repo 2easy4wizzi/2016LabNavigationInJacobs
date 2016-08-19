@@ -1,41 +1,32 @@
 #include "graph.h"
-#include <QDebug>
+
 using namespace rapidxml;
-#define cout qDebug()<< __LINE__
+
 Graph::Graph(string xmlPath)
 {
-    cout <<xmlPath.c_str();
-//    char* path;
-//    _get_pgmptr(&path);
-//    cout << path;
+    ParseXml(xmlPath);
+}
+
+Graph::~Graph()
+{
+    delete(_nodes);
+    delete(_edges);
+}
+
+void Graph::ParseXml(string xmlPath)
+{
     _nodes = new list<Node>();
     _edges = new list<Edge>();
     xml_document<> doc;
     xml_node<> * root_node;
     // Read the xml file into a vector
-
-    ifstream theFile("C:/workspace/Nav/Nav/dependencies/rooms.xml");
-//    ifstream theFile0("../../dependencies/rooms.xml");
-//    ifstream theFile1("../../../dependencies/rooms.xml");
-//    ifstream theFile2("../dependencies/rooms.xml");
-//    ifstream theFile3("dependencies/rooms.xml");
-
-
-
-
-
-
+    ifstream theFile(xmlPath);
     vector<char> buffer((istreambuf_iterator<char>(theFile)), istreambuf_iterator<char>());
     buffer.push_back('\0');
     // Parse the buffer using the xml file parsing library into doc
     doc.parse<0>(&buffer[0]);
     // Find our root node
     root_node = doc.first_node("Graph");
-//    if (!root_node)
-//    {
-//        cout << "root is null";
-//        exit;
-//    }
     // Iterate over the nodes
     int nodeFloor = -1;
     string nodeName = "\0";
@@ -60,15 +51,6 @@ Graph::Graph(string xmlPath)
             Node *node = new Node(nodeName, nodeFloor, neighbors);
             _nodes->push_back(*node);
     }
-    cout << "finished"<<endl;
-}
-
-
-
-Graph::~Graph()
-{
-    delete(_nodes);
-    delete(_edges);
 }
 
 list<Node> Graph::GetGrapghNodes() const
@@ -81,12 +63,4 @@ list<Edge> Graph::GetGrapghEdges() const
     return *_edges;
 }
 
-void Graph::AddToNodesList(Node* node)
-{
-    _nodes->push_back(*node);
-}
 
-void Graph::AddToEdgesList(Edge* edge)
-{
-    _edges->push_back(*edge);
-}

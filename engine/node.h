@@ -1,14 +1,14 @@
 #ifndef NODE_H
 #define NODE_H
+#include "includes.h"
 
 
 #define neighborPair pair< Direction,string >
-#define NUMOFNEIGBHORS 4 // update to 8 ?
+#define NUM_OF_NEIGBHORS 4
 
-#include "includes.h"
 enum Direction {North, East, South, West, Invalid};
-const string direction_names[] = { "North", "East", "South" ,"West" };
 const map<string, Direction> dirMap = { { "North", North },{ "East", East },{ "South", South },{ "West", West } };
+
 
 class Node
 {
@@ -18,10 +18,9 @@ private:
     int _floor;
     int _edgeWeightToPrevious; // usedfor back tracking the weights on the shortest path
     Node* _previosNode; // used for backtracking the nodes on the shortest path
-    neighborPair _neighbors[NUMOFNEIGBHORS]; // contains the neighbors at 4 directions
+    neighborPair _neighbors[NUM_OF_NEIGBHORS]; // contains the neighbors at 4 directions
 public:
-    Node();
-    Node(string name,int floor, neighborPair (&neighbors)[NUMOFNEIGBHORS]);
+    Node(string name,int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS]);
     ~Node();
 
     string GetName() const;
@@ -33,9 +32,7 @@ public:
     void SetEdgeWeightToPrevious(int eWeight);
     Node* GetPreviosNode() const;
     void SetPreviosNode(Node* previos) ;
-    const basic_string<char>GetNeighborDirection(string const *neighborName);
-    const pair<Direction, string> * GetNeihbors() const;
-    // add set for _neighbors ?
+     pair<Direction, string> *GetNeihbors() ;
 };
 
 #endif // NODE_H

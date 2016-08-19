@@ -22,6 +22,7 @@
 #define cout qDebug()<< __LINE__
 #define xxx qDebug()<< __LINE__ ;
 
+const QMap <Direction,QString> dirMap2 = { {  North, "North"},{  East , "East" },{  South ,"South" },{  West,"West" } };
 
 class Nav : public QWidget
 {

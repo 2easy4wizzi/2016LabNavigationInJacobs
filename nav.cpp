@@ -25,14 +25,18 @@ void Nav::readRoomsFromXml()//temp solution
 {
     //m_roomsObjects = readRoomsFromXmlUsingEngine(roomsXmlPath);
     Graph* graph = new Graph(roomsXmlPath.toUtf8().constData());
-    QMap<QString,QString> room1;
-    room1["name"] = "room1";
-    room1["id"] = "1";
-    QMap<QString,QString> room2;
-    room2["name"] = "room2";
-    room2["id"] = "2";
-    m_roomsObjects.push_back(room1);
-    m_roomsObjects.push_back(room2);
+    list<Node> nodetList=  graph->GetGrapghNodes();
+    for (Node node : nodetList){
+        QMap<QString,QString> room;
+        room["id"] = QString::number(node.GetId());
+        room["name"] = node.GetName().c_str();
+        const pair<Direction, string> * neighbos = node.GetNeihbors();
+        for (int i=0; i<NUM_OF_NEIGBHORS ; i++){
+            room[dirMap2[neighbos[i].first]] = neighbos[i].second.c_str();
+        }
+        room["floor"] = QString::number(node.GetNodeFloor());
+        m_roomsObjects.push_back(room);
+    }
     cout << m_roomsObjects;
 }
 

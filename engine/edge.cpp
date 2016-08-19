@@ -1,13 +1,5 @@
 #include "edge.h"
 
-Edge::Edge()
-{
-    _weight = -1;
-    _floor = -1;
-    _edgeType = NotInitialized;
-    _node1 = NULL;
-    _node2 = NULL;
-}
 
 Edge::Edge(int weight, int floor, Node* node1, Node* node2, EdgeType edgeType )
 {

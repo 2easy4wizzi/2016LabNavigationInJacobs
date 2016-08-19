@@ -6,8 +6,7 @@ const QString fontSize = "font-size: 20px;";
 const QString border = "border: 1px solid black;";
 const QString globalTextAttributes = fontType + fontSize + border;
 
-const QString roomsXmlPath = "../../Dependencies/rooms.xml";
-//const QString roomsXmlPath = "C:/workspace/Nav/Nav/dependencies/rooms.xml";
+const QString roomsXmlPath = "../Nav/dependencies/rooms.xml";
 const QString projectTitleLabelText = "<project title>";
 const QString projectTitleLabelStyle  = "background-color: yellow;";
 const QString windowTitleText  = "<window title>";
