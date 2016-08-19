@@ -1,0 +1,38 @@
+#ifndef EDGE_H
+#define EDGE_H
+
+#include "includes.h"
+#include "node.h"
+//class Node;
+
+//static int EdgesId = 0;
+enum EdgeType { NotInitialized,Regular,Elevator,Stairs };
+const string EdgeType_name[] = { "NotInitialized", "Regular", "Elevator" ,"Stairs" };
+
+
+class Edge
+{
+private:
+    int _weight;
+    int _floor;
+    EdgeType _edgeType;
+    Node* _node1;
+    Node* _node2;
+public:
+        Edge();
+        Edge(int weight, int floor, Node* node1, Node* node2, EdgeType edgeType = NotInitialized);
+    ~Edge();
+
+    int GetWeight() const;
+    void SetWeight(int eWeight);
+    int GetEdgeFloor() const;
+    void SetEdgeFloor(int floorNum);
+    EdgeType GetEdgeType() const;
+    void SetEdgeType(EdgeType eType);
+    Node* GetNode1() const;
+    void SetNode1(Node* node1);
+    Node* GetNode2() const;
+    void SetNode2(Node* node2);
+};
+
+#endif // EDGE_H

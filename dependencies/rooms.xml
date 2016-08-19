@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Graph>
+    <Node name="A" floor="0" >
+        <Neighbor direction="North" name="B"> </Neighbor>
+        <Neighbor direction="East" name="C"> </Neighbor>
+        <Neighbor direction="South" name="D"> </Neighbor>
+        <Neighbor direction="West" name="E"> </Neighbor>
+    </Node>
+    <Node name="B" floor="0" >
+        <Neighbor direction="North" name="H"> </Neighbor>
+        <Neighbor direction="East" name="F"> </Neighbor>
+        <Neighbor direction="South" name="A"> </Neighbor>
+        <Neighbor direction="West" name="P"> </Neighbor>
+    </Node>	
+</Graph>
