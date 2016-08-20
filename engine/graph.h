@@ -33,7 +33,8 @@ public:
 	list<Node*> GetGrapghNodes() const;
 	list<Edge*> GetGrapghEdges() const;
 	Node* GetNodeByName(string nodeName);
-	list<pathRoom> GetShortestpath(Node* start, Node* end);
+    list<pathRoom> GetShortestPath(Node* start, Node* end);
+    list<pathRoom> GetShrinkendShortestPath();
 };
 
 #endif // GRAPH_H

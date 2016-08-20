@@ -26,9 +26,9 @@
     </Node>	
 	<Node name="E" floor="0" >
         <Neighbor direction="North" name="D"> </Neighbor>
-		<Neighbor direction="East" name="B"> </Neighbor>
+		<Neighbor direction="East" name="F"> </Neighbor>
 		<Neighbor direction="South" name=""> </Neighbor>
-		<Neighbor direction="West" name="F"> </Neighbor>
+		<Neighbor direction="West" name="B"> </Neighbor>
     </Node>		
 	<Node name="F" floor="0" >
         <Neighbor direction="North" name=""> </Neighbor>

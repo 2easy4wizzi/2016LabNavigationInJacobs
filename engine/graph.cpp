@@ -84,8 +84,6 @@ void Graph::ParseXmlEdges(string xmlPathEdges)
             // find node1 and node2 of the edge
             Node* node1 = NULL;
             Node* node2 = NULL;
-//            list<Node*>::iterator iterNode = _nodes->begin();
-//            list<Node*>::iterator iterEnd = _nodes->end();
             for (Node* node : *_nodes)
             {
                 if (node->GetName() == nodeName1)
@@ -125,7 +123,7 @@ Node* Graph::GetNodeByName(string nodeName)
 	return NULL;
 }
 
-list<pathRoom> Graph::GetShortestpath(Node* start, Node* end)
+list<pathRoom> Graph::GetShortestPath(Node* start, Node* end)
 {
 	//if (_nodes == NULL || _edges == NULL) return NULL;
 	_shortestPath = new list<pathRoom>;
@@ -196,4 +194,48 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end)
 	_shortestPath->push_back(endingRoom);
 
 	return *_shortestPath;
+}
+
+list<pathRoom> Graph::GetShrinkendShortestPath()
+{
+    //if (_shortestPath == NULL)
+    list<pathRoom>* shrinkedShortestPath = new list<pathRoom>;
+    list<pathRoom>::iterator iter1 = _shortestPath->begin();
+    list<pathRoom>::iterator iter2 = _shortestPath->begin();
+    ++iter2;
+    for (; iter1 != _shortestPath->end() && iter2!= _shortestPath->end(); ++iter1,++iter2)
+    {
+        bool stop = false;
+        bool advance = false;
+        string dir = iter1->direction;
+        int dis = iter1->distance;
+        while ((!stop) && iter2 != _shortestPath->end())
+        {
+            if (iter1->direction == iter2->direction)
+            {
+                dis += iter2->distance;
+                advance = true;
+                ++iter2;
+            }
+            else
+            {
+                stop = true;
+            }
+        }
+        pathRoom pRoom = { iter1->room,dis,dir };
+        shrinkedShortestPath->push_back(pRoom);
+        if (advance) { iter1 = iter2; }
+
+    }
+    iter1 = _shortestPath->end();
+    --iter1;
+    iter2 = shrinkedShortestPath->end();
+    --iter2;
+    if (iter2->room != iter1->room)
+    {
+        pathRoom endPathRoom = { iter1->room,0,"" };
+        shrinkedShortestPath->push_back(endPathRoom);
+    }
+    return *shrinkedShortestPath;
+
 }
