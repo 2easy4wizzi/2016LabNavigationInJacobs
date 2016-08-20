@@ -5,8 +5,7 @@
 #include "node.h"
 
 enum EdgeType { NotInitialized ,Regular,Elevator,Stairs };
-const string EdgeType_name[] = { "NotInitialized", "Regular", "Elevator" ,"Stairs" };
-
+//const string EdgeType_name[] = { "NotInitialized", "Regular", "Elevator" ,"Stairs" };
 
 class Edge
 {

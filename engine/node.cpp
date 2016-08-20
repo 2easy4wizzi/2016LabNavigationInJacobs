@@ -70,6 +70,20 @@ void Node::SetPreviosNode(Node* previos)
     _previosNode = previos;
 }
 
+const basic_string<char>Node::GetNeighborDirection(string neighborName)
+{
+	string result = "";
+	if ((neighborName).empty()) return NULL;
+    for (size_t i = 0; i < NUM_OF_NEIGBHORS; i++)
+	{
+		if (_neighbors[i].second == neighborName)
+        {
+            map<Direction,basic_string<char> >::const_iterator it = dirRevMap.find(_neighbors[i].first);
+            return (*it).second;
+        }
+	}
+	return result;
+}
 
  pair<Direction, string> * Node::GetNeihbors()
 {

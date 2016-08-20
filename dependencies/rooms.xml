@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Graph>
     <Node name="A" floor="0" >
-        <Neighbor direction="North" name="B"> </Neighbor>
-        <Neighbor direction="East" name="C"> </Neighbor>
-        <Neighbor direction="South" name="D"> </Neighbor>
-        <Neighbor direction="West" name="E"> </Neighbor>
+        <Neighbor direction="North" name=""> </Neighbor>
+		<Neighbor direction="East" name="B"> </Neighbor>
+		<Neighbor direction="South" name=""> </Neighbor>
+		<Neighbor direction="West" name=""> </Neighbor>
     </Node>
-    <Node name="B" floor="0" >
-        <Neighbor direction="North" name="H"> </Neighbor>
-        <Neighbor direction="East" name="F"> </Neighbor>
-        <Neighbor direction="South" name="A"> </Neighbor>
-        <Neighbor direction="West" name="P"> </Neighbor>
+	<Node name="B" floor="0" >
+        <Neighbor direction="North" name="C"> </Neighbor>
+		<Neighbor direction="East" name="E"> </Neighbor>
+		<Neighbor direction="South" name=""> </Neighbor>
+		<Neighbor direction="West" name="A"> </Neighbor>
+    </Node>
+	<Node name="C" floor="0" >
+        <Neighbor direction="North" name=""> </Neighbor>
+		<Neighbor direction="East" name="D"> </Neighbor>
+		<Neighbor direction="South" name="B"> </Neighbor>
+		<Neighbor direction="West" name=""> </Neighbor>
     </Node>	
+	<Node name="D" floor="0" >
+        <Neighbor direction="North" name=""> </Neighbor>
+		<Neighbor direction="East" name=""> </Neighbor>
+		<Neighbor direction="South" name="E"> </Neighbor>
+		<Neighbor direction="West" name="C"> </Neighbor>
+    </Node>	
+	<Node name="E" floor="0" >
+        <Neighbor direction="North" name="D"> </Neighbor>
+		<Neighbor direction="East" name="B"> </Neighbor>
+		<Neighbor direction="South" name=""> </Neighbor>
+		<Neighbor direction="West" name="F"> </Neighbor>
+    </Node>		
+	<Node name="F" floor="0" >
+        <Neighbor direction="North" name=""> </Neighbor>
+		<Neighbor direction="East" name=""> </Neighbor>
+		<Neighbor direction="South" name=""> </Neighbor>
+		<Neighbor direction="West" name="E"> </Neighbor>
+    </Node>		
 </Graph>

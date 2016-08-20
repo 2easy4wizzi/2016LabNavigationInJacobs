@@ -8,6 +8,7 @@
 
 enum Direction {North, East, South, West, Invalid};
 const map<string, Direction> dirMap = { { "North", North },{ "East", East },{ "South", South },{ "West", West } };
+const map< Direction, string> dirRevMap = { { North,"North"  },{ East,"East"  },{ South, "South"  },{ West,"West"  } };
 
 
 class Node
@@ -32,6 +33,7 @@ public:
     void SetEdgeWeightToPrevious(int eWeight);
     Node* GetPreviosNode() const;
     void SetPreviosNode(Node* previos) ;
+	const basic_string<char>GetNeighborDirection(string neighborName);
      pair<Direction, string> *GetNeihbors() ;
 };
 
