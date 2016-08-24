@@ -198,46 +198,47 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end)
     return *shortestPath;
 }
 
-list<pathRoom> Graph::GetShrinkendShortestPath()
-{
-    //if (_shortestPath == NULL)
-    list<pathRoom>* shrinkedShortestPath = new list<pathRoom>;
-    list<pathRoom>::iterator iter1 = _shortestPath->begin();
-    list<pathRoom>::iterator iter2 = _shortestPath->begin();
-    ++iter2;
-    for (; iter1 != _shortestPath->end() && iter2!= _shortestPath->end(); ++iter1,++iter2)
-    {
-        bool stop = false;
-        bool advance = false;
-        string dir = iter1->direction;
-        int dis = iter1->distance;
-        while ((!stop) && iter2 != _shortestPath->end())
-        {
-            if (iter1->direction == iter2->direction)
-            {
-                dis += iter2->distance;
-                advance = true;
-                ++iter2;
-            }
-            else
-            {
-                stop = true;
-            }
-        }
-        pathRoom pRoom = { iter1->room,dis,dir };
-        shrinkedShortestPath->push_back(pRoom);
-        if (advance) { iter1 = iter2; }
+//list<pathRoom> Graph::GetShrinkendShortestPath()
+//{
+//    list<pathRoom>* _shortestPath = &(GetShortestpath(NULL, NULL));
+//    //if (_shortestPath == NULL)
+//    list<pathRoom>* shrinkedShortestPath = new list<pathRoom>;
+//    list<pathRoom>::iterator iter1 = _shortestPath->begin();
+//    list<pathRoom>::iterator iter2 = _shortestPath->begin();
+//    ++iter2;
+//    for (; iter1 != _shortestPath->end() && iter2!= _shortestPath->end(); ++iter1,++iter2)
+//    {
+//        bool stop = false;
+//        bool advance = false;
+//        string dir = iter1->direction;
+//        int dis = iter1->distance;
+//        while ((!stop) && iter2 != _shortestPath->end())
+//        {
+//            if (iter1->direction == iter2->direction)
+//            {
+//                dis += iter2->distance;
+//                advance = true;
+//                ++iter2;
+//            }
+//            else
+//            {
+//                stop = true;
+//            }
+//        }
+//        pathRoom pRoom = { iter1->room,dis,dir };
+//        shrinkedShortestPath->push_back(pRoom);
+//        if (advance) { iter1 = iter2; }
 
-    }
-    iter1 = _shortestPath->end();
-    --iter1;
-    iter2 = shrinkedShortestPath->end();
-    --iter2;
-    if (iter2->room != iter1->room)
-    {
-        pathRoom endPathRoom = { iter1->room,0,"" };
-        shrinkedShortestPath->push_back(endPathRoom);
-    }
-    return *shrinkedShortestPath;
+//    }
+//    iter1 = _shortestPath->end();
+//    --iter1;
+//    iter2 = shrinkedShortestPath->end();
+//    --iter2;
+//    if (iter2->room != iter1->room)
+//    {
+//        pathRoom endPathRoom = { iter1->room,0,"" };
+//        shrinkedShortestPath->push_back(endPathRoom);
+//    }
+//    return *shrinkedShortestPath;
 
-}
+//}

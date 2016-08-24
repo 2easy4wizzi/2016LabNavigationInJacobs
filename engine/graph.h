@@ -33,6 +33,7 @@ public:
     list<Node*> GetGrapghNodes() const;
     list<Edge*> GetGrapghEdges() const;
     list<pathRoom> GetShortestpath(Node* start, Node* end);
+//    list<pathRoom> GetShrinkendShortestPath();
 
 private:
 	list<Node*>* _nodes;
