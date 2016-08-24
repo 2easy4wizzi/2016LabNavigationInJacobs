@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Graph>
-    <Edge weight="3" floor="0" type="Regular" node1="A" node2="B"></Edge>
-    <Edge weight="2" floor="0" type="Stairs" node1="B" node2="C"></Edge>
-	<Edge weight="4" floor="0" type="Elevator" node1="C" node2="D"></Edge>
-	<Edge weight="0" floor="0" type="Stairs" node1="E" node2="D"></Edge>
-	<Edge weight="11" floor="0" type="Regular" node1="B" node2="E"></Edge>
-	<Edge weight="1" floor="0" type="Regular" node1="F" node2="E"></Edge>
-</Graph>
