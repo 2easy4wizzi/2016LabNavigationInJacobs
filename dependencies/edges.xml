@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Graph>
+    <Edge Weight="3" Floor="0" Type="Regular" Node1="A" Node2="B"></Edge>
+    <Edge Weight="2" Floor="0" Type="Stairs" Node1="B" Node2="C"></Edge>
+	<Edge Weight="4" Floor="0" Type="Elevator" Node1="C" Node2="D"></Edge>
+	<Edge Weight="0" Floor="0" Type="Stairs" Node1="E" Node2="D"></Edge>
+        <Edge Weight="11" Floor="0" Type="Regular" Node1="B" Node2="E"></Edge>
+	<Edge Weight="1" Floor="0" Type="Regular" Node1="F" Node2="E"></Edge>
+</Graph>
