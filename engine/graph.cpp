@@ -1,7 +1,7 @@
 #include "graph.h"
-//#include <QDebug>
-//#define cout qDebug()<< __LINE__
-//#define xxx qDebug()<< __LINE__ ;
+#include <QDebug>
+#define cout qDebug()<< __LINE__
+#define xxx qDebug()<< __LINE__ ;
 
 map<string, EdgeType> typeMap = { { "NotInitialized", NotInitialized },{ "Regular", Regular },{ "Elevator", Elevator },{ "Stairs", Stairs } };
 
@@ -195,50 +195,69 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end)
 //    pathRoom endingRoom = { end,0,"" };
 //    shortestPath->push_back(endingRoom);
 
-    return *shortestPath;
+    return GetShrinkendShortestPath(*shortestPath);
 }
 
-//list<pathRoom> Graph::GetShrinkendShortestPath()
-//{
-//    list<pathRoom>* _shortestPath = &(GetShortestpath(NULL, NULL));
-//    //if (_shortestPath == NULL)
-//    list<pathRoom>* shrinkedShortestPath = new list<pathRoom>;
-//    list<pathRoom>::iterator iter1 = _shortestPath->begin();
-//    list<pathRoom>::iterator iter2 = _shortestPath->begin();
-//    ++iter2;
-//    for (; iter1 != _shortestPath->end() && iter2!= _shortestPath->end(); ++iter1,++iter2)
-//    {
-//        bool stop = false;
-//        bool advance = false;
-//        string dir = iter1->direction;
-//        int dis = iter1->distance;
-//        while ((!stop) && iter2 != _shortestPath->end())
-//        {
-//            if (iter1->direction == iter2->direction)
-//            {
-//                dis += iter2->distance;
-//                advance = true;
-//                ++iter2;
-//            }
-//            else
-//            {
-//                stop = true;
-//            }
-//        }
-//        pathRoom pRoom = { iter1->room,dis,dir };
-//        shrinkedShortestPath->push_back(pRoom);
-//        if (advance) { iter1 = iter2; }
+list<pathRoom> Graph::GetShrinkendShortestPath(list<pathRoom> shortestPath)
+{
+    //if (shortestPath == NULL)
+    list<pathRoom>* shrinkedShortestPath = new list<pathRoom>;
+    list<pathRoom>::iterator iter1 = shortestPath.begin();
+    list<pathRoom>::iterator iter2 = shortestPath.begin();
+    ++iter2;
 
-//    }
-//    iter1 = _shortestPath->end();
-//    --iter1;
-//    iter2 = shrinkedShortestPath->end();
-//    --iter2;
-//    if (iter2->room != iter1->room)
-//    {
-//        pathRoom endPathRoom = { iter1->room,0,"" };
-//        shrinkedShortestPath->push_back(endPathRoom);
-//    }
-//    return *shrinkedShortestPath;
+    list<pathRoom>::iterator it = shortestPath.begin();
+    while(it != shortestPath.end()){
+        cout << it->room->GetName().c_str();
+        it++;
+    }
+    bool lastWasMerged = false;
+    for (unsigned int maxIters=0;
+         iter1 != shortestPath.end() && iter2!= shortestPath.end()
+         && maxIters<shortestPath.size() && iter1 != iter2;
+         maxIters++, ++iter1,++iter2)
+    {
+        bool stop = false;
+        bool advance = false;
+        string dir = iter1->direction;
+        int dis = iter1->distance;
+        int nextNode = iter1->nextRoomInPathId;
+        while ((!stop) && iter2 != shortestPath.end())
+        {
+            if (iter1->direction == iter2->direction)
+            {
+                dis += iter2->distance;
+                nextNode = iter2->nextRoomInPathId;
+                advance = true;
+                lastWasMerged = true;
+                ++iter2;
+            }
+            else
+            {
+                lastWasMerged = false;
+                stop = true;
+            }
+        }
+        pathRoom pRoom = { iter1->room,dis,dir,nextNode };
+        shrinkedShortestPath->push_back(pRoom);
+        if (advance) { iter1 = iter2; }
+    }
+
+    if(!lastWasMerged)
+    {
+        iter1 = shortestPath.end();
+        --iter1;
+        cout << "iter1: " << iter1->room->GetName().c_str();
+        iter2 = shrinkedShortestPath->end();
+        --iter2;
+        cout << "iter2: " << iter2->room->GetName().c_str();
+        if (iter2->room != iter1->room)
+        {
+            pathRoom endPathRoom = { iter1->room,iter1->distance,iter1->direction,iter1->nextRoomInPathId };
+            shrinkedShortestPath->push_back(endPathRoom);
+        }
+    }
+    return *shrinkedShortestPath;
+}
 
 //}

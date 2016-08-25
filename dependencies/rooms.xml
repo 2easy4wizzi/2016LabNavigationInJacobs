@@ -2,38 +2,38 @@
 <Graph>
     <Node Name="A" Floor="0" >
         <Neighbor Direction="North" Name=""> </Neighbor>
-		<Neighbor Direction="East" Name="B"> </Neighbor>
-		<Neighbor Direction="South" Name=""> </Neighbor>
-		<Neighbor Direction="West" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name="B"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor>
+        <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>
 	<Node Name="B" Floor="0" >
         <Neighbor Direction="North" Name="C"> </Neighbor>
-		<Neighbor Direction="East" Name="E"> </Neighbor>
-		<Neighbor Direction="South" Name=""> </Neighbor>
-		<Neighbor Direction="West" Name="A"> </Neighbor>
+        <Neighbor Direction="East" Name="E"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor>
+        <Neighbor Direction="West" Name="A"> </Neighbor>
     </Node>
 	<Node Name="C" Floor="0" >
         <Neighbor Direction="North" Name=""> </Neighbor>
-		<Neighbor Direction="East" Name="D"> </Neighbor>
-		<Neighbor Direction="South" Name="B"> </Neighbor>
-		<Neighbor Direction="West" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name="D"> </Neighbor>
+        <Neighbor Direction="South" Name="B"> </Neighbor>
+        <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>	
 	<Node Name="D" Floor="0" >
         <Neighbor Direction="North" Name=""> </Neighbor>
-		<Neighbor Direction="East" Name=""> </Neighbor>
-		<Neighbor Direction="South" Name="E"> </Neighbor>
-		<Neighbor Direction="West" Name="C"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="E"> </Neighbor>
+        <Neighbor Direction="West" Name="C"> </Neighbor>
     </Node>	
 	<Node Name="E" Floor="0" >
         <Neighbor Direction="North" Name="D"> </Neighbor>
-		<Neighbor Direction="East" Name="B"> </Neighbor>
-		<Neighbor Direction="South" Name=""> </Neighbor>
-		<Neighbor Direction="West" Name="F"> </Neighbor>
+        <Neighbor Direction="East" Name="F"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor>
+        <Neighbor Direction="West" Name="B"> </Neighbor>
     </Node>		
 	<Node Name="F" Floor="0" >
         <Neighbor Direction="North" Name=""> </Neighbor>
-		<Neighbor Direction="East" Name=""> </Neighbor>
-		<Neighbor Direction="South" Name=""> </Neighbor>
-		<Neighbor Direction="West" Name="E"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor>
+        <Neighbor Direction="West" Name="E"> </Neighbor>
     </Node>		
 </Graph>
