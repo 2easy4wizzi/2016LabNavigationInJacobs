@@ -1,39 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Graph>
-    <Node Name="A" Floor="0" >
-        <Neighbor Direction="North" Name=""> </Neighbor>
-        <Neighbor Direction="East" Name="B"> </Neighbor>
-        <Neighbor Direction="South" Name=""> </Neighbor>
-        <Neighbor Direction="West" Name=""> </Neighbor>
-    </Node>
-	<Node Name="B" Floor="0" >
-        <Neighbor Direction="North" Name="C"> </Neighbor>
-        <Neighbor Direction="East" Name="E"> </Neighbor>
-        <Neighbor Direction="South" Name=""> </Neighbor>
-        <Neighbor Direction="West" Name="A"> </Neighbor>
-    </Node>
-	<Node Name="C" Floor="0" >
-        <Neighbor Direction="North" Name=""> </Neighbor>
-        <Neighbor Direction="East" Name="D"> </Neighbor>
-        <Neighbor Direction="South" Name="B"> </Neighbor>
-        <Neighbor Direction="West" Name=""> </Neighbor>
-    </Node>	
-	<Node Name="D" Floor="0" >
+    <Node Name="Robotics Lab" Number="417" Floor="4" >
         <Neighbor Direction="North" Name=""> </Neighbor>
         <Neighbor Direction="East" Name=""> </Neighbor>
-        <Neighbor Direction="South" Name="E"> </Neighbor>
-        <Neighbor Direction="West" Name="C"> </Neighbor>
+        <Neighbor Direction="South" Name="Rachel Kalderoni"> </Neighbor>
+        <Neighbor Direction="West" Name="Stairs,Elevators,Emergency Exit Corner"> </Neighbor>
+    </Node>
+	<Node Name="Rachel Kalderoni" Number="416" Floor="4" >
+        <Neighbor Direction="North" Name="Robotics Lab"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Hagit Hal Or"> </Neighbor>
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>
+	<Node Name="Hagit Hal Or" Number="415" Floor="4" >
+        <Neighbor Direction="North" Name="Rachel Kalderoni"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Ronen Shealtiel"> </Neighbor>
+        <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>	
-	<Node Name="E" Floor="0" >
-        <Neighbor Direction="North" Name="D"> </Neighbor>
-        <Neighbor Direction="East" Name="F"> </Neighbor>
+	<Node Name="Ronen Shealtiel" Number="414" Floor="4" >
+        <Neighbor Direction="North" Name="Hagit Hal Or"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>   
+        <Neighbor Direction="South" Name="Dam Feldman"> </Neighbor> <!--FIX -->
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="Dam Feldman" Number="413" Floor="4" >
+        <Neighbor Direction="North" Name="Ronen Shealtiel"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>   
+        <Neighbor Direction="South" Name="412"> </Neighbor> <!--FIX -->
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="412" Number="412" Floor="4" > <!--FIX -->
+        <Neighbor Direction="North" Name="Dam Feldman"> </Neighbor>
+        <Neighbor Direction="East" Name="Or Meir"> </Neighbor>
         <Neighbor Direction="South" Name=""> </Neighbor>
-        <Neighbor Direction="West" Name="B"> </Neighbor>
+        <Neighbor Direction="West" Name="Dani Keren"> </Neighbor>
     </Node>		
-	<Node Name="F" Floor="0" >
+	<Node Name="Or Meir" Number="412c" Floor="4" >
         <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor> <!--FIX -->
+        <Neighbor Direction="South" Name="412b"> </Neighbor> <!--FIX -->
+        <Neighbor Direction="West" Name="412"> </Neighbor>
+    </Node>	
+	<Node Name="412b" Number="412b" Floor="4" > <!--FIX -->
+        <Neighbor Direction="North" Name="Or Meir"> </Neighbor> 
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Oren Weeman"> </Neighbor>
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="Oren Weeman" Number="412a" Floor="4" > 
+        <Neighbor Direction="North" Name="412b"> </Neighbor> <!--FIX -->
         <Neighbor Direction="East" Name=""> </Neighbor>
         <Neighbor Direction="South" Name=""> </Neighbor>
-        <Neighbor Direction="West" Name="E"> </Neighbor>
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="Dani Keren" Number="411" Floor="4" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name="412"> </Neighbor> <!--FIX -->
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name="Rita Osdechi"> </Neighbor>
+    </Node>		
+	<Node Name="Rita Osdechi" Number="410" Floor="4" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name="Dani Keren"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name="Etgar Secretariat"> </Neighbor>
+    </Node>	
+	<Node Name="Etgar Secretariat" Number="409" Floor="4" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name="Rita Osdechi"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name="Or Donkelman"> </Neighbor>
+    </Node>	
+	<Node Name="Or Donkelman" Number="408" Floor="4" >
+        <Neighbor Direction="North" Name="CS Secretariat"> </Neighbor>
+        <Neighbor Direction="East" Name="Etgar Secretariat"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="CS Secretariat" Number="406" Floor="4" >
+        <Neighbor Direction="North" Name="Copy Room"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Or Donkelman"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>
+	<Node Name="Copy Room" Number="404" Floor="4" >
+        <Neighbor Direction="North" Name="Shuli Vitner"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="CS Secretariat"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>
+	<Node Name="Shuli Vitner" Number="403" Floor="4" >
+        <Neighbor Direction="North" Name="Martin Golombeek"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Copy Room"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>
+	<Node Name="Martin Golombeek" Number="402" Floor="4" >
+        <Neighbor Direction="North" Name="CS Lounge"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Shuli Vitner"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="CS Lounge" Number="401" Floor="4" >
+        <Neighbor Direction="North" Name="Bathroom"> </Neighbor>
+        <Neighbor Direction="East" Name="Stairs,Elevators,Emergency Exit Corner"> </Neighbor>
+        <Neighbor Direction="South" Name="Martin Golombeek"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="Bathroom" Number="" Floor="4" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="CS Lounge"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="Stairs,Elevators,Emergency Exit Corner" Number="" Floor="4" >
+        <Neighbor Direction="North" Name="CS Private Room"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name="CS Lounge"> </Neighbor>
+    </Node>	
+	<Node Name="CS Private Room" Number="418" Floor="4" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name="Robotics Lab"> </Neighbor>
+        <Neighbor Direction="South" Name="Stairs,Elevators,Emergency Exit Corner"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>		
 </Graph>

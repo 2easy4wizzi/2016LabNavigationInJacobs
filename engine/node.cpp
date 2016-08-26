@@ -1,7 +1,7 @@
 #include "node.h"
 
 
-Node::Node(string name, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS])
+Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS])
 {
         static int NodesId = 1;
 //    if (floor < 0) /*throw new exception("Error! floor input is out of range")*/;
@@ -9,6 +9,7 @@ Node::Node(string name, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS])
     _id = NodesId++;
     _floor = floor;
     _name = name;
+	_number = number;
     _previosNode = NULL;
     for (int i = 0; i < NUM_OF_NEIGBHORS; i++)
     {

@@ -15,13 +15,14 @@ class Node
 {
 private:
     string _name;
-    int _id;
+	string _number; // used for numbering the rooms, uniqued 
+    int _id; // unique field
     int _floor;
-    int _edgeWeightToPrevious; // usedfor back tracking the weights on the shortest path
+    int _edgeWeightToPrevious; // used for back tracking the weights on the shortest path
     Node* _previosNode; // used for backtracking the nodes on the shortest path
     neighborPair _neighbors[NUM_OF_NEIGBHORS]; // contains the neighbors at 4 directions
 public:
-    Node(string name,int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS]);
+    Node(string name,string number,int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS]);
     ~Node();
 
     string GetName() const;

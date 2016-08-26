@@ -35,14 +35,16 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
     // Iterate over the nodes
     int floor = -1;
     string name = "\0";
+	string number = "\0";
     neighborPair neighbors[NUM_OF_NEIGBHORS];
     Direction neighborDir;
     string neighborName = "\0";
     for (xml_node<> * vertex_node = root->first_node("Node"); vertex_node; vertex_node = vertex_node->next_sibling())
     {
             name = vertex_node->first_attribute("Name")->value();
-            floor = atoi(vertex_node->first_attribute("Floor")->value());
-            // Interate over the nodes neighbors
+            number = vertex_node->first_attribute("Number")->value();
+			floor = atoi(vertex_node->first_attribute("Floor")->value());
+			// Interate over the nodes neighbors
             int i = 0;
             for (xml_node<> * neighbor_node = vertex_node->first_node("Neighbor"); neighbor_node; neighbor_node = neighbor_node->next_sibling())
             {
@@ -53,7 +55,7 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
                     if (i > 3) { /*throw new exception("i is bigger then 3");*/ }
                     neighbors[i++] =  neighborPair(neighborDir, neighborName);
             }
-            Node *node = new Node(name, floor, neighbors);
+            Node *node = new Node(name,number, floor, neighbors);
             _nodes->push_back(node);
     }
     return 1;
@@ -192,10 +194,16 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end)
 		next = next->GetPreviosNode();
 	}
 	//push to the list the ending room
-//    pathRoom endingRoom = { end,0,"" };
-//    shortestPath->push_back(endingRoom);
-
-    return GetShrinkendShortestPath(*shortestPath);
+    pathRoom endingRoom = { end,0,"",-1 };
+    shortestPath->push_back(endingRoom);
+	if (shortestPath->size() < 2) // nothing to shrink if there is only one destination on the path
+	{
+		return *shortestPath;
+	}
+	else
+	{
+		return GetShrinkendShortestPath(*shortestPath);
+	}
 }
 
 list<pathRoom> Graph::GetShrinkendShortestPath(list<pathRoom> shortestPath)
@@ -204,60 +212,32 @@ list<pathRoom> Graph::GetShrinkendShortestPath(list<pathRoom> shortestPath)
     list<pathRoom>* shrinkedShortestPath = new list<pathRoom>;
     list<pathRoom>::iterator iter1 = shortestPath.begin();
     list<pathRoom>::iterator iter2 = shortestPath.begin();
-    ++iter2;
+	list<pathRoom>::iterator iterEnd = shortestPath.end();
+	++iter2;	
+	int distance;
+	string direction = "";
+	while (iter2!= iterEnd )
+	{
+		bool advanced = false;
+		distance = iter1->distance; //distance to the next room on shortest path
+		while(iter2!=iterEnd && iter1->direction == iter2->direction)
+		{
+			distance += iter2->distance;
+			++iter2;
+			advanced = true;
+		}
+		pathRoom pRoom = { iter1->room,distance,iter1->direction,iter2->room->GetId() };
+		shrinkedShortestPath->push_back(pRoom);
+		if (advanced)
+		{
+			iter1 = iter2;
+		} 
+		else
+		{
+			++iter1;
+		}		
+		++iter2;
+	}
 
-    list<pathRoom>::iterator it = shortestPath.begin();
-    while(it != shortestPath.end()){
-        cout << it->room->GetName().c_str();
-        it++;
-    }
-    bool lastWasMerged = false;
-    for (unsigned int maxIters=0;
-         iter1 != shortestPath.end() && iter2!= shortestPath.end()
-         && maxIters<shortestPath.size() && iter1 != iter2;
-         maxIters++, ++iter1,++iter2)
-    {
-        bool stop = false;
-        bool advance = false;
-        string dir = iter1->direction;
-        int dis = iter1->distance;
-        int nextNode = iter1->nextRoomInPathId;
-        while ((!stop) && iter2 != shortestPath.end())
-        {
-            if (iter1->direction == iter2->direction)
-            {
-                dis += iter2->distance;
-                nextNode = iter2->nextRoomInPathId;
-                advance = true;
-                lastWasMerged = true;
-                ++iter2;
-            }
-            else
-            {
-                lastWasMerged = false;
-                stop = true;
-            }
-        }
-        pathRoom pRoom = { iter1->room,dis,dir,nextNode };
-        shrinkedShortestPath->push_back(pRoom);
-        if (advance) { iter1 = iter2; }
-    }
-
-    if(!lastWasMerged)
-    {
-        iter1 = shortestPath.end();
-        --iter1;
-        cout << "iter1: " << iter1->room->GetName().c_str();
-        iter2 = shrinkedShortestPath->end();
-        --iter2;
-        cout << "iter2: " << iter2->room->GetName().c_str();
-        if (iter2->room != iter1->room)
-        {
-            pathRoom endPathRoom = { iter1->room,iter1->distance,iter1->direction,iter1->nextRoomInPathId };
-            shrinkedShortestPath->push_back(endPathRoom);
-        }
-    }
     return *shrinkedShortestPath;
 }
-
-//}

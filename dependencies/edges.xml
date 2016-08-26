@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Graph>
-    <Edge Weight="3" Floor="0" Type="Regular" Node1="A" Node2="B"></Edge>
-    <Edge Weight="2" Floor="0" Type="Stairs" Node1="B" Node2="C"></Edge>
-	<Edge Weight="4" Floor="0" Type="Elevator" Node1="C" Node2="D"></Edge>
-	<Edge Weight="0" Floor="0" Type="Stairs" Node1="E" Node2="D"></Edge>
-        <Edge Weight="1" Floor="0" Type="Regular" Node1="B" Node2="E"></Edge>
-	<Edge Weight="1" Floor="0" Type="Regular" Node1="F" Node2="E"></Edge>
+    <Edge Weight="2" Floor="4" Type="Regular" Node1="Robotics Lab" Node2="Rachel Kalderoni"></Edge>
+    <Edge Weight="2.5" Floor="4" Type="Regular" Node1="Rachel Kalderoni" Node2="Hagit Hal Or"></Edge>
+	<Edge Weight="2.5" Floor="4" Type="Regular" Node1="Hagit Hal Or" Node2="Ronen Shealtiel"></Edge>
+	<Edge Weight="2" Floor="4" Type="Regular" Node1="Ronen Shealtiel" Node2="Dam Feldman"></Edge>
+	<Edge Weight="2.5" Floor="4" Type="Regular" Node1="Dam Feldman" Node2="412"></Edge>
+    <Edge Weight="3.5" Floor="4" Type="Regular" Node1="412" Node2="Or Meir"></Edge>
+	<Edge Weight="3" Floor="4" Type="Regular" Node1="Or Meir" Node2="412b"></Edge>
+	<Edge Weight="1" Floor="4" Type="Regular" Node1="412b" Node2="Oren Weeman"></Edge>
+	<Edge Weight="3" Floor="4" Type="Regular" Node1="412" Node2="Dani Keren"></Edge>
+	<Edge Weight="3" Floor="4" Type="Regular" Node1="Dani Keren" Node2="Rita Osdechi"></Edge>
+	<Edge Weight="1" Floor="4" Type="Regular" Node1="Rita Osdechi" Node2="Etgar Secretariat"></Edge>
+	<Edge Weight="3" Floor="4" Type="Regular" Node1="Etgar Secretariat" Node2="Or Donkelman"></Edge>
+	<Edge Weight="1.5" Floor="4" Type="Regular" Node1="Or Donkelman" Node2="CS Secretariat"></Edge>
+	<Edge Weight="5.5" Floor="4" Type="Regular" Node1="CS Secretariat" Node2="Copy Room"></Edge>
+	<Edge Weight="2" Floor="4" Type="Regular" Node1="Copy Room" Node2="Shuli Vitner"></Edge>
+	<Edge Weight="2" Floor="4" Type="Regular" Node1="Shuli Vitner" Node2="Martin Golombeek"></Edge>
+	<Edge Weight="2.5" Floor="4" Type="Regular" Node1="Martin Golombeek" Node2="CS Lounge"></Edge>
+	<Edge Weight="4.5" Floor="4" Type="Regular" Node1="CS Lounge" Node2="Bathroom"></Edge>
+	<Edge Weight="8" Floor="4" Type="Regular" Node1="CS Lounge" Node2="Stairs,Elevators,Emergency Exit Corner"></Edge>
+	<Edge Weight="4.5" Floor="4" Type="Regular" Node1="Stairs,Elevators,Emergency Exit Corner" Node2="CS Private Room"></Edge>
+	<Edge Weight="5" Floor="4" Type="Regular" Node1="Stairs,Elevators,Emergency Exit Corner" Node2="Robotics Lab"></Edge>
 </Graph>

@@ -264,11 +264,11 @@ void Nav::printShortestPath(QList<pathRoomQt> shortestPathQt)
 
 void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
 {
-    m_log->append("Start from room " + getRoomValueByIdAndComboKey(shortestPathQt[0].room->GetId()));
+    m_log->append("Start from " + getRoomValueByIdAndComboKey(shortestPathQt[0].room->GetId()));
     for(pathRoomQt roomInPath: shortestPathQt ){
         m_log->append("Walk " + QString::number(roomInPath.distance) + " meters " +
                       roomInPath.direction +
-                      " to room " + getRoomValueByIdAndComboKey(roomInPath.nextRoomInPathId) + "." );
+                      " to " + getRoomValueByIdAndComboKey(roomInPath.nextRoomInPathId) + "." );
     }
 }
 
