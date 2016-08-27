@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Graph>
+<!--Floor 4-->
     <Node Name="Robotics Lab" Number="417" Floor="4" >
         <Neighbor Direction="North" Name=""> </Neighbor>
         <Neighbor Direction="East" Name=""> </Neighbor>
         <Neighbor Direction="South" Name="Rachel Kalderoni"> </Neighbor>
-        <Neighbor Direction="West" Name="Stairs,Elevators,Emergency Exit Corner"> </Neighbor>
+        <Neighbor Direction="West" Name="Lobby of Floor 4"> </Neighbor>
     </Node>
-	<Node Name="Rachel Kalderoni" Number="416" Floor="4" >
+    <Node Name="Lobby of Floor 4" Number="" Floor="4" >
+        <Neighbor Direction="North" Name="Elevators,Emergency Exit Floor 4"> </Neighbor>
+        <Neighbor Direction="East" Name="Robotics Lab"> </Neighbor>
+        <Neighbor Direction="South" Name="Stairs Down To Floor 3"> </Neighbor>
+        <Neighbor Direction="West" Name="Stairs Up To Floor 5"> </Neighbor>
+    </Node>	
+	<Node Name="Stairs Down To Floor 3" Number="" Floor="4" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name="Lobby of Floor 4"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor>
+        <Neighbor Direction="West" Name="Stairs Up To Floor 5"> </Neighbor>
+    </Node>
+	<Node Name="Stairs Up To Floor 5" Number="" Floor="4" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name="Stairs Down To Floor 3"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor>
+        <Neighbor Direction="West" Name="CS Lounge"> </Neighbor>
+    </Node>
+    <Node Name="Rachel Kalderoni" Number="416" Floor="4" >
         <Neighbor Direction="North" Name="Robotics Lab"> </Neighbor>
         <Neighbor Direction="East" Name=""> </Neighbor>
         <Neighbor Direction="South" Name="Hagit Hal Or"> </Neighbor>
@@ -21,17 +40,17 @@
 	<Node Name="Ronen Shealtiel" Number="414" Floor="4" >
         <Neighbor Direction="North" Name="Hagit Hal Or"> </Neighbor>
         <Neighbor Direction="East" Name=""> </Neighbor>   
-        <Neighbor Direction="South" Name="Dam Feldman"> </Neighbor> <!--FIX -->
+        <Neighbor Direction="South" Name="Dan Feldman"> </Neighbor> <!--FIX -->
         <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>	
-	<Node Name="Dam Feldman" Number="413" Floor="4" >
+	<Node Name="Dan Feldman" Number="413" Floor="4" >
         <Neighbor Direction="North" Name="Ronen Shealtiel"> </Neighbor>
         <Neighbor Direction="East" Name=""> </Neighbor>   
         <Neighbor Direction="South" Name="412"> </Neighbor> <!--FIX -->
         <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>	
 	<Node Name="412" Number="412" Floor="4" > <!--FIX -->
-        <Neighbor Direction="North" Name="Dam Feldman"> </Neighbor>
+        <Neighbor Direction="North" Name="Dan Feldman"> </Neighbor>
         <Neighbor Direction="East" Name="Or Meir"> </Neighbor>
         <Neighbor Direction="South" Name=""> </Neighbor>
         <Neighbor Direction="West" Name="Dani Keren"> </Neighbor>
@@ -104,7 +123,7 @@
     </Node>	
 	<Node Name="CS Lounge" Number="401" Floor="4" >
         <Neighbor Direction="North" Name="Bathroom"> </Neighbor>
-        <Neighbor Direction="East" Name="Stairs,Elevators,Emergency Exit Corner"> </Neighbor>
+        <Neighbor Direction="East" Name="Stairs Up To Floor 5"> </Neighbor>
         <Neighbor Direction="South" Name="Martin Golombeek"> </Neighbor> 
         <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>	
@@ -114,16 +133,95 @@
         <Neighbor Direction="South" Name="CS Lounge"> </Neighbor> 
         <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>	
-	<Node Name="Stairs,Elevators,Emergency Exit Corner" Number="" Floor="4" >
+	<Node Name="Elevators,Emergency Exit Floor 4" Number="" Floor="4" >
         <Neighbor Direction="North" Name="CS Private Room"> </Neighbor>
         <Neighbor Direction="East" Name=""> </Neighbor>
-        <Neighbor Direction="South" Name=""> </Neighbor> 
-        <Neighbor Direction="West" Name="CS Lounge"> </Neighbor>
+        <Neighbor Direction="South" Name="Stairs Down To Floor 3"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>	
 	<Node Name="CS Private Room" Number="418" Floor="4" >
         <Neighbor Direction="North" Name=""> </Neighbor>
-        <Neighbor Direction="East" Name="Robotics Lab"> </Neighbor>
-        <Neighbor Direction="South" Name="Stairs,Elevators,Emergency Exit Corner"> </Neighbor> 
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Elevators,Emergency Exit Floor 4"> </Neighbor> 
         <Neighbor Direction="West" Name=""> </Neighbor>
     </Node>		
+<!--Floor 3-->	
+	<Node Name="Lobby Of Floor 3" Number="" Floor="3" >
+        <Neighbor Direction="North" Name="Elevators,Emergency Exit Floor 3"> </Neighbor>
+        <Neighbor Direction="East" Name="Jackbobs Entrance"> </Neighbor>
+        <Neighbor Direction="South" Name="305"> </Neighbor> 
+        <Neighbor Direction="West" Name="Stairs Up To Floor 4"> </Neighbor>
+    </Node>		
+	<Node Name="306" Number="306" Floor="3" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Elevators,Emergency Exit Floor 3"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>		
+	<Node Name="Elevators,Emergency Exit Floor 3" Number="" Floor="3" >
+        <Neighbor Direction="North" Name="306"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Lobby Of Floor 3"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>		
+	<Node Name="Stairs Up To Floor 4" Number="" Floor="3" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name="Lobby Of Floor 3"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name="Bathroom Corner"> </Neighbor>
+    </Node>		
+	<Node Name="Bathroom Corner" Number="" Floor="3" >
+        <Neighbor Direction="North" Name="Bathroom"> </Neighbor>
+        <Neighbor Direction="East" Name="Stairs Up To Floor 4"> </Neighbor>
+        <Neighbor Direction="South" Name="Stairs Down To Floor 2"> </Neighbor> 
+        <Neighbor Direction="West" Name="302"> </Neighbor>
+    </Node>	
+	<Node Name="Bathroom" Number="" Floor="3" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Bathroom Corner"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="302" Number="302" Floor="3" >
+        <Neighbor Direction="North" Name="301"> </Neighbor>
+        <Neighbor Direction="East" Name="Bathroom Corner"> </Neighbor>
+        <Neighbor Direction="South" Name="303"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>	
+	<Node Name="301" Number="301" Floor="3" >
+        <Neighbor Direction="North" Name=""> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="Stairs Down To Floor 2"> </Neighbor> 
+        <Neighbor Direction="West" Name="302"> </Neighbor>
+    </Node>		
+	<Node Name="Stairs Down To Floor 2" Number="" Floor="3" >
+        <Neighbor Direction="North" Name="Bathroom Corner"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name="303"> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>
+	<Node Name="303" Number="303" Floor="3" >
+        <Neighbor Direction="North" Name="Bathroom Corner"> </Neighbor>
+        <Neighbor Direction="East" Name="Communication Room"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name=""> </Neighbor>
+    </Node>
+	<Node Name="Communication Room" Number="304" Floor="3" >
+        <Neighbor Direction="North" Name="Bathroom Corner"> </Neighbor>
+        <Neighbor Direction="East" Name="305"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name="303"> </Neighbor>
+    </Node>
+	<Node Name="305" Number="305" Floor="3" >
+        <Neighbor Direction="North" Name="Lobby Of Floor 3"> </Neighbor>
+        <Neighbor Direction="East" Name="Jackbobs Entrance"> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name="Communication Room"> </Neighbor>
+    </Node>
+	<Node Name="Jackbobs Entrance" Number="" Floor="3" >
+        <Neighbor Direction="North" Name="Lobby Of Floor 3"> </Neighbor>
+        <Neighbor Direction="East" Name=""> </Neighbor>
+        <Neighbor Direction="South" Name=""> </Neighbor> 
+        <Neighbor Direction="West" Name="305"> </Neighbor>
+    </Node>
 </Graph>
