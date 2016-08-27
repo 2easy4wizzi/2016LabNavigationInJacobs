@@ -1,5 +1,7 @@
 #include "nav.h"
 
+
+
 Nav::Nav(QWidget *parent):QWidget(parent)
 {
     setObjectName("Nav gui manager");
@@ -142,7 +144,7 @@ void Nav::initOnce()
     m_cbAndLabelsLayout->addWidget(m_goButton);
     m_cbAndLabelsLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
 
-    /*text box for direction. will be replaced in video player in the future*/
+    /*text box for direction and video player*/
 
     QLabel* logLabel = new QLabel(logLabelText);
     logLabel->setStyleSheet(globalTextAttributes + logLabelStyle);
@@ -152,12 +154,16 @@ void Nav::initOnce()
     m_log->setStyleSheet(globalTextAttributes + logStyle);
     m_log->setReadOnly(true);
 
+    m_mediaPlayer = new QMediaPlayer;
+    m_videoWidget = new QVideoWidget;
+
     QVBoxLayout* logLayout = new QVBoxLayout();
     logLayout->addWidget(logLabel);
     logLayout->addWidget(m_log);
 
+
     m_logSpacerLayout = new QHBoxLayout();
-    m_logSpacerLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+    m_logSpacerLayout->addWidget(m_videoWidget);
     m_logSpacerLayout->addLayout(logLayout);
     m_logSpacerLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
 }
@@ -181,6 +187,17 @@ void Nav::init()
 
     m_mainVLayout->addLayout(m_cbAndLabelsLayout);
     m_mainVLayout->addLayout(m_logSpacerLayout);
+
+
+
+
+    m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
+    m_videoWidget->show();
+
+    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoTest)); //video location
+    m_mediaPlayer->setPosition(2000); // starting index time
+
+    m_mediaPlayer->play();
 }
 
 void Nav::resetSlot()
@@ -228,6 +245,7 @@ void Nav::goWasPressedSlot()
         QList<pathRoomQt> shortestPathQt = translateShortestPathFromCppToQt();
         appendShortestPathToLog(shortestPathQt);
     }
+
 
 }
 

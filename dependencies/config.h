@@ -6,8 +6,12 @@ const QString fontSize = "font-size: 20px;";
 const QString border = "border: 1px solid black;";
 const QString globalTextAttributes = fontType + fontSize + border;
 
-const QString roomsXmlPath = "../Nav/dependencies/rooms.xml";
-const QString edgesXmlPath = "../Nav/dependencies/edges.xml";
+//const QString roomsXmlPath = "../Nav/dependencies/rooms.xml";
+//const QString edgesXmlPath = "../Nav/dependencies/edges.xml";
+const QString roomsXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/rooms.xml";
+const QString edgesXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/edges.xml";
+const QString videoTest = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/fromDanToLab.avi";
+
 const QString projectTitleLabelText = "<project title>";
 const QString projectTitleLabelStyle  = "background-color: yellow;";
 const QString windowTitleText  = "<window title>";

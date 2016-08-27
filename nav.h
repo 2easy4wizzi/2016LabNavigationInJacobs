@@ -12,6 +12,12 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QString>
+// https://www.youtube.com/watch?v=tGKmQy-VBX0
+#include <QTimer>
+#include <QtMultimedia/qmediaplayer.h>
+#include <QtMultimediaWidgets/qvideowidget.h>
+
+
 
 #include "dependencies/config.h"
 #include "engine/includes.h"
@@ -85,6 +91,8 @@ private:
     QHBoxLayout* m_controlButtonsHLayout;
     QHBoxLayout* m_cbAndLabelsLayout;
     QHBoxLayout* m_logSpacerLayout;
+    QMediaPlayer* m_mediaPlayer;
+    QVideoWidget* m_videoWidget;
 };
 
 #endif // NAV_H
