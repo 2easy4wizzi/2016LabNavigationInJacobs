@@ -1,12 +1,14 @@
 #include "node.h"
 
 
-Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS])
+Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS], int videoStartIndex, int videoEndIndex)
 {
         static int NodesId = 1;
 //    if (floor < 0) /*throw new exception("Error! floor input is out of range")*/;
 //    if (name.empty()) /*throw new exception("Error! name input is empty")*/;
     _id = NodesId++;
+	_videoStartIndex = videoStartIndex;
+	_videoEndIndex = videoEndIndex;
     _floor = floor;
     _name = name;
 	_number = number;
@@ -89,4 +91,14 @@ const basic_string<char>Node::GetNeighborDirection(string neighborName)
  pair<Direction, string> * Node::GetNeihbors()
 {
     return _neighbors;
+}
+
+int Node::GetVideoStartIndex() const
+{
+	return _videoStartIndex;
+}
+
+int Node::GetVideoEndIndex() const
+{
+	return _videoEndIndex;
 }

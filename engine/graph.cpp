@@ -34,6 +34,8 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
     if (!root) return 0;
     // Iterate over the nodes
     int floor = -1;
+	int videoStartIndex = -1;
+	int videoEndIndex = -1;
     string name = "\0";
 	string number = "\0";
     neighborPair neighbors[NUM_OF_NEIGBHORS];
@@ -44,18 +46,21 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
             name = vertex_node->first_attribute("Name")->value();
             number = vertex_node->first_attribute("Number")->value();
 			floor = atoi(vertex_node->first_attribute("Floor")->value());
+			videoStartIndex = atoi(vertex_node->first_attribute("VideoStartIndex")->value());
+			videoEndIndex = atoi(vertex_node->first_attribute("VideoEndIndex")->value());
 			// Interate over the nodes neighbors
             int i = 0;
             for (xml_node<> * neighbor_node = vertex_node->first_node("Neighbor"); neighbor_node; neighbor_node = neighbor_node->next_sibling())
             {
                     neighborName = neighbor_node->first_attribute("Name")->value();
+
                     string tempDir = neighbor_node->first_attribute("Direction")->value();
                     map<basic_string<char>, Direction>::const_iterator it = dirMap.find(tempDir);
                     neighborDir = (*it).second;
                     if (i > 3) { /*throw new exception("i is bigger then 3");*/ }
                     neighbors[i++] =  neighborPair(neighborDir, neighborName);
             }
-            Node *node = new Node(name,number, floor, neighbors);
+            Node *node = new Node(name,number, floor, neighbors, videoStartIndex, videoEndIndex);
             _nodes->push_back(node);
     }
     return 1;

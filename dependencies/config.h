@@ -24,3 +24,6 @@ const QString viewRoomsCbText = "View rooms by:";
 const QString viewRoomsCbStyle = "";
 
 #endif // CONFIG_H
+
+//const QString roomsXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/rooms.xml";
+//const QString edgesXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/edges.xml";
