@@ -3,7 +3,28 @@
 #define cout qDebug()<< __LINE__
 #define xxx qDebug()<< __LINE__ ;
 
-map<string, EdgeType> typeMap = { { "NotInitialized", NotInitialized },{ "Regular", Regular },{ "Elevator", Elevator },{ "Stairs", Stairs } };
+const char* fieldGraph= "Graph";
+const char* fieldEdge= "Edge";
+const char* fieldWeight= "Weight";
+const char* fieldFloor= "Floor";
+const char* fieldType= "Type";
+const char* fieldNode1= "Node1";
+const char* fieldNode2= "Node2";
+const char* fieldNode= "Node";
+const char* fieldName= "Name";
+const char* fieldNumber= "Number";
+const char* fieldNotInitialized= "NotInitialized";
+const char* fieldRegular= "Regular";
+const char* fieldElevator= "Elevator";
+const char* fieldStairs= "Stairs";
+const char* fieldVideoStartIndex= "VideoStartIndex";
+const char* fieldVideoEndIndex= "VideoEndIndex";
+const char* fieldNeighbor= "Neighbor";
+const char* fieldDirection= "Direction";
+
+
+
+map<string, EdgeType> typeMap = { { fieldNotInitialized, NotInitialized },{ fieldRegular, Regular },{ fieldElevator, Elevator },{ fieldStairs, Stairs } };
 
 using namespace rapidxml;
 
@@ -30,7 +51,7 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
     // Parse the buffer using the xml file parsing library into doc
     doc.parse<0>(&buffer[0]);
     // Find our root
-    root = doc.first_node("Graph");
+    root = doc.first_node(fieldGraph);
     if (!root) return 0;
     // Iterate over the nodes
     int floor = -1;
@@ -41,20 +62,20 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
     neighborPair neighbors[NUM_OF_NEIGBHORS];
     Direction neighborDir;
     string neighborName = "\0";
-    for (xml_node<> * vertex_node = root->first_node("Node"); vertex_node; vertex_node = vertex_node->next_sibling())
+    for (xml_node<> * vertex_node = root->first_node(fieldNode); vertex_node; vertex_node = vertex_node->next_sibling())
     {
-            name = vertex_node->first_attribute("Name")->value();
-            number = vertex_node->first_attribute("Number")->value();
-			floor = atoi(vertex_node->first_attribute("Floor")->value());
-			videoStartIndex = atoi(vertex_node->first_attribute("VideoStartIndex")->value());
-			videoEndIndex = atoi(vertex_node->first_attribute("VideoEndIndex")->value());
+            name = vertex_node->first_attribute(fieldName)->value();
+            number = vertex_node->first_attribute(fieldNumber)->value();
+            floor = atoi(vertex_node->first_attribute(fieldFloor)->value());
+            videoStartIndex = atoi(vertex_node->first_attribute(fieldVideoStartIndex)->value());
+            videoEndIndex = atoi(vertex_node->first_attribute(fieldVideoEndIndex)->value());
 			// Interate over the nodes neighbors
             int i = 0;
-            for (xml_node<> * neighbor_node = vertex_node->first_node("Neighbor"); neighbor_node; neighbor_node = neighbor_node->next_sibling())
+            for (xml_node<> * neighbor_node = vertex_node->first_node(fieldNeighbor); neighbor_node; neighbor_node = neighbor_node->next_sibling())
             {
-                    neighborName = neighbor_node->first_attribute("Name")->value();
+                    neighborName = neighbor_node->first_attribute(fieldName)->value();
 
-                    string tempDir = neighbor_node->first_attribute("Direction")->value();
+                    string tempDir = neighbor_node->first_attribute(fieldDirection)->value();
                     map<basic_string<char>, Direction>::const_iterator it = dirMap.find(tempDir);
                     neighborDir = (*it).second;
                     if (i > 3) { /*throw new exception("i is bigger then 3");*/ }
@@ -78,7 +99,7 @@ bool Graph::ParseXmlEdges(string xmlPathEdges)
     // Parse the buffer using the xml file parsing library into doc
     doc.parse<0>(&buffer[0]);
     // Find our root
-    root = doc.first_node("Graph");
+    root = doc.first_node(fieldGraph);
     if (!root) return 0;
     // Iterate over the nodes
     int weight = -1;
@@ -86,14 +107,14 @@ bool Graph::ParseXmlEdges(string xmlPathEdges)
     EdgeType type = NotInitialized;
     string nodeName1 = "\0";
     string nodeName2 = "\0";
-    for (xml_node<> * vertex_node = root->first_node("Edge"); vertex_node; vertex_node = vertex_node->next_sibling())
+    for (xml_node<> * vertex_node = root->first_node(fieldEdge); vertex_node; vertex_node = vertex_node->next_sibling())
     {
-            weight = atoi(vertex_node->first_attribute("Weight")->value());
-            floor = atoi(vertex_node->first_attribute("Floor")->value());
-            string typeStr = vertex_node->first_attribute("Type")->value();
+            weight = atoi(vertex_node->first_attribute(fieldWeight)->value());
+            floor = atoi(vertex_node->first_attribute(fieldFloor)->value());
+            string typeStr = vertex_node->first_attribute(fieldType)->value();
             type = typeMap.find(typeStr)->second;
-            nodeName1 = vertex_node->first_attribute("Node1")->value();
-            nodeName2 = vertex_node->first_attribute("Node2")->value();
+            nodeName1 = vertex_node->first_attribute(fieldNode1)->value();
+            nodeName2 = vertex_node->first_attribute(fieldNode2)->value();
             // find node1 and node2 of the edge
             Node* node1 = NULL;
             Node* node2 = NULL;
@@ -231,7 +252,6 @@ list<pathRoom> Graph::GetShrinkendShortestPath(list<pathRoom> shortestPath)
 	list<pathRoom>::iterator iterEnd = shortestPath.end();
 	++iter2;	
 	int distance;
-	string direction = "";
 	while (iter2!= iterEnd )
 	{
 		bool advanced = false;

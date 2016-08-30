@@ -30,7 +30,19 @@
 #define xxx qDebug()<< __LINE__ ;
 #define DEBUG 0
 
-const QMap <Direction,QString> dirMap2 = { {  North, "North"},{  East , "East" },{  South ,"South" },{  West,"West" } };
+const QString fieldID = "Id";
+const QString fieldNumber = "Number";
+const QString fieldName = "Name";
+const QString fieldNorth = "North";
+const QString fieldEast = "East";
+const QString fieldSouth = "South";
+const QString fieldWest = "West";
+const QString fieldStairs = "Stairs";
+const QString fieldElevator = "Elevator";
+const QString fieldFloor = "Floor";
+
+
+const QMap <Direction,QString> dirMap2 = { {  North, fieldNorth},{  East , fieldEast },{  South ,fieldSouth },{  West,fieldWest } };
 
 //return nodes from GetShortestpath() in this struct
 struct pathRoomQt {
@@ -97,7 +109,7 @@ private:
     QMediaPlayer* m_mediaPlayer;
     QVideoWidget* m_videoWidget;
     QRadioButton *m_groupBoxPrefRadioDefault;
-    QRadioButton *m_groupBoxPrefRadioStiars;
+    QRadioButton *m_groupBoxPrefRadioStairs;
     QRadioButton *m_groupBoxPrefRadioElevator;
     QRadioButton *m_groupBoxViewByRadioName;
     QRadioButton *m_groupBoxViewByRadioNumber;
