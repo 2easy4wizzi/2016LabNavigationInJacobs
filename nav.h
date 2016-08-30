@@ -16,7 +16,8 @@
 #include <QTimer>
 #include <QtMultimedia/qmediaplayer.h>
 #include <QtMultimediaWidgets/qvideowidget.h>
-
+#include <QGroupBox>
+#include <QRadioButton>
 
 
 #include "dependencies/config.h"
@@ -58,14 +59,14 @@ public:
     QList<pathRoomQt> translateShortestPathFromCppToQt();
     void printShortestPath(QList<pathRoomQt> shortestPathQt);
     void appendShortestPathToLog(QList<pathRoomQt> shortestPathQt);
-
+    void playVideoFromTo(QString videoPath,int from, int to);
 
 public slots:
     void resetSlot();
     void currentLocationCbHasChangedSlot();
     void destinationCbHasChangedSlot();
     void goWasPressedSlot();
-    void viewRoomsCbHasChangedSlot();
+    void viewRoomsByHasChangedSlot(bool clicked);
 
 
 signals:
@@ -84,7 +85,6 @@ private:
     Graph* m_graph;
     QMap<int, Node*> m_nodesMap;
     QString m_comboKey;
-    QComboBox * m_viewRoomsCb;
     Node* m_currentRoom;
     Node* m_destRoom;
     QHBoxLayout* m_titleLayout;
@@ -93,6 +93,11 @@ private:
     QHBoxLayout* m_logSpacerLayout;
     QMediaPlayer* m_mediaPlayer;
     QVideoWidget* m_videoWidget;
+    QRadioButton *groupBoxPrefRadioDefault;
+    QRadioButton *groupBoxPrefRadioStiars;
+    QRadioButton *groupBoxPrefRadioElevator;
+    QRadioButton *groupBoxViewByRadioName;
+    QRadioButton *groupBoxViewByRadioNumber;
 };
 
 #endif // NAV_H

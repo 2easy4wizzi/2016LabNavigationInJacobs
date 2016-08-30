@@ -40,6 +40,7 @@ public:
     pair<Direction, string> *GetNeihbors() ;
 	int GetVideoStartIndex() const;
 	int GetVideoEndIndex() const;
+    string GetNumber() const;
 };
 
 #endif // NODE_H

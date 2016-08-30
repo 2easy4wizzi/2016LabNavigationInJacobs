@@ -125,7 +125,7 @@ list<Edge*> Graph::GetGrapghEdges() const
     return *_edges;
 }
 
-list<pathRoom> Graph::GetShortestpath(Node* start, Node* end)
+list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, stairsOrElevator pref)
 {
     bool wasChecked[MAXNODES];
     int distanceV[MAXNODES];

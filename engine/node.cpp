@@ -100,5 +100,10 @@ int Node::GetVideoStartIndex() const
 
 int Node::GetVideoEndIndex() const
 {
-	return _videoEndIndex;
+    return _videoEndIndex;
+}
+
+string Node::GetNumber() const
+{
+    return _number;
 }

@@ -22,10 +22,10 @@ const QString destinationLabelStyle = "background-color: red;";
 const QString logLabelText = "directions";
 const QString logLabelStyle = "background-color: blue;";
 const QString logStyle = "background-color: grey;";
-const QStringList viewRoomsCb = { "Name" , "Id"};
-const QString comboKey = viewRoomsCb[0];
-const QString viewRoomsCbText = "View rooms by:";
+const QString comboKey = "Name";
 const QString viewRoomsCbStyle = "";
+const QString groupBoxPrefStyle = "";
+const QString groupBoxViewByStyle = "";
 
 #endif // CONFIG_H
 

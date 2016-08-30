@@ -2,6 +2,8 @@
 
 
 
+
+
 Nav::Nav(QWidget *parent):QWidget(parent)
 {
     setObjectName("Nav gui manager");
@@ -32,6 +34,7 @@ void Nav::translateRoomsFromCppToQt()
             room[dirMap2[neighbos[i].first]] = neighbos[i].second.c_str();
         }
         room["Floor"] = QString::number(node->GetNodeFloor());
+        room["Number"] = (node->GetNumber().c_str());
         m_roomsObjects.push_back(room);
     }
 }
@@ -93,24 +96,53 @@ void Nav::initOnce()
     m_titleLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
 
     /*control buttons*/
-    QLabel* viewRoomsLabel = new QLabel(viewRoomsCbText);
-    viewRoomsLabel->setStyleSheet(globalTextAttributes + viewRoomsCbStyle);
-    m_viewRoomsCb = new QComboBox();
-    m_viewRoomsCb->addItems(viewRoomsCb);
-    m_viewRoomsCb->setCurrentText(m_comboKey);
-    connect(m_viewRoomsCb, SIGNAL(activated(int)), this, SLOT(viewRoomsCbHasChangedSlot()));
+
 
     m_resetButton = new QPushButton("reset");
     connect(m_resetButton,SIGNAL(clicked(bool)),this,SLOT(resetSlot()));
-    QVBoxLayout* controlButtonsVLayout = new QVBoxLayout();
 
-    controlButtonsVLayout->addWidget(viewRoomsLabel);
-    controlButtonsVLayout->addWidget(m_viewRoomsCb);
-    controlButtonsVLayout->addWidget(m_resetButton);
 
     m_controlButtonsHLayout = new QHBoxLayout();
     m_controlButtonsHLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
-    m_controlButtonsHLayout->addLayout(controlButtonsVLayout);
+    m_controlButtonsHLayout->addWidget(m_resetButton);
+
+    /*group box view room text by - name vs number*/
+    QGroupBox *groupBoxViewBy = new QGroupBox("View rooms by:");
+    groupBoxViewBy->setStyleSheet(groupBoxViewByStyle);
+    groupBoxViewByRadioName = new QRadioButton("Name");
+    connect(groupBoxViewByRadioName, SIGNAL(clicked(bool)), this, SLOT(viewRoomsByHasChangedSlot(bool)));
+
+    groupBoxViewByRadioNumber = new QRadioButton("Number");
+    connect(groupBoxViewByRadioNumber, SIGNAL(clicked(bool)), this, SLOT(viewRoomsByHasChangedSlot(bool)));
+
+    groupBoxViewByRadioName->setChecked(true);
+    QVBoxLayout *vboxViewBy = new QVBoxLayout;
+    vboxViewBy->addWidget(groupBoxViewByRadioName);
+    vboxViewBy->addWidget(groupBoxViewByRadioNumber);
+    vboxViewBy->addStretch(1);
+    groupBoxViewBy->setLayout(vboxViewBy);
+    m_controlButtonsHLayout->addWidget(groupBoxViewBy);
+
+    /*group box preference - elevator vs stairs*/
+    QGroupBox *groupBoxPref = new QGroupBox("Take me from the");
+    groupBoxPref->setStyleSheet(groupBoxPrefStyle);
+    groupBoxPrefRadioDefault = new QRadioButton("Fastest way");
+    groupBoxPrefRadioStiars = new QRadioButton("Stiars");
+    groupBoxPrefRadioElevator = new QRadioButton("Elevator");
+
+    groupBoxPrefRadioDefault->setChecked(true);
+    QVBoxLayout *vboxPref = new QVBoxLayout;
+    vboxPref->addWidget(groupBoxPrefRadioDefault);
+    vboxPref->addWidget(groupBoxPrefRadioStiars);
+    vboxPref->addWidget(groupBoxPrefRadioElevator);
+    vboxPref->addStretch(1);
+    groupBoxPref->setLayout(vboxPref);
+
+
+
+
+
+    m_controlButtonsHLayout->addWidget(groupBoxPref);
 
     /*combos labels*/
     QLabel* currentLocationLabel = new QLabel(currentLocationLabelText);
@@ -163,17 +195,14 @@ void Nav::initOnce()
 
     m_mediaPlayer = new QMediaPlayer;
     m_videoWidget = new QVideoWidget;
-    //m_videoWidget->setGeometry(100,100,600,400);
-m_videoWidget->show();
-m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
-    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoTest)); //video location
-    m_mediaPlayer->setPosition(7000); // starting index time
-m_mediaPlayer->play();
+
+
 
     m_logSpacerLayout = new QHBoxLayout();
     m_logSpacerLayout->addWidget(m_videoWidget);
     m_logSpacerLayout->addLayout(logLayout);
     //m_logSpacerLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+
 
 
 }
@@ -198,16 +227,8 @@ void Nav::init()
     m_mainVLayout->addLayout(m_cbAndLabelsLayout);
     m_mainVLayout->addLayout(m_logSpacerLayout);
 
+    playVideoFromTo(videoTest,7000,8000);
 
-
-
-//    m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
-//    m_videoWidget->show();
-
-//    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoTest)); //video location
-//    m_mediaPlayer->setPosition(2000); // starting index time
-
-//    m_mediaPlayer->play();
 }
 
 void Nav::resetSlot()
@@ -260,7 +281,8 @@ void Nav::goWasPressedSlot()
 }
 
 QList<pathRoomQt> Nav::translateShortestPathFromCppToQt(){
-    list<pathRoom> shortestPath = m_graph->GetShortestpath(m_currentRoom, m_destRoom);
+    stairsOrElevator pref = stairs;
+    list<pathRoom> shortestPath = m_graph->GetShortestpath(m_currentRoom, m_destRoom, pref);
     QList<pathRoomQt> shortestPathQt;
     for(pathRoom room : shortestPath){
         pathRoomQt roomQt;
@@ -300,15 +322,25 @@ void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
     }
 }
 
+void Nav::playVideoFromTo(QString videoPath, int from, int to)
+{
+    m_videoWidget->show();
+    m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
+    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
+    m_mediaPlayer->setPosition(from); // starting index time
+    m_mediaPlayer->play();
+}
+
 QString Nav::getRoomValueByIdAndComboKey(int id)
 {
     for(QMap<QString,QString> room : m_roomsObjects){ if (room["Id"] == QString::number(id)) return room[m_comboKey]; }
     return NULL;
 }
 
-void Nav::viewRoomsCbHasChangedSlot()
+void Nav::viewRoomsByHasChangedSlot(bool clicked)
 {
-    m_comboKey = m_viewRoomsCb->currentText();
+    cout << clicked;
+    m_comboKey = groupBoxViewByRadioName->isChecked() ? groupBoxViewByRadioName->text() : groupBoxViewByRadioNumber->text();
     resetSlot();
 }
 
