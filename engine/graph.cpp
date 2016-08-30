@@ -125,8 +125,9 @@ list<Edge*> Graph::GetGrapghEdges() const
     return *_edges;
 }
 
-list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, stairsOrElevator pref)
+list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
 {
+    int prefAddon = 0;
     bool wasChecked[MAXNODES];
     int distanceV[MAXNODES];
     vector< qPair > Adjacency[MAXNODES];
@@ -145,8 +146,18 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, stairsOrElevator p
 		u = edge->GetNode1();
 		v = edge->GetNode2();
 		weight = edge->GetWeight();
-		Adjacency[u->GetId()].push_back(qPair(v, weight));
-		Adjacency[v->GetId()].push_back(qPair(u, weight));
+        EdgeType edgeType = edge->GetEdgeType();
+        if (edgeType != EdgeType::Regular){
+            if(pref == EdgeType::Stairs && edgeType == EdgeType::Elevator ){
+                prefAddon = INF;
+            }
+            else if(pref == EdgeType::Elevator && edgeType == EdgeType::Stairs ){
+                prefAddon = INF;
+            }
+        }
+        Adjacency[u->GetId()].push_back(qPair(v, weight + prefAddon));
+        Adjacency[v->GetId()].push_back(qPair(u, weight + prefAddon));
+        prefAddon = 0;
 	}	
 	// initialize distance vector
     for (unsigned int i = 1; i <= _nodes->size(); i++) {
@@ -169,7 +180,7 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, stairsOrElevator p
 		for (int i = 0; i<size; i++) {
 			v = Adjacency[u->GetId()][i].first;
 			weight = Adjacency[u->GetId()][i].second;
-			if (!wasChecked[v->GetId()] && distanceV[u->GetId()] + weight < distanceV[v->GetId()]) {
+            if (!wasChecked[v->GetId()] && distanceV[u->GetId()] + weight < distanceV[v->GetId()]) {
 				distanceV[v->GetId()] = distanceV[u->GetId()] + weight;
 				v->SetPreviosNode(u);
 				v->SetEdgeWeightToPrevious(weight);				

@@ -7,6 +7,7 @@
 #define MAXNODES 10000
 #define INFVALUE 1000000
 #define qPair pair< Node*, int >
+#define INF 1000000;
 
 //comperator
 struct comp {
@@ -23,12 +24,6 @@ struct pathRoom {
     int nextRoomInPathId;
 };
 
-enum stairsOrElevator {
-    def = 0 ,
-    elevator = 1,
-    stairs = 2
-};
-
 class Graph
 {
 public:
@@ -38,7 +33,7 @@ public:
     bool ParseXmlEdges(string xmlPathEdges);
     list<Node*> GetGrapghNodes() const;
     list<Edge*> GetGrapghEdges() const;
-    list<pathRoom> GetShortestpath(Node* start, Node* end, stairsOrElevator pref);
+    list<pathRoom> GetShortestpath(Node* start, Node* end, EdgeType pref);
     list<pathRoom> GetShrinkendShortestPath(list<pathRoom> shortestPath);
 
 private:

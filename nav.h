@@ -52,7 +52,7 @@ public:
     void initOnce();
     void init();
     Node* findNodeByStr(QString str);
-    QString getRoomValueByIdAndComboKey(int id);
+    QString getRoomFieldById(int id, QString field);
     QStringList getRoomsTagsToPlaceInComboBox();
     void translateRoomsFromCppToQt();
     void printRooms();
@@ -60,13 +60,16 @@ public:
     void printShortestPath(QList<pathRoomQt> shortestPathQt);
     void appendShortestPathToLog(QList<pathRoomQt> shortestPathQt);
     void playVideoFromTo(QString videoPath,int from, int to);
+    void findWitchButtonIsOnPref();
 
 public slots:
     void resetSlot();
     void currentLocationCbHasChangedSlot();
     void destinationCbHasChangedSlot();
     void goWasPressedSlot();
-    void viewRoomsByHasChangedSlot(bool clicked);
+    void viewRoomsByHasChangedSlot();
+    void prefWasChangedSlot();
+
 
 
 signals:
@@ -93,11 +96,12 @@ private:
     QHBoxLayout* m_logSpacerLayout;
     QMediaPlayer* m_mediaPlayer;
     QVideoWidget* m_videoWidget;
-    QRadioButton *groupBoxPrefRadioDefault;
-    QRadioButton *groupBoxPrefRadioStiars;
-    QRadioButton *groupBoxPrefRadioElevator;
-    QRadioButton *groupBoxViewByRadioName;
-    QRadioButton *groupBoxViewByRadioNumber;
+    QRadioButton *m_groupBoxPrefRadioDefault;
+    QRadioButton *m_groupBoxPrefRadioStiars;
+    QRadioButton *m_groupBoxPrefRadioElevator;
+    QRadioButton *m_groupBoxViewByRadioName;
+    QRadioButton *m_groupBoxViewByRadioNumber;
+    EdgeType m_pref;
 };
 
 #endif // NAV_H

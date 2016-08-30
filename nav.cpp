@@ -109,16 +109,16 @@ void Nav::initOnce()
     /*group box view room text by - name vs number*/
     QGroupBox *groupBoxViewBy = new QGroupBox("View rooms by:");
     groupBoxViewBy->setStyleSheet(groupBoxViewByStyle);
-    groupBoxViewByRadioName = new QRadioButton("Name");
-    connect(groupBoxViewByRadioName, SIGNAL(clicked(bool)), this, SLOT(viewRoomsByHasChangedSlot(bool)));
+    m_groupBoxViewByRadioName = new QRadioButton("Name");
+    connect(m_groupBoxViewByRadioName, SIGNAL(clicked(bool)), this, SLOT(viewRoomsByHasChangedSlot()));
 
-    groupBoxViewByRadioNumber = new QRadioButton("Number");
-    connect(groupBoxViewByRadioNumber, SIGNAL(clicked(bool)), this, SLOT(viewRoomsByHasChangedSlot(bool)));
+    m_groupBoxViewByRadioNumber = new QRadioButton("Number");
+    connect(m_groupBoxViewByRadioNumber, SIGNAL(clicked(bool)), this, SLOT(viewRoomsByHasChangedSlot()));
 
-    groupBoxViewByRadioName->setChecked(true);
+    m_groupBoxViewByRadioName->setChecked(true);
     QVBoxLayout *vboxViewBy = new QVBoxLayout;
-    vboxViewBy->addWidget(groupBoxViewByRadioName);
-    vboxViewBy->addWidget(groupBoxViewByRadioNumber);
+    vboxViewBy->addWidget(m_groupBoxViewByRadioName);
+    vboxViewBy->addWidget(m_groupBoxViewByRadioNumber);
     vboxViewBy->addStretch(1);
     groupBoxViewBy->setLayout(vboxViewBy);
     m_controlButtonsHLayout->addWidget(groupBoxViewBy);
@@ -126,15 +126,20 @@ void Nav::initOnce()
     /*group box preference - elevator vs stairs*/
     QGroupBox *groupBoxPref = new QGroupBox("Take me from the");
     groupBoxPref->setStyleSheet(groupBoxPrefStyle);
-    groupBoxPrefRadioDefault = new QRadioButton("Fastest way");
-    groupBoxPrefRadioStiars = new QRadioButton("Stiars");
-    groupBoxPrefRadioElevator = new QRadioButton("Elevator");
+    m_groupBoxPrefRadioDefault = new QRadioButton("Fastest way");
+    m_groupBoxPrefRadioStiars = new QRadioButton("Stiars");
+    m_groupBoxPrefRadioElevator = new QRadioButton("Elevator");
 
-    groupBoxPrefRadioDefault->setChecked(true);
+    connect(m_groupBoxPrefRadioDefault, SIGNAL(clicked(bool)), this, SLOT(prefWasChangedSlot()));
+    connect(m_groupBoxPrefRadioStiars, SIGNAL(clicked(bool)), this, SLOT(prefWasChangedSlot()));
+    connect(m_groupBoxPrefRadioElevator, SIGNAL(clicked(bool)), this, SLOT(prefWasChangedSlot()));
+    prefWasChangedSlot();
+
+    m_groupBoxPrefRadioDefault->setChecked(true);
     QVBoxLayout *vboxPref = new QVBoxLayout;
-    vboxPref->addWidget(groupBoxPrefRadioDefault);
-    vboxPref->addWidget(groupBoxPrefRadioStiars);
-    vboxPref->addWidget(groupBoxPrefRadioElevator);
+    vboxPref->addWidget(m_groupBoxPrefRadioDefault);
+    vboxPref->addWidget(m_groupBoxPrefRadioStiars);
+    vboxPref->addWidget(m_groupBoxPrefRadioElevator);
     vboxPref->addStretch(1);
     groupBoxPref->setLayout(vboxPref);
 
@@ -281,8 +286,7 @@ void Nav::goWasPressedSlot()
 }
 
 QList<pathRoomQt> Nav::translateShortestPathFromCppToQt(){
-    stairsOrElevator pref = stairs;
-    list<pathRoom> shortestPath = m_graph->GetShortestpath(m_currentRoom, m_destRoom, pref);
+    list<pathRoom> shortestPath = m_graph->GetShortestpath(m_currentRoom, m_destRoom, m_pref);
     QList<pathRoomQt> shortestPathQt;
     for(pathRoom room : shortestPath){
         pathRoomQt roomQt;
@@ -314,11 +318,39 @@ void Nav::printShortestPath(QList<pathRoomQt> shortestPathQt)
 
 void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
 {
-    m_log->append("Start from " + getRoomValueByIdAndComboKey(shortestPathQt[0].room->GetId()));
+    m_log->append("\nStart from " + getRoomFieldById(shortestPathQt[0].room->GetId(),m_comboKey) + " :");
+    int i = 0;
     for(pathRoomQt roomInPath: shortestPathQt ){
-        m_log->append("Walk " + QString::number(roomInPath.distance) + " meters " +
-                      roomInPath.direction +
-                      " to " + getRoomValueByIdAndComboKey(roomInPath.nextRoomInPathId) + "." );
+
+        QString roomName = roomInPath.room->GetName().c_str();
+        int nextRoomInPathId = roomInPath.nextRoomInPathId;
+
+        if(roomName.contains("Elevator") && getRoomFieldById(nextRoomInPathId, "Name").contains("Elevator")){
+            int currentFloor = roomInPath.room->GetNodeFloor();
+            int desFloor = getRoomFieldById(nextRoomInPathId,"Floor").toInt();
+            QString text = currentFloor > desFloor ?
+                        (QString::number(++i) + ") Use the elevator to go down to floor" + QString::number(desFloor) + ".") :
+                        (QString::number(++i) + ") Use the elevator to go up to floor"   + QString::number(desFloor) + ".");
+            m_log->append(text);
+        }
+        else if(roomName.contains("Stairs")&& getRoomFieldById(nextRoomInPathId, "Name").contains("Stairs")){
+            int currentFloor = roomInPath.room->GetNodeFloor();
+            int desFloor = getRoomFieldById(nextRoomInPathId,"Floor").toInt();
+            QString text = currentFloor > desFloor ?
+                        (QString::number(++i) + ") Go down the stairs to floor" + QString::number(desFloor) + ".") :
+                        (QString::number(++i) + ") Go up the stairs to floor"   + QString::number(desFloor) + ".");
+            m_log->append(text);
+        }
+        else{
+            m_log->append(QString::number(++i) + ") Walk " + QString::number(roomInPath.distance) +
+                          " meters " + roomInPath.direction +
+                          " to " + getRoomFieldById(nextRoomInPathId,m_comboKey) + "." );
+        }
+
+
+
+
+
     }
 }
 
@@ -331,17 +363,33 @@ void Nav::playVideoFromTo(QString videoPath, int from, int to)
     m_mediaPlayer->play();
 }
 
-QString Nav::getRoomValueByIdAndComboKey(int id)
+QString Nav::getRoomFieldById(int id, QString field)
 {
-    for(QMap<QString,QString> room : m_roomsObjects){ if (room["Id"] == QString::number(id)) return room[m_comboKey]; }
+    for(QMap<QString,QString> room : m_roomsObjects){ if (room["Id"] == QString::number(id)) return room[field]; }
     return NULL;
 }
 
-void Nav::viewRoomsByHasChangedSlot(bool clicked)
+
+void Nav::viewRoomsByHasChangedSlot()
 {
-    cout << clicked;
-    m_comboKey = groupBoxViewByRadioName->isChecked() ? groupBoxViewByRadioName->text() : groupBoxViewByRadioNumber->text();
+    m_comboKey = m_groupBoxViewByRadioName->isChecked() ? m_groupBoxViewByRadioName->text() : m_groupBoxViewByRadioNumber->text();
     resetSlot();
+}
+
+void Nav::prefWasChangedSlot()
+{
+    if(m_groupBoxPrefRadioDefault->isChecked())
+    {
+        m_pref = EdgeType::Regular;
+    }
+    else if(m_groupBoxPrefRadioStiars->isChecked())
+    {
+        m_pref = EdgeType::Stairs;
+    }
+    else if(m_groupBoxPrefRadioElevator->isChecked())
+    {
+        m_pref = EdgeType::Elevator;
+    }
 }
 
 QStringList Nav::getRoomsTagsToPlaceInComboBox()
