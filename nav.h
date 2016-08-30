@@ -27,7 +27,7 @@
 
 #define cout qDebug()<< __LINE__
 #define xxx qDebug()<< __LINE__ ;
-#define DEBUG 1
+#define DEBUG 0
 
 const QMap <Direction,QString> dirMap2 = { {  North, "North"},{  East , "East" },{  South ,"South" },{  West,"West" } };
 

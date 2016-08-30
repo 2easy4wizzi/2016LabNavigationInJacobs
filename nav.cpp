@@ -154,18 +154,28 @@ void Nav::initOnce()
     m_log->setStyleSheet(globalTextAttributes + logStyle);
     m_log->setReadOnly(true);
 
-    m_mediaPlayer = new QMediaPlayer;
-    m_videoWidget = new QVideoWidget;
+
+
 
     QVBoxLayout* logLayout = new QVBoxLayout();
     logLayout->addWidget(logLabel);
     logLayout->addWidget(m_log);
 
+    m_mediaPlayer = new QMediaPlayer;
+    m_videoWidget = new QVideoWidget;
+    //m_videoWidget->setGeometry(100,100,600,400);
+m_videoWidget->show();
+m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
+    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoTest)); //video location
+    m_mediaPlayer->setPosition(7000); // starting index time
+m_mediaPlayer->play();
 
     m_logSpacerLayout = new QHBoxLayout();
     m_logSpacerLayout->addWidget(m_videoWidget);
     m_logSpacerLayout->addLayout(logLayout);
-    m_logSpacerLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+    //m_logSpacerLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+
+
 }
 
 void Nav::init()
@@ -191,13 +201,13 @@ void Nav::init()
 
 
 
-    m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
-    m_videoWidget->show();
+//    m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
+//    m_videoWidget->show();
 
-    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoTest)); //video location
-    m_mediaPlayer->setPosition(2000); // starting index time
+//    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoTest)); //video location
+//    m_mediaPlayer->setPosition(2000); // starting index time
 
-    m_mediaPlayer->play();
+//    m_mediaPlayer->play();
 }
 
 void Nav::resetSlot()
