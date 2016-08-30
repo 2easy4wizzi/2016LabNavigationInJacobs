@@ -1,158 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Graph>
 <!--Floor 4-->
-    <Node Name="Robotics Lab" Number="417" Floor="4" VideoStartIndex="7000" VideoEndIndex="8000">
-        <Neighbor Direction="South" Name="Rachel Kalderoni"> </Neighbor>
-        <Neighbor Direction="West" Name="Lobby of Floor 4"> </Neighbor>
+    <Node Id="1" Name="Robotics Lab" Number="417" Floor="4" VideoStartIndex="7000" VideoEndIndex="8000" sort="405">
+        <Neighbor Direction="South" Id="5"> </Neighbor>
+        <Neighbor Direction="West" Id="2"> </Neighbor>
     </Node>
-    <Node Name="Lobby of Floor 4" Number="" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Elevators,Emergency Exit Floor 4"> </Neighbor>
-        <Neighbor Direction="East" Name="Robotics Lab"> </Neighbor>
-        <Neighbor Direction="South" Name="Stairs Down To Floor 3"> </Neighbor>
-        <Neighbor Direction="West" Name="Stairs Up To Floor 5"> </Neighbor>
+    <Node Id="2" Name="Lobby of Floor 4" Number="0" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="400">
+        <Neighbor Direction="North" Id="23"> </Neighbor>
+        <Neighbor Direction="East" Id="1"> </Neighbor>
+        <Neighbor Direction="South" Id="3"> </Neighbor>
+        <Neighbor Direction="West" Id="4"> </Neighbor>
     </Node>	
-	<Node Name="Stairs Down To Floor 3" Number="" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="East" Name="Lobby of Floor 4"> </Neighbor>
-        <Neighbor Direction="West" Name="Stairs Up To Floor 5"> </Neighbor>
+    <Node Id="3" Name="Stairs To Floor 3" Number="-1" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="401">
+        <Neighbor Direction="East" Id="2"> </Neighbor>
+        <Neighbor Direction="West" Id="4"> </Neighbor>
     </Node>
-	<Node Name="Stairs Up To Floor 5" Number="" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="East" Name="Stairs Down To Floor 3"> </Neighbor>
-        <Neighbor Direction="West" Name="CS Lounge"> </Neighbor>
+    <Node Id="4"  Name="Stairs To Floor 5" Number="-1" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="402">
+        <Neighbor Direction="East" Id="3"> </Neighbor>
+        <Neighbor Direction="West" Id="21"> </Neighbor>
     </Node>
-    <Node Name="Rachel Kalderoni" Number="416" Floor="4" VideoStartIndex="5000" VideoEndIndex="6000">
-        <Neighbor Direction="North" Name="Robotics Lab"> </Neighbor>
-        <Neighbor Direction="South" Name="Hagit Hal Or"> </Neighbor>
+    <Node Id="5" Name="Rachel Kalderoni" Number="416" Floor="4" VideoStartIndex="5000" VideoEndIndex="6000" sort="406">
+        <Neighbor Direction="North" Id="1"> </Neighbor>
+        <Neighbor Direction="South" Id="6"> </Neighbor>
     </Node>
-	<Node Name="Hagit Hal Or" Number="415" Floor="4" VideoStartIndex="3000" VideoEndIndex="4000">
-        <Neighbor Direction="North" Name="Rachel Kalderoni"> </Neighbor>
-        <Neighbor Direction="South" Name="Ronen Shealtiel"> </Neighbor>
+    <Node Id="6" Name="Hagit Hal Or" Number="415" Floor="4" VideoStartIndex="3000" VideoEndIndex="4000" sort="407">
+        <Neighbor Direction="North" Id="5"> </Neighbor>
+        <Neighbor Direction="South" Id="7"> </Neighbor>
     </Node>	
-	<Node Name="Ronen Shealtiel" Number="414" Floor="4" VideoStartIndex="1000" VideoEndIndex="2000">
-        <Neighbor Direction="North" Name="Hagit Hal Or"> </Neighbor>
-        <Neighbor Direction="South" Name="Dan Feldman"> </Neighbor> <!--FIX -->
+    <Node Id="7" Name="Ronen Shealtiel" Number="414" Floor="4" VideoStartIndex="1000" VideoEndIndex="2000" sort="408">
+        <Neighbor Direction="North" Id="6"> </Neighbor>
+        <Neighbor Direction="South" Id="8"> </Neighbor> <!--FIX -->
     </Node>	
-	<Node Name="Dan Feldman" Number="413" Floor="4" VideoStartIndex="0" VideoEndIndex="1000">
-        <Neighbor Direction="North" Name="Ronen Shealtiel"> </Neighbor>
-        <Neighbor Direction="South" Name="412"> </Neighbor> <!--FIX -->
+    <Node Id="8" Name="Dan Feldman" Number="413" Floor="4" VideoStartIndex="0" VideoEndIndex="1000" sort="409">
+        <Neighbor Direction="North" Id="7"> </Neighbor>
+        <Neighbor Direction="South" Id="9"> </Neighbor> <!--FIX -->
     </Node>	
-	<Node Name="412" Number="412" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1"> <!--FIX -->
-        <Neighbor Direction="North" Name="Dan Feldman"> </Neighbor>
-        <Neighbor Direction="East" Name="Or Meir"> </Neighbor>
-        <Neighbor Direction="West" Name="Dani Keren"> </Neighbor>
+    <Node Id="9" Name="412-office" Number="4120" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="413"> <!--FIX -->
+        <Neighbor Direction="North" Id="8"> </Neighbor>
+        <Neighbor Direction="East" Id="10"> </Neighbor>
+        <Neighbor Direction="West" Id="13"> </Neighbor>
     </Node>		
-	<Node Name="Or Meir" Number="412c" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="South" Name="412b"> </Neighbor> <!--FIX -->
-        <Neighbor Direction="West" Name="412"> </Neighbor>
+    <Node Id="10" Name="Or Meir" Number="4121" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="412">
+        <Neighbor Direction="South" Id="11"> </Neighbor> <!--FIX -->
+        <Neighbor Direction="West" Id="9"> </Neighbor>
     </Node>	
-	<Node Name="412b" Number="412b" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1"> <!--FIX -->
-        <Neighbor Direction="North" Name="Or Meir"> </Neighbor> 
-        <Neighbor Direction="South" Name="Oren Weeman"> </Neighbor>
+    <Node Id="11" Name="412b-office" Number="4122" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="411"> <!--FIX -->
+        <Neighbor Direction="North" Id="10"> </Neighbor>
+        <Neighbor Direction="South" Id="12"> </Neighbor>
     </Node>	
-	<Node Name="Oren Weeman" Number="412a" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1"> 
-        <Neighbor Direction="North" Name="412b"> </Neighbor> <!--FIX -->
+    <Node Id="12" Name="Oren Weeman" Number="4123" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="410">
+        <Neighbor Direction="North" Id="11"> </Neighbor> <!--FIX -->
     </Node>	
-	<Node Name="Dani Keren" Number="411" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="East" Name="412"> </Neighbor> <!--FIX -->
-        <Neighbor Direction="West" Name="Rita Osdechi"> </Neighbor>
+    <Node Id="13" Name="Dani Keren" Number="411" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="414">
+        <Neighbor Direction="East" Id="9"> </Neighbor> <!--FIX -->
+        <Neighbor Direction="West" Id="14"> </Neighbor>
     </Node>		
-	<Node Name="Rita Osdechi" Number="410" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="East" Name="Dani Keren"> </Neighbor>
-        <Neighbor Direction="West" Name="Etgar Secretariat"> </Neighbor>
+    <Node Id="14" Name="Rita Osdechi" Number="410" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="415">
+        <Neighbor Direction="East" Id="13"> </Neighbor>
+        <Neighbor Direction="West" Id="15"> </Neighbor>
     </Node>	
-	<Node Name="Etgar Secretariat" Number="409" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="East" Name="Rita Osdechi"> </Neighbor>
-        <Neighbor Direction="West" Name="Or Donkelman"> </Neighbor>
+    <Node Id="15" Name="Etgar Secretariat" Number="409" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="416">
+        <Neighbor Direction="East" Id="14"> </Neighbor>
+        <Neighbor Direction="West" Id="16"> </Neighbor>
     </Node>	
-	<Node Name="Or Donkelman" Number="408" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="CS Secretariat"> </Neighbor>
-        <Neighbor Direction="East" Name="Etgar Secretariat"> </Neighbor>
+    <Node Id="16" Name="Or Donkelman" Number="408" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="417">
+        <Neighbor Direction="North" Id="17"> </Neighbor>
+        <Neighbor Direction="East" Id="15"> </Neighbor>
     </Node>	
-	<Node Name="CS Secretariat" Number="406" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Copy Room"> </Neighbor>
-        <Neighbor Direction="South" Name="Or Donkelman"> </Neighbor> 
+    <Node Id="17" Name="CS Secretariat" Number="406" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="418">
+        <Neighbor Direction="North" Id="18"> </Neighbor>
+        <Neighbor Direction="South" Id="16"> </Neighbor>
     </Node>
-	<Node Name="Copy Room" Number="404" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Shuli Vitner"> </Neighbor>
-        <Neighbor Direction="South" Name="CS Secretariat"> </Neighbor> 
+    <Node Id="18" Name="Copy Room" Number="404" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="419">
+        <Neighbor Direction="North" Id="19"> </Neighbor>
+        <Neighbor Direction="South" Id="17"> </Neighbor>
     </Node>
-	<Node Name="Shuli Vitner" Number="403" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Martin Golombeek"> </Neighbor>
-        <Neighbor Direction="South" Name="Copy Room"> </Neighbor> 
+    <Node Id="19" Name="Shuli Vitner" Number="403" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="420">
+        <Neighbor Direction="North" Id="20"> </Neighbor>
+        <Neighbor Direction="South" Id="18"> </Neighbor>
     </Node>
-	<Node Name="Martin Golombeek" Number="402" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="CS Lounge"> </Neighbor>
-        <Neighbor Direction="South" Name="Shuli Vitner"> </Neighbor> 
+    <Node Id="20" Name="Martin Golombeek" Number="402" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="421">
+        <Neighbor Direction="North" Id="21"> </Neighbor>
+        <Neighbor Direction="South" Id="19"> </Neighbor>
     </Node>	
-	<Node Name="CS Lounge" Number="401" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Bathroom"> </Neighbor>
-        <Neighbor Direction="East" Name="Stairs Up To Floor 5"> </Neighbor>
-        <Neighbor Direction="South" Name="Martin Golombeek"> </Neighbor> 
+    <Node Id="21" Name="CS Lounge" Number="401" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="422">
+        <Neighbor Direction="North" Id="22"> </Neighbor>
+        <Neighbor Direction="East" Id="4"> </Neighbor>
+        <Neighbor Direction="South" Id="20"> </Neighbor>
     </Node>	
-	<Node Name="Bathroom" Number="" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="South" Name="CS Lounge"> </Neighbor> 
+    <Node Id="22" Name="Bathroom floor 4" Number="0" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="423">
+        <Neighbor Direction="South" Id="21"> </Neighbor>
     </Node>	
-	<Node Name="Elevators,Emergency Exit Floor 4" Number="" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="CS Private Room"> </Neighbor>
-        <Neighbor Direction="South" Name="Stairs Down To Floor 3"> </Neighbor> 
+    <Node Id="23" Name="Elevator Floor 4" Number="0" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="403">
+        <Neighbor Direction="North" Id="24"> </Neighbor>
+        <Neighbor Direction="South" Id="3"> </Neighbor>
     </Node>	
-	<Node Name="CS Private Room" Number="418" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="South" Name="Elevators,Emergency Exit Floor 4"> </Neighbor> 
+    <Node Id="24" Name="CS Private Room" Number="418" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="404">
+        <Neighbor Direction="South" Id="23"> </Neighbor>
     </Node>		
 <!--Floor 3-->	
-	<Node Name="Lobby Of Floor 3" Number="" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Elevators,Emergency Exit Floor 3"> </Neighbor>
-        <Neighbor Direction="East" Name="Jackbobs Entrance"> </Neighbor>
-        <Neighbor Direction="West" Name="Stairs Up To Floor 4"> </Neighbor>
+    <Node Id="25" Name="Lobby Of Floor 3" Number="0" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="310">
+        <Neighbor Direction="North" Id="27"> </Neighbor>
+        <Neighbor Direction="East" Id="37"> </Neighbor>
+        <Neighbor Direction="West" Id="28"> </Neighbor>
     </Node>		
-	<Node Name="306" Number="306" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="South" Name="Elevators,Emergency Exit Floor 3"> </Neighbor> 
+    <Node Id="26" Name="306-class" Number="306" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="312">
+        <Neighbor Direction="South" Id="27"> </Neighbor>
     </Node>		
-	<Node Name="Elevators,Emergency Exit Floor 3" Number="" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="306"> </Neighbor>
-        <Neighbor Direction="South" Name="Lobby Of Floor 3"> </Neighbor> 
+    <Node Id="27" Name="Elevator Floor 3" Number="0" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="311">
+        <Neighbor Direction="North" Id="26"> </Neighbor>
+        <Neighbor Direction="South" Id="25"> </Neighbor>
     </Node>		
-	<Node Name="Stairs Up To Floor 4" Number="" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="East" Name="Lobby Of Floor 3"> </Neighbor>
-        <Neighbor Direction="West" Name="Bathroom Corner"> </Neighbor>
+    <Node Id="28" Name="Stairs To Floor 4" Number="-1" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="309">
+        <Neighbor Direction="East" Id="25"> </Neighbor>
+        <Neighbor Direction="West" Id="29"> </Neighbor>
     </Node>		
-	<Node Name="Bathroom Corner" Number="" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Bathroom"> </Neighbor>
-        <Neighbor Direction="East" Name="Stairs Up To Floor 4"> </Neighbor>
-        <Neighbor Direction="South" Name="Stairs Down To Floor 2"> </Neighbor> 
-        <Neighbor Direction="West" Name="302"> </Neighbor>
+    <Node Id="29" Name="Bathroom Corner" Number="-1" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="308">
+        <Neighbor Direction="North" Id="30"> </Neighbor>
+        <Neighbor Direction="East" Id="28"> </Neighbor>
+        <Neighbor Direction="South" Id="33"> </Neighbor>
+        <Neighbor Direction="West" Id="31"> </Neighbor>
     </Node>	
-	<Node Name="Bathroom" Number="" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="South" Name="Bathroom Corner"> </Neighbor> 
+    <Node Id="30" Name="Bathroom floor 3" Number="0" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="307">
+        <Neighbor Direction="South" Id="29"> </Neighbor>
     </Node>	
-	<Node Name="302" Number="302" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="301"> </Neighbor>
-        <Neighbor Direction="East" Name="Bathroom Corner"> </Neighbor>
-        <Neighbor Direction="South" Name="303"> </Neighbor> 
+    <Node Id="31" Name="302-office" Number="302" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="305">
+        <Neighbor Direction="North" Id="32"> </Neighbor>
+        <Neighbor Direction="East" Id="29"> </Neighbor>
+        <Neighbor Direction="South" Id="34"> </Neighbor>
     </Node>	
-	<Node Name="301" Number="301" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="South" Name="Stairs Down To Floor 2"> </Neighbor> 
-        <Neighbor Direction="West" Name="302"> </Neighbor>
+    <Node Id="32" Name="301-office" Number="301" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="306">
+        <Neighbor Direction="South" Id="33"> </Neighbor>
+        <Neighbor Direction="West" Id="31"> </Neighbor>
     </Node>		
-	<Node Name="Stairs Down To Floor 2" Number="" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Bathroom Corner"> </Neighbor>
-        <Neighbor Direction="South" Name="303"> </Neighbor> 
+    <Node Id="33" Name="Stairs To Floor 2" Number="-1" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="304">
+        <Neighbor Direction="North" Id="29"> </Neighbor>
+        <Neighbor Direction="South" Id="34"> </Neighbor>
     </Node>
-	<Node Name="303" Number="303" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Bathroom Corner"> </Neighbor>
-        <Neighbor Direction="East" Name="Communication Room"> </Neighbor>
+    <Node Id="34" Name="303-class" Number="303" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="303">
+        <Neighbor Direction="North" Id="29"> </Neighbor>
+        <Neighbor Direction="East" Id="35"> </Neighbor>
     </Node>
-	<Node Name="Communication Room" Number="304" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Bathroom Corner"> </Neighbor>
-        <Neighbor Direction="East" Name="305"> </Neighbor>
-        <Neighbor Direction="West" Name="303"> </Neighbor>
+    <Node Id="35" Name="Communication Room" Number="304" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="302">
+        <Neighbor Direction="North" Id="29"> </Neighbor>
+        <Neighbor Direction="East" Id="36"> </Neighbor>
+        <Neighbor Direction="West" Id="34"> </Neighbor>
     </Node>
-	<Node Name="305" Number="305" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Lobby Of Floor 3"> </Neighbor>
-        <Neighbor Direction="East" Name="Jackbobs Entrance"> </Neighbor>
-        <Neighbor Direction="West" Name="Communication Room"> </Neighbor>
+    <Node Id="36" Name="305-class" Number="305" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="301">
+        <Neighbor Direction="North" Id="25"> </Neighbor>
+        <Neighbor Direction="East" Id="37"> </Neighbor>
+        <Neighbor Direction="West" Id="35"> </Neighbor>
     </Node>
-	<Node Name="Jackbobs Entrance" Number="" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1">
-        <Neighbor Direction="North" Name="Lobby Of Floor 3"> </Neighbor>
-        <Neighbor Direction="West" Name="305"> </Neighbor>
+    <Node Id="37" Name="Jackbobs Entrance" Number="0" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="300">
+        <Neighbor Direction="North" Id="25"> </Neighbor>
+        <Neighbor Direction="West" Id="36"> </Neighbor>
     </Node>
 </Graph>

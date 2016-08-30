@@ -21,6 +21,8 @@ const char* fieldVideoStartIndex= "VideoStartIndex";
 const char* fieldVideoEndIndex= "VideoEndIndex";
 const char* fieldNeighbor= "Neighbor";
 const char* fieldDirection= "Direction";
+const char* fieldId= "Id";
+const char* fieldSort= "sort";
 
 
 
@@ -57,11 +59,12 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
     int floor = -1;
 	int videoStartIndex = -1;
 	int videoEndIndex = -1;
+    int sortNum = 0;
     string name = "\0";
 	string number = "\0";
     neighborPair neighbors[NUM_OF_NEIGBHORS];
     Direction neighborDir;
-    string neighborName = "\0";
+    int neighborId = 0;
     for (xml_node<> * vertex_node = root->first_node(fieldNode); vertex_node; vertex_node = vertex_node->next_sibling())
     {
             name = vertex_node->first_attribute(fieldName)->value();
@@ -69,19 +72,19 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
             floor = atoi(vertex_node->first_attribute(fieldFloor)->value());
             videoStartIndex = atoi(vertex_node->first_attribute(fieldVideoStartIndex)->value());
             videoEndIndex = atoi(vertex_node->first_attribute(fieldVideoEndIndex)->value());
+            sortNum = atoi(vertex_node->first_attribute(fieldSort)->value());
 			// Interate over the nodes neighbors
             int i = 0;
             for (xml_node<> * neighbor_node = vertex_node->first_node(fieldNeighbor); neighbor_node; neighbor_node = neighbor_node->next_sibling())
             {
-                    neighborName = neighbor_node->first_attribute(fieldName)->value();
-
+                    neighborId = atoi(neighbor_node->first_attribute(fieldId)->value());
                     string tempDir = neighbor_node->first_attribute(fieldDirection)->value();
                     map<basic_string<char>, Direction>::const_iterator it = dirMap.find(tempDir);
                     neighborDir = (*it).second;
                     if (i > 3) { /*throw new exception("i is bigger then 3");*/ }
-                    neighbors[i++] =  neighborPair(neighborDir, neighborName);
+                    neighbors[i++] =  neighborPair(neighborDir, neighborId);
             }
-            Node *node = new Node(name,number, floor, neighbors, videoStartIndex, videoEndIndex);
+            Node *node = new Node(name,number, floor, neighbors, videoStartIndex, videoEndIndex, sortNum);
             _nodes->push_back(node);
     }
     return 1;
@@ -105,26 +108,26 @@ bool Graph::ParseXmlEdges(string xmlPathEdges)
     int weight = -1;
     int floor = -1;
     EdgeType type = NotInitialized;
-    string nodeName1 = "\0";
-    string nodeName2 = "\0";
+    int nodeId1 = 0;
+    int nodeId2 = 0;
     for (xml_node<> * vertex_node = root->first_node(fieldEdge); vertex_node; vertex_node = vertex_node->next_sibling())
     {
             weight = atoi(vertex_node->first_attribute(fieldWeight)->value());
             floor = atoi(vertex_node->first_attribute(fieldFloor)->value());
             string typeStr = vertex_node->first_attribute(fieldType)->value();
             type = typeMap.find(typeStr)->second;
-            nodeName1 = vertex_node->first_attribute(fieldNode1)->value();
-            nodeName2 = vertex_node->first_attribute(fieldNode2)->value();
+            nodeId1 = atoi(vertex_node->first_attribute(fieldNode1)->value());
+            nodeId2 = atoi(vertex_node->first_attribute(fieldNode2)->value());
             // find node1 and node2 of the edge
             Node* node1 = NULL;
             Node* node2 = NULL;
             for (Node* node : *_nodes)
             {
-                if (node->GetName() == nodeName1)
+                if (node->GetId() == nodeId1)
                 {
                     node1 = node;
                 }
-                else if (node->GetName() == nodeName2)
+                else if (node->GetId() == nodeId2)
                 {
                     node2 = node;
                 }
@@ -214,7 +217,7 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     Node* trace = start;
 	// push to list the starting room
     Node *next = trace->GetPreviosNode();
-    pathRoom startingRoom = { trace,trace->GetEdgeWeightToPrevious(),trace->GetNeighborDirection(trace->GetPreviosNode()->GetName()), next->GetId() };
+    pathRoom startingRoom = { trace, trace->GetEdgeWeightToPrevious(), trace->GetNeighborDirection(trace->GetPreviosNode()->GetId()), next->GetId() };
     shortestPath->push_back(startingRoom);
 
     while (next != NULL && next != end)
@@ -223,7 +226,7 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
         {
 			pathRoom pRoom = { next,
 				next->GetEdgeWeightToPrevious(),
-                next->GetNeighborDirection(next->GetPreviosNode()->GetName()) ,
+                next->GetNeighborDirection(next->GetPreviosNode()->GetId()) ,
                 next->GetPreviosNode()->GetId()
                 };
             shortestPath->push_back(pRoom);

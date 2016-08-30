@@ -1,7 +1,7 @@
 #include "node.h"
 
 
-Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS], int videoStartIndex, int videoEndIndex)
+Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS], int videoStartIndex, int videoEndIndex, int sort)
 {
         static int NodesId = 1;
 //    if (floor < 0) /*throw new exception("Error! floor input is out of range")*/;
@@ -13,6 +13,7 @@ Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM
     _name = name;
 	_number = number;
     _previosNode = NULL;
+    _sort = sort;
     for (int i = 0; i < NUM_OF_NEIGBHORS; i++)
     {
         _neighbors[i] = neighbors[i];
@@ -38,6 +39,11 @@ void Node::SetName(string const *name)
 int Node::GetId() const
 {
     return _id;
+}
+
+int Node::GetSort() const
+{
+    return _sort;
 }
 
 int Node::GetNodeFloor() const
@@ -73,22 +79,20 @@ void Node::SetPreviosNode(Node* previos)
     _previosNode = previos;
 }
 
-const basic_string<char>Node::GetNeighborDirection(string neighborName)
+const basic_string<char> Node::GetNeighborDirection(int neighborId)
 {
-	string result = "";
-	if ((neighborName).empty()) return NULL;
     for (size_t i = 0; i < NUM_OF_NEIGBHORS; i++)
 	{
-		if (_neighbors[i].second == neighborName)
+        if (_neighbors[i].second == neighborId)
         {
             map<Direction,basic_string<char> >::const_iterator it = dirRevMap.find(_neighbors[i].first);
             return (*it).second;
         }
 	}
-	return result;
+    return 0;
 }
 
- pair<Direction, string> * Node::GetNeihbors()
+ pair<Direction, int> * Node::GetNeihbors()
 {
     return _neighbors;
 }

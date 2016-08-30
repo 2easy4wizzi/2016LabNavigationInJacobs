@@ -40,6 +40,7 @@ const QString fieldWest = "West";
 const QString fieldStairs = "Stairs";
 const QString fieldElevator = "Elevator";
 const QString fieldFloor = "Floor";
+const QString fieldSort = "Sort";
 
 
 const QMap <Direction,QString> dirMap2 = { {  North, fieldNorth},{  East , fieldEast },{  South ,fieldSouth },{  West,fieldWest } };

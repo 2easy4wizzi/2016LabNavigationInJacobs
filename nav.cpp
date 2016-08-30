@@ -29,12 +29,13 @@ void Nav::translateRoomsFromCppToQt()
         QMap<QString,QString> room;
         room[fieldID] = QString::number(node->GetId());
         room[fieldName] = node->GetName().c_str();
-        const pair<Direction, string> * neighbos = node->GetNeihbors();
+        const pair<Direction, int> * neighbos = node->GetNeihbors();
         for (int i=0; i<NUM_OF_NEIGBHORS ; i++){
-            room[dirMap2[neighbos[i].first]] = neighbos[i].second.c_str();
+            room[dirMap2[neighbos[i].first]] = QString::number(neighbos[i].second);
         }
         room[fieldFloor] = QString::number(node->GetNodeFloor());
         room[fieldNumber] = (node->GetNumber().c_str());
+        room[fieldSort] = QString::number(node->GetSort());
         m_roomsObjects.push_back(room);
     }
 }
@@ -329,16 +330,16 @@ void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
             int currentFloor = roomInPath.room->GetNodeFloor();
             int desFloor = getRoomFieldById(nextRoomInPathId,fieldFloor).toInt();
             QString text = currentFloor > desFloor ?
-                        (QString::number(++i) + ") Use the elevator to go down to floor" + QString::number(desFloor) + ".") :
-                        (QString::number(++i) + ") Use the elevator to go up to floor"   + QString::number(desFloor) + ".");
+                        (QString::number(++i) + ") Use the Elevator to go down to Floor " + QString::number(desFloor) + ".") :
+                        (QString::number(++i) + ") Use the Elevator to go up to Floor "   + QString::number(desFloor) + ".");
             m_log->append(text);
         }
         else if(roomName.contains(fieldStairs)&& getRoomFieldById(nextRoomInPathId, fieldName).contains(fieldStairs)){
             int currentFloor = roomInPath.room->GetNodeFloor();
             int desFloor = getRoomFieldById(nextRoomInPathId,fieldFloor).toInt();
             QString text = currentFloor > desFloor ?
-                        (QString::number(++i) + ") Go down the stairs to floor" + QString::number(desFloor) + ".") :
-                        (QString::number(++i) + ") Go up the stairs to floor"   + QString::number(desFloor) + ".");
+                        (QString::number(++i) + ") Go down the Stairs to Floor " + QString::number(desFloor) + ".") :
+                        (QString::number(++i) + ") Go up the Stairs to Floor "   + QString::number(desFloor) + ".");
             m_log->append(text);
         }
         else{
@@ -396,8 +397,27 @@ QStringList Nav::getRoomsTagsToPlaceInComboBox()
 {
     QStringList tags;
     for(QMap<QString,QString> room : m_roomsObjects){
-        tags.push_back(room[m_comboKey]);
+        if(m_comboKey==fieldNumber){
+            if(room[fieldNumber] == "0"){ //rooms like bathroom with no number
+                tags.push_back(room[fieldName]);
+            }
+            else if(room[fieldNumber] == "-1"){ //rooms that help on the route but are not a destanation
+                //do nothing
+            }
+            else{
+                tags.push_back(room[m_comboKey]);
+            }
+        }
+        else{
+            tags.push_back(room[m_comboKey]);
+        }
     }
+    QStringList sortedTags;
+    for(QString str : tags){
+
+    }
+
+
     return tags;
 }
 
