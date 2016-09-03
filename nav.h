@@ -12,13 +12,13 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QString>
-// https://www.youtube.com/watch?v=tGKmQy-VBX0
 #include <QTimer>
 #include <QtMultimedia/qmediaplayer.h>
 #include <QtMultimediaWidgets/qvideowidget.h>
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QCheckBox>
+#include <QToolBar>
 
 
 
@@ -117,6 +117,7 @@ private:
     QHBoxLayout* m_logSpacerLayout;
     QMediaPlayer* m_mediaPlayer;
     QVideoWidget* m_videoWidget;
+    QMediaPlaylist* m_playlist;
     QRadioButton *m_groupBoxPrefRadioDefault;
     QRadioButton *m_groupBoxPrefRadioStairs;
     QRadioButton *m_groupBoxPrefRadioElevator;

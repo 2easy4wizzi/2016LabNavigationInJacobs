@@ -5,6 +5,8 @@
 
 
 
+
+
 Nav::Nav(QWidget *parent):QWidget(parent)
 {
     setObjectName("Nav gui manager");
@@ -236,13 +238,26 @@ void Nav::initOnce()
     logLayout->addWidget(logLabel);
     logLayout->addWidget(m_log);
 
+
+    QVBoxLayout* videoLayout = new QVBoxLayout();
     m_mediaPlayer = new QMediaPlayer;
     m_videoWidget = new QVideoWidget;
+    m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
+    QToolBar* tb = new QToolBar();
+    QPushButton* play = new QPushButton("Play");
+    tb->addWidget(play);
+    QPushButton* pause = new QPushButton("pause");
+    tb->addWidget(pause);
+    QPushButton* stop = new QPushButton("Stop");
+    tb->addWidget(stop);
+    QPushButton* rePlay = new QPushButton("rePlay");
+    tb->addWidget(rePlay);
 
-
+    videoLayout->addWidget(m_videoWidget);
+    videoLayout->addWidget(tb);
 
     m_logSpacerLayout = new QHBoxLayout();
-    m_logSpacerLayout->addWidget(m_videoWidget);
+    m_logSpacerLayout->addLayout(videoLayout);
     m_logSpacerLayout->addLayout(logLayout);
     //m_logSpacerLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
 
@@ -394,10 +409,11 @@ void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
 
 void Nav::playVideoFromTo(QString videoPath, int from, int to)
 {
-    m_videoWidget->show();
-    m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
+
     m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
     m_mediaPlayer->setPosition(from); // starting index time
+
+    m_videoWidget->show();
     m_mediaPlayer->play();
 }
 
