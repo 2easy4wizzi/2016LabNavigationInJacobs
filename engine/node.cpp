@@ -89,7 +89,7 @@ const basic_string<char> Node::GetNeighborDirection(int neighborId)
             return (*it).second;
         }
 	}
-    return 0;
+    return "";
 }
 
  pair<Direction, int> * Node::GetNeihbors()
@@ -110,4 +110,19 @@ int Node::GetVideoEndIndex() const
 string Node::GetNumber() const
 {
     return _number;
+}
+
+string Node::ToString() const
+{
+    string toString =
+            "_name:" + _name + " " +
+            "_number:" + _number + " " +
+            "_id:" + std::to_string(_id) + " " +
+            "_floor:" + std::to_string(_floor) + " " +
+            "_sort:" + std::to_string(_sort) + " " +
+            "_edgeWPrev:" + std::to_string(_edgeWeightToPrevious) + " " +
+            "_videoSI:" + std::to_string(_videoStartIndex) + " " +
+            "_videoEI:" + std::to_string(_videoEndIndex) + " "
+            ;
+    return toString;
 }

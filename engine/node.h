@@ -43,6 +43,7 @@ public:
 	int GetVideoStartIndex() const;
 	int GetVideoEndIndex() const;
     string GetNumber() const;
+    string ToString() const;
 };
 
 #endif // NODE_H
