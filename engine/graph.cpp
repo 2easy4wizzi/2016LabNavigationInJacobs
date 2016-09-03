@@ -259,7 +259,7 @@ list<pathRoom> Graph::GetShrinkendShortestPath(list<pathRoom> shortestPath)
 	{
 		bool advanced = false;
 		distance = iter1->distance; //distance to the next room on shortest path
-		while(iter2!=iterEnd && iter1->direction == iter2->direction)
+        while(iter2!=iterEnd && iter1->direction == iter2->direction && iter1->direction != "")
 		{
 			distance += iter2->distance;
 			++iter2;

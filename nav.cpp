@@ -255,7 +255,7 @@ Node *Nav::findNodeByStr(QString str)
     int id = -1;
     for(QMap<QString,QString> room : m_roomsObjects)
     {
-        if(str == room[m_comboKey]){
+        if(str == room[m_comboKey] || str == room[fieldNumber]|| str == room[fieldName]){ //some node has just Name or Just number
             id = room[fieldID].toInt();
         }
     }
@@ -319,7 +319,9 @@ void Nav::printShortestPath(QList<pathRoomQt> shortestPathQt)
 
 void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
 {
-    m_log->append("\nStart from " + getRoomFieldById(shortestPathQt[0].room->GetId(),m_comboKey) + " :");
+    QString currentRoom(m_currentLocationCb->currentText());
+    QString destRoom(m_destinationCb->currentText());
+    m_log->append("\nStart from " + currentRoom + " :");
     int i = 0;
     for(pathRoomQt roomInPath: shortestPathQt ){
 
@@ -343,15 +345,12 @@ void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
             m_log->append(text);
         }
         else{
+            QString dest(getRoomFieldById(nextRoomInPathId,m_comboKey));
+            if (m_comboKey == fieldNumber &&(dest == "-1"|| dest == "0")) dest = getRoomFieldById(nextRoomInPathId,fieldName);
             m_log->append(QString::number(++i) + ") Walk " + QString::number(roomInPath.distance) +
                           " meters " + roomInPath.direction +
-                          " to " + getRoomFieldById(nextRoomInPathId,m_comboKey) + "." );
+                          " to " + dest + "." );
         }
-
-
-
-
-
     }
 }
 
@@ -396,27 +395,23 @@ void Nav::prefWasChangedSlot()
 QStringList Nav::getRoomsTagsToPlaceInComboBox()
 {
     QStringList tags;
+    QMap <int,QString> sortKeyAndTags;
     for(QMap<QString,QString> room : m_roomsObjects){
-        if(m_comboKey==fieldNumber){
-            if(room[fieldNumber] == "0"){ //rooms like bathroom with no number
-                tags.push_back(room[fieldName]);
-            }
-            else if(room[fieldNumber] == "-1"){ //rooms that help on the route but are not a destanation
-                //do nothing
-            }
-            else{
-                tags.push_back(room[m_comboKey]);
-            }
+        if(room[fieldNumber] == "0"){ //rooms like bathroom with no number
+            //tags.push_back(room[fieldName]);
+            sortKeyAndTags.insert(room[fieldSort].toInt(), room[fieldName]);
+        }
+        else if(room[fieldNumber] == "-1"){ //rooms that help on the route but are not a destanation
+            //do nothing
         }
         else{
-            tags.push_back(room[m_comboKey]);
+            //tags.push_back(room[m_comboKey]);
+            sortKeyAndTags.insert(room[fieldSort].toInt(), room[m_comboKey]);
         }
     }
-    QStringList sortedTags;
-    for(QString str : tags){
-
+    for(QMap<int,QString>::iterator it = sortKeyAndTags.begin(); it!=sortKeyAndTags.end(); ++it){
+        tags.push_back(it.value());
     }
-
 
     return tags;
 }

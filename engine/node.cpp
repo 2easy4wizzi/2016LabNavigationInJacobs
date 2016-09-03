@@ -3,7 +3,7 @@
 
 Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS], int videoStartIndex, int videoEndIndex, int sort)
 {
-        static int NodesId = 1;
+        static int NodesId = 1; //#mark cahnge to attribute
 //    if (floor < 0) /*throw new exception("Error! floor input is out of range")*/;
 //    if (name.empty()) /*throw new exception("Error! name input is empty")*/;
     _id = NodesId++;
