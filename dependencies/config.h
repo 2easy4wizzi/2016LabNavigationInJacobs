@@ -23,9 +23,16 @@ const QString logLabelText = "directions";
 const QString logLabelStyle = "background-color: blue;";
 const QString logStyle = "background-color: grey;";
 const QString comboKey = "Name";
-const QString viewRoomsCbStyle = "";
 const QString groupBoxPrefStyle = "";
 const QString groupBoxViewByStyle = "";
+const QString resetButtonStyle = "";
+const QString filterButtonStyle = "";
+const QString goButtonStyle = "";
+const QString locationCBsStyle = "";
+const QString floorsNumbersWidgetStyle = "";
+const QString floorsNumbersWidgetHeader = "see only floors number:";
+
+const QString baseFloor = "3"; //used in the filter. come in use when user uncheck all floors
 
 #endif // CONFIG_H
 

@@ -18,6 +18,8 @@
 #include <QtMultimediaWidgets/qvideowidget.h>
 #include <QGroupBox>
 #include <QRadioButton>
+#include <QCheckBox>
+
 
 
 #include "dependencies/config.h"
@@ -66,9 +68,8 @@ public:
     void init();
     Node* findNodeByStr(QString str);
     QString getRoomFieldById(int id, QString field);
-    QStringList getRoomsTagsToPlaceInComboBox();
+    QStringList getRoomsTagsToPlaceInComboBox(QMap <int,QString> floorsToShow = QMap<int, QString>());
     void translateRoomsFromCppToQt();
-    void printRooms();
     QList<pathRoomQt> translateShortestPathFromCppToQt();
     void printShortestPath(QList<pathRoomQt> shortestPathQt);
     void appendShortestPathToLog(QList<pathRoomQt> shortestPathQt);
@@ -82,7 +83,10 @@ public slots:
     void goWasPressedSlot();
     void viewRoomsByHasChangedSlot();
     void prefWasChangedSlot();
-
+    void showFilter1Slot();
+    void showFilter2Slot();
+    void updateFilter1Slot();
+    void updateFilter2Slot();
 
 
 signals:
@@ -95,7 +99,11 @@ private:
     QVBoxLayout* m_mainVLayout;
     QPushButton* m_resetButton;
     QComboBox * m_currentLocationCb;
+    QPushButton * m_currentLocationCbFilter;
+    QGroupBox *m_groupBoxCurrentLocationCbWidget;
     QComboBox * m_destinationCb;
+    QPushButton * m_destinationCbFilter;
+    QGroupBox *m_groupBoxdestinationCbWidget;
     QPushButton* m_goButton;
     QTextEdit* m_log;
     Graph* m_graph;
@@ -115,6 +123,8 @@ private:
     QRadioButton *m_groupBoxViewByRadioName;
     QRadioButton *m_groupBoxViewByRadioNumber;
     EdgeType m_pref;
+    QMap <int,QString> m_floorToShow1;
+    QMap <int,QString> m_floorToShow2;
 };
 
 #endif // NAV_H

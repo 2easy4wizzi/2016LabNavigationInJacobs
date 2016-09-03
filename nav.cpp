@@ -4,6 +4,7 @@
 
 
 
+
 Nav::Nav(QWidget *parent):QWidget(parent)
 {
     setObjectName("Nav gui manager");
@@ -13,7 +14,10 @@ Nav::Nav(QWidget *parent):QWidget(parent)
     init();
 }
 
-Nav::~Nav(){}
+Nav::~Nav(){
+    m_groupBoxCurrentLocationCbWidget->close();
+    m_groupBoxdestinationCbWidget->close();
+}
 
 /*read files once at start up and cache them*/
 void Nav::readAndCache()
@@ -40,33 +44,6 @@ void Nav::translateRoomsFromCppToQt()
     }
 }
 
-void Nav::printRooms()
-{
-    QList<QString> headers({fieldName , fieldID, fieldFloor, fieldNorth, fieldEast, fieldSouth, fieldWest});
-    QString strHeaders("");
-    for(QString header : headers)
-    {
-        strHeaders.append(header + " ");
-    }
-    qDebug() << strHeaders;
-    for (QMap<QString, QString> room : m_roomsObjects){
-        QString strRoom("");
-        strRoom.append(room[headers.at(0)]+ "    ");
-        strRoom.append(room[headers.at(1)]+ "  ");
-        strRoom.append(room[headers.at(2)]+ "     ");
-
-        QString strNorth = room[headers.at(3)].isEmpty() ? "      " : room[headers.at(3)]+ "     ";
-        strRoom.append(strNorth);
-        QString strEast = room[headers.at(4)].isEmpty() ? "     " : room[headers.at(4)]+ "    ";
-        strRoom.append(strEast);
-        QString strSouth = room[headers.at(5)].isEmpty() ? "      " : room[headers.at(5)]+ "     ";
-        strRoom.append(strSouth);
-        QString strWest = room[headers.at(6)].isEmpty() ? "     " : room[headers.at(6)]+ "    ";
-        strRoom.append(strWest);
-        qDebug() << strRoom;
-    }
-}
-
 void Nav::readRoomsFromXml()//temp solution
 {
     //m_roomsObjects = readRoomsFromXmlUsingEngine(roomsXmlPath);
@@ -76,7 +53,6 @@ void Nav::readRoomsFromXml()//temp solution
         exitProgramWithErrMsg("Unable to read XML files.\nPlease check their paths in config.h are valid");
     }
     translateRoomsFromCppToQt();
-    if(DEBUG) printRooms();
 }
 
 void Nav::initOnce()
@@ -100,6 +76,7 @@ void Nav::initOnce()
 
 
     m_resetButton = new QPushButton("reset");
+    m_resetButton->setStyleSheet(resetButtonStyle);
     connect(m_resetButton,SIGNAL(clicked(bool)),this,SLOT(resetSlot()));
 
 
@@ -158,13 +135,68 @@ void Nav::initOnce()
 
     /*combos inside text*/
     m_currentLocationCb = new QComboBox();
+    m_currentLocationCb->setStyleSheet(locationCBsStyle);
     connect(m_currentLocationCb, SIGNAL(activated(int)), this, SLOT(currentLocationCbHasChangedSlot()));
 
     m_destinationCb = new QComboBox();
+    m_destinationCb->setStyleSheet(locationCBsStyle);
     connect(m_destinationCb, SIGNAL(activated(int)), this, SLOT(destinationCbHasChangedSlot()));
+
+    /*combos filer*/
+
+
+    for (QMap<QString,QString> room : m_roomsObjects){
+        if(!m_floorToShow1.keys().contains(room[fieldFloor].toInt())){
+            m_floorToShow1.insert(room[fieldFloor].toInt(),room[fieldFloor]);
+            m_floorToShow2.insert(room[fieldFloor].toInt(),room[fieldFloor]);
+        }
+    }
+
+    m_groupBoxCurrentLocationCbWidget = new QGroupBox(floorsNumbersWidgetHeader);
+    m_groupBoxCurrentLocationCbWidget->setStyleSheet(floorsNumbersWidgetStyle);
+    m_groupBoxCurrentLocationCbWidget->setFlat(true);
+    QVBoxLayout *vboxFilter1 = new QVBoxLayout;
+    for (int uniqueFloorNum : m_floorToShow1.keys()){
+        QCheckBox *checkBox = new QCheckBox(m_floorToShow1[uniqueFloorNum]);
+        checkBox->setChecked(true);
+        checkBox->setObjectName("filter1");
+        connect(checkBox, SIGNAL(clicked(bool)),this, SLOT(updateFilter1Slot()));
+        vboxFilter1->addWidget(checkBox);
+    }
+    vboxFilter1->addStretch(1);
+    m_groupBoxCurrentLocationCbWidget->setLayout(vboxFilter1);
+    m_groupBoxCurrentLocationCbWidget->setGeometry(200, 200 ,200, 200);
+
+    m_currentLocationCbFilter = new QPushButton("filter floors");
+    m_currentLocationCbFilter->setStyleSheet(filterButtonStyle);
+
+    connect(m_currentLocationCbFilter, SIGNAL(clicked(bool)),this, SLOT(showFilter1Slot()));
+
+
+    m_groupBoxdestinationCbWidget = new QGroupBox(floorsNumbersWidgetHeader);
+    m_groupBoxdestinationCbWidget->setStyleSheet(floorsNumbersWidgetStyle);
+    m_groupBoxdestinationCbWidget->setFlat(true);
+    QVBoxLayout *vboxFilter2 = new QVBoxLayout;
+    for (int uniqueFloorNum : m_floorToShow2.keys()){
+        QCheckBox *checkBox = new QCheckBox(m_floorToShow2[uniqueFloorNum]);
+        checkBox->setChecked(true);
+        connect(checkBox, SIGNAL(clicked(bool)),this, SLOT(updateFilter2Slot()));
+        checkBox->setObjectName("filter2");
+        vboxFilter2->addWidget(checkBox);
+    }
+    vboxFilter2->addStretch(1);
+    m_groupBoxdestinationCbWidget->setLayout(vboxFilter2);
+    m_groupBoxdestinationCbWidget->setGeometry(200, 200 ,200, 200);
+
+
+    m_destinationCbFilter = new QPushButton("filter floors");
+    m_destinationCbFilter->setStyleSheet(filterButtonStyle);
+    connect(m_destinationCbFilter, SIGNAL(clicked(bool)),this, SLOT(showFilter2Slot()));
+
 
     /*go button*/
     m_goButton = new QPushButton("GO");
+    m_goButton->setStyleSheet(goButtonStyle);
     connect(m_goButton,SIGNAL(clicked(bool)),this,SLOT(goWasPressedSlot()));
 
     /*combos layout*/
@@ -176,9 +208,14 @@ void Nav::initOnce()
     cBLayout->addWidget(m_currentLocationCb);
     cBLayout->addWidget(m_destinationCb);
 
+    QVBoxLayout* multiCheckBoxesFiltersLayout = new QVBoxLayout();
+    multiCheckBoxesFiltersLayout->addWidget(m_currentLocationCbFilter);
+    multiCheckBoxesFiltersLayout->addWidget(m_destinationCbFilter);
+
     m_cbAndLabelsLayout = new QHBoxLayout();
     m_cbAndLabelsLayout->addLayout(combosLabelsLayout);
     m_cbAndLabelsLayout->addLayout(cBLayout);
+    m_cbAndLabelsLayout->addLayout(multiCheckBoxesFiltersLayout);
     m_cbAndLabelsLayout->addWidget(m_goButton);
     m_cbAndLabelsLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
 
@@ -234,6 +271,7 @@ void Nav::init()
     m_mainVLayout->addLayout(m_logSpacerLayout);
 
     playVideoFromTo(videoTest,7000,8000);
+
 
 }
 
@@ -392,21 +430,82 @@ void Nav::prefWasChangedSlot()
     }
 }
 
-QStringList Nav::getRoomsTagsToPlaceInComboBox()
+void Nav::showFilter1Slot()
+{
+    m_groupBoxCurrentLocationCbWidget->show();
+}
+
+void Nav::showFilter2Slot()
+{
+    m_groupBoxdestinationCbWidget->show();
+}
+
+void Nav::updateFilter1Slot()
+{
+    m_floorToShow1.clear();
+    QList<QCheckBox*> checkBoxes = m_groupBoxCurrentLocationCbWidget->findChildren<QCheckBox*>("filter1");
+    for(QCheckBox* checkbox : checkBoxes){
+        if(checkbox->isChecked()){
+            m_floorToShow1.insert(checkbox->text().toInt(), checkbox->text());
+        }
+    }
+    if(m_floorToShow1.size() == 0)
+    {
+        for(QCheckBox* checkbox : checkBoxes){
+            if(checkbox->text() == baseFloor){
+                checkbox->setChecked(true);
+                m_floorToShow1.insert(checkbox->text().toInt(), checkbox->text());
+            }
+        }
+    }
+    QStringList tags = getRoomsTagsToPlaceInComboBox(m_floorToShow1);
+    m_currentLocationCb->clear();
+    m_currentLocationCb->addItems(tags);
+    currentLocationCbHasChangedSlot();
+}
+
+void Nav::updateFilter2Slot()
+{
+    m_floorToShow2.clear();
+    QList<QCheckBox*> checkBoxes = m_groupBoxdestinationCbWidget->findChildren<QCheckBox*>("filter2");
+    for(QCheckBox* checkbox : checkBoxes){
+        if(checkbox->isChecked()){
+            m_floorToShow2.insert(checkbox->text().toInt(), checkbox->text());
+        }
+    }
+    if(m_floorToShow2.size() == 0)
+    {
+        for(QCheckBox* checkbox : checkBoxes){
+            if(checkbox->text() == baseFloor){
+                checkbox->setChecked(true);
+                m_floorToShow2.insert(checkbox->text().toInt(), checkbox->text());
+            }
+        }
+    }
+    QStringList tags = getRoomsTagsToPlaceInComboBox(m_floorToShow2);
+    m_destinationCb->clear();
+    m_destinationCb->addItems(tags);
+    destinationCbHasChangedSlot();
+}
+
+QStringList Nav::getRoomsTagsToPlaceInComboBox(QMap<int, QString> floorsToShow)
 {
     QStringList tags;
     QMap <int,QString> sortKeyAndTags;
     for(QMap<QString,QString> room : m_roomsObjects){
-        if(room[fieldNumber] == "0"){ //rooms like bathroom with no number
-            //tags.push_back(room[fieldName]);
-            sortKeyAndTags.insert(room[fieldSort].toInt(), room[fieldName]);
-        }
-        else if(room[fieldNumber] == "-1"){ //rooms that help on the route but are not a destanation
-            //do nothing
-        }
-        else{
-            //tags.push_back(room[m_comboKey]);
-            sortKeyAndTags.insert(room[fieldSort].toInt(), room[m_comboKey]);
+        if(floorsToShow.isEmpty() || floorsToShow.values().contains(room[fieldFloor]))
+        {
+            if(room[fieldNumber] == "0"){ //rooms like bathroom with no number
+                //tags.push_back(room[fieldName]);
+                sortKeyAndTags.insert(room[fieldSort].toInt(), room[fieldName]);
+            }
+            else if(room[fieldNumber] == "-1"){ //rooms that help on the route but are not a destanation
+                //do nothing
+            }
+            else{
+                //tags.push_back(room[m_comboKey]);
+                sortKeyAndTags.insert(room[fieldSort].toInt(), room[m_comboKey]);
+            }
         }
     }
     for(QMap<int,QString>::iterator it = sortKeyAndTags.begin(); it!=sortKeyAndTags.end(); ++it){
