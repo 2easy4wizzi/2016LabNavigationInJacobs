@@ -21,6 +21,12 @@ Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM
     _edgeWeightToPrevious = 0;
 }
 
+//Node::Node(Node* other):
+//_id(other->GetId()), _name(other->GetName()), _floor(other->GetNodeFloor()), _neighbors(other->GetNeihbors()),
+//{
+
+//}
+
 Node::~Node()
 {
 }
@@ -122,7 +128,10 @@ string Node::ToString() const
             "_sort:" + std::to_string(_sort) + " " +
             "_edgeWPrev:" + std::to_string(_edgeWeightToPrevious) + " " +
             "_videoSI:" + std::to_string(_videoStartIndex) + " " +
-            "_videoEI:" + std::to_string(_videoEndIndex) + " "
+            "_videoEI:" + std::to_string(_videoEndIndex) + " " +
+            "roomPathDistance:" + std::to_string(_roomPathDistance) + " " +
+            "roomPathDirection:" + _roomPathDirection + " " +
+            "roomPathNextRoomInPathId:" + std::to_string(_roomPathNextRoomInPathId) + " "
             ;
     return toString;
 }

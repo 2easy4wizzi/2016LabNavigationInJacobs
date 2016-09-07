@@ -149,7 +149,7 @@ list<Edge*> Graph::GetGrapghEdges() const
     return *_edges;
 }
 
-list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
+list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
 {
     int prefAddon = 0;
     bool wasChecked[MAXNODES];
@@ -157,16 +157,16 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     vector< qPair > Adjacency[MAXNODES];
     priority_queue< qPair, vector< qPair >, comp > Queue;
 	//if (_nodes == NULL || _edges == NULL) return NULL;
-    list<pathRoom>* shortestPath = new list<pathRoom>;
+    list<Node*>* shortestNodesPath = new list<Node*>;
 	Node* u = NULL;
 	Node* v = NULL;
 	Node* startingNode = end;
 	Node* endingNode = start;
 	int weight = -1;
-	int size;
+    int size;
 	// initizlized adjacency container
 	for (Edge* edge : *_edges)
-	{
+    {
 		u = edge->GetNode1();
 		v = edge->GetNode2();
 		weight = edge->GetWeight();
@@ -182,7 +182,7 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
         Adjacency[u->GetId()].push_back(qPair(v, weight + prefAddon));
         Adjacency[v->GetId()].push_back(qPair(u, weight + prefAddon));
         prefAddon = 0;
-	}	
+    }
 	// initialize distance vector
     for (unsigned int i = 1; i <= _nodes->size(); i++) {
         distanceV[i] = INFVALUE;
@@ -190,7 +190,6 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     }
 	distanceV[startingNode->GetId()] = 0;
 	Queue.push(qPair(startingNode, 0));
-
 	// dijkstra
 	while (!Queue.empty()) {
 		u = Queue.top().first;
@@ -213,60 +212,61 @@ list<pathRoom> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
 		}
 		wasChecked[u->GetId()] = 1; // done with u
 	}
-
     Node* trace = start;
 	// push to list the starting room
     Node *next = trace->GetPreviosNode();
-    pathRoom startingRoom = { trace, trace->GetEdgeWeightToPrevious(), trace->GetNeighborDirection(trace->GetPreviosNode()->GetId()), next->GetId() };
-    shortestPath->push_back(startingRoom);
-
+    trace->_roomPathDistance = trace->GetEdgeWeightToPrevious();
+    trace->_roomPathDirection = trace->GetNeighborDirection(trace->GetPreviosNode()->GetId());
+    trace->_roomPathNextRoomInPathId = next->GetId();
+    shortestNodesPath->push_back(trace);
     while (next != NULL && next != end)
     {
 		if (next->GetPreviosNode() != NULL)
         {
-			pathRoom pRoom = { next,
-				next->GetEdgeWeightToPrevious(),
-                next->GetNeighborDirection(next->GetPreviosNode()->GetId()) ,
-                next->GetPreviosNode()->GetId()
-                };
-            shortestPath->push_back(pRoom);
+            next->_roomPathDistance = next->GetEdgeWeightToPrevious();
+            next->_roomPathDirection = next->GetNeighborDirection(next->GetPreviosNode()->GetId());
+            next->_roomPathNextRoomInPathId = next->GetPreviosNode()->GetId();
+            shortestNodesPath->push_back(next);
 		}
 		next = next->GetPreviosNode();
 	}
 	//push to the list the ending room
-    pathRoom endingRoom = { end,0,"",-1 };
-    shortestPath->push_back(endingRoom);
-	if (shortestPath->size() < 2) // nothing to shrink if there is only one destination on the path
-	{
-		return *shortestPath;
-	}
-	else
-	{
-		return GetShrinkendShortestPath(*shortestPath);
-	}
+    end->_roomPathDistance  = 0;
+    end->_roomPathDirection= "";
+    end->_roomPathNextRoomInPathId = -1;
+    shortestNodesPath->push_back(end);
+    // nothing to shrink if there is only one destination on the path
+    return (shortestNodesPath->size() < 2) ? (*shortestNodesPath) :GetShrinkendShortestPath(*shortestNodesPath);
 }
 
-list<pathRoom> Graph::GetShrinkendShortestPath(list<pathRoom> shortestPath)
+list<Node *> Graph::GetShrinkendShortestPath(list<Node *> shortestPath)
 {
     //if (shortestPath == NULL)
-    list<pathRoom>* shrinkedShortestPath = new list<pathRoom>;
-    list<pathRoom>::iterator iter1 = shortestPath.begin();
-    list<pathRoom>::iterator iter2 = shortestPath.begin();
-	list<pathRoom>::iterator iterEnd = shortestPath.end();
+    list<Node*>* shrinkedShortestPath = new list<Node*>;
+    list<Node*>::iterator iter1 = shortestPath.begin();
+    list<Node*>::iterator iter2 = shortestPath.begin();
+    list<Node*>::iterator iterEnd = shortestPath.end();
 	++iter2;	
-	int distance;
+    int distance;
+
 	while (iter2!= iterEnd )
 	{
 		bool advanced = false;
-		distance = iter1->distance; //distance to the next room on shortest path
-        while(iter2!=iterEnd && iter1->direction == iter2->direction && iter1->direction != "")
+        Node* tmp1 = *iter1;
+        Node* tmp2 = *iter2;
+        distance = tmp1->_roomPathDistance; //distance to the next room on shortest path
+        while(iter2!=iterEnd && tmp1->_roomPathDirection== tmp2->_roomPathDirection && tmp1->_roomPathDirection != "")
 		{
-			distance += iter2->distance;
+            distance += tmp2->_roomPathDistance;
 			++iter2;
 			advanced = true;
+            tmp2 = *iter2;
 		}
-		pathRoom pRoom = { iter1->room,distance,iter1->direction,iter2->room->GetId() };
-		shrinkedShortestPath->push_back(pRoom);
+
+        tmp1->_roomPathDistance = distance;
+        tmp1->_roomPathDirection = tmp1->_roomPathDirection;
+        tmp1->_roomPathNextRoomInPathId = tmp2->GetId();
+        shrinkedShortestPath->push_back(tmp1);
 		if (advanced)
 		{
 			iter1 = iter2;

@@ -35,7 +35,7 @@
         <Neighbor Direction="North" Id="7"> </Neighbor>
         <Neighbor Direction="South" Id="9"> </Neighbor> <!--FIX -->
     </Node>	
-    <Node Id="9" Name="412-office" Number="4120" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="413"> <!--FIX -->
+    <Node Id="9" Name="office-4120" Number="4120" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="413"> <!--FIX -->
         <Neighbor Direction="North" Id="8"> </Neighbor>
         <Neighbor Direction="East" Id="10"> </Neighbor>
         <Neighbor Direction="West" Id="13"> </Neighbor>
@@ -44,7 +44,7 @@
         <Neighbor Direction="South" Id="11"> </Neighbor> <!--FIX -->
         <Neighbor Direction="West" Id="9"> </Neighbor>
     </Node>	
-    <Node Id="11" Name="412b-office" Number="4122" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="411"> <!--FIX -->
+    <Node Id="11" Name="office-4122" Number="4122" Floor="4" VideoStartIndex="-1" VideoEndIndex="-1" sort="411"> <!--FIX -->
         <Neighbor Direction="North" Id="10"> </Neighbor>
         <Neighbor Direction="South" Id="12"> </Neighbor>
     </Node>	
@@ -104,7 +104,7 @@
         <Neighbor Direction="East" Id="37"> </Neighbor>
         <Neighbor Direction="West" Id="28"> </Neighbor>
     </Node>		
-    <Node Id="26" Name="306-class" Number="306" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="312">
+    <Node Id="26" Name="class-306" Number="306" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="312">
         <Neighbor Direction="South" Id="27"> </Neighbor>
     </Node>		
     <Node Id="27" Name="Elevator Floor 3" Number="0" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="311">
@@ -124,12 +124,12 @@
     <Node Id="30" Name="Bathroom floor 3" Number="0" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="307">
         <Neighbor Direction="South" Id="29"> </Neighbor>
     </Node>	
-    <Node Id="31" Name="302-office" Number="302" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="305">
+    <Node Id="31" Name="office-302" Number="302" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="305">
         <Neighbor Direction="North" Id="32"> </Neighbor>
         <Neighbor Direction="East" Id="29"> </Neighbor>
         <Neighbor Direction="South" Id="34"> </Neighbor>
     </Node>	
-    <Node Id="32" Name="301-office" Number="301" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="306">
+    <Node Id="32" Name="office-301" Number="301" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="306">
         <Neighbor Direction="South" Id="33"> </Neighbor>
         <Neighbor Direction="West" Id="31"> </Neighbor>
     </Node>		
@@ -137,7 +137,7 @@
         <Neighbor Direction="North" Id="29"> </Neighbor>
         <Neighbor Direction="South" Id="34"> </Neighbor>
     </Node>
-    <Node Id="34" Name="303-class" Number="303" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="303">
+    <Node Id="34" Name="class-303" Number="303" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="303">
         <Neighbor Direction="North" Id="29"> </Neighbor>
         <Neighbor Direction="East" Id="35"> </Neighbor>
     </Node>
@@ -146,7 +146,7 @@
         <Neighbor Direction="East" Id="36"> </Neighbor>
         <Neighbor Direction="West" Id="34"> </Neighbor>
     </Node>
-    <Node Id="36" Name="305-class" Number="305" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="301">
+    <Node Id="36" Name="class-305" Number="305" Floor="3" VideoStartIndex="-1" VideoEndIndex="-1" sort="301">
         <Neighbor Direction="North" Id="25"> </Neighbor>
         <Neighbor Direction="East" Id="37"> </Neighbor>
         <Neighbor Direction="West" Id="35"> </Neighbor>

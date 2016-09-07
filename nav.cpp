@@ -1,17 +1,9 @@
 #include "nav.h"
 
-
-
-
-
-
-
-
 Nav::Nav(QWidget *parent):QWidget(parent)
 {
     setObjectName("Nav gui manager");
-    m_comboKey = comboKey;
-    readAndCache();
+    readRoomsFromXml();
     initOnce();
     init();
 }
@@ -21,12 +13,19 @@ Nav::~Nav(){
     m_groupBoxdestinationCbWidget->close();
 }
 
-/*read files once at start up and cache them*/
-void Nav::readAndCache()
+void Nav::readRoomsFromXml()
 {
-    readRoomsFromXml();
+    bool succesReadingXml;
+    m_graph = new Graph(roomsXmlPath.toUtf8().constData(), edgesXmlPath.toUtf8().constData(), succesReadingXml);
+    if (!succesReadingXml){
+        exitProgramWithErrMsg("Unable to read XML files.\nPlease check their paths in config.h are valid");
+    }
+    translateRoomsFromCppToQt();
 }
 
+//creating 2 containers.
+//1. m_roomsObjects - mapping each field name(QString) to his value(QString)
+//2. m_nodesMap     - mapping each id(int) to his Node object(Node*)
 void Nav::translateRoomsFromCppToQt()
 {
     list<Node*> nodetList =  m_graph->GetGrapghNodes();
@@ -42,24 +41,18 @@ void Nav::translateRoomsFromCppToQt()
         room[fieldFloor] = QString::number(node->GetNodeFloor());
         room[fieldNumber] = (node->GetNumber().c_str());
         room[fieldSort] = QString::number(node->GetSort());
+        room[fieldStartIndex] = QString::number(node->GetVideoStartIndex());
+        room[fieldEndIndex] = QString::number(node->GetVideoEndIndex());
         m_roomsObjects.push_back(room);
     }
 }
 
-void Nav::readRoomsFromXml()//temp solution
-{
-    //m_roomsObjects = readRoomsFromXmlUsingEngine(roomsXmlPath);
-    bool succesReadingXml;
-    m_graph = new Graph(roomsXmlPath.toUtf8().constData(), edgesXmlPath.toUtf8().constData(), succesReadingXml);
-    if (!succesReadingXml){
-        exitProgramWithErrMsg("Unable to read XML files.\nPlease check their paths in config.h are valid");
-    }
-    translateRoomsFromCppToQt();
-}
-
+//happens once
 void Nav::initOnce()
 {
     /*general attributes*/
+    this->setFixedSize(QSize(1280,720));
+
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
     /*widow title*/
     setWindowTitle(windowTitleText);
@@ -86,22 +79,6 @@ void Nav::initOnce()
     m_controlButtonsHLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
     m_controlButtonsHLayout->addWidget(m_resetButton);
 
-    /*group box view room text by - name vs number*/
-    QGroupBox *groupBoxViewBy = new QGroupBox("View rooms by:");
-    groupBoxViewBy->setStyleSheet(groupBoxViewByStyle);
-    m_groupBoxViewByRadioName = new QRadioButton(fieldName);
-    connect(m_groupBoxViewByRadioName, SIGNAL(clicked(bool)), this, SLOT(viewRoomsByHasChangedSlot()));
-
-    m_groupBoxViewByRadioNumber = new QRadioButton(fieldNumber);
-    connect(m_groupBoxViewByRadioNumber, SIGNAL(clicked(bool)), this, SLOT(viewRoomsByHasChangedSlot()));
-
-    m_groupBoxViewByRadioName->setChecked(true);
-    QVBoxLayout *vboxViewBy = new QVBoxLayout;
-    vboxViewBy->addWidget(m_groupBoxViewByRadioName);
-    vboxViewBy->addWidget(m_groupBoxViewByRadioNumber);
-    vboxViewBy->addStretch(1);
-    groupBoxViewBy->setLayout(vboxViewBy);
-    m_controlButtonsHLayout->addWidget(groupBoxViewBy);
 
     /*group box preference - elevator vs stairs*/
     QGroupBox *groupBoxPref = new QGroupBox("Take me from the");
@@ -123,11 +100,12 @@ void Nav::initOnce()
     vboxPref->addStretch(1);
     groupBoxPref->setLayout(vboxPref);
 
+    QVBoxLayout *groupBoxPrefLayout = new QVBoxLayout;
+    groupBoxPrefLayout->addWidget(groupBoxPref);
+    groupBoxPrefLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::Maximum, QSizePolicy::MinimumExpanding));
 
 
 
-
-    m_controlButtonsHLayout->addWidget(groupBoxPref);
 
     /*combos labels*/
     QLabel* currentLocationLabel = new QLabel(currentLocationLabelText);
@@ -168,6 +146,12 @@ void Nav::initOnce()
     vboxFilter1->addStretch(1);
     m_groupBoxCurrentLocationCbWidget->setLayout(vboxFilter1);
     m_groupBoxCurrentLocationCbWidget->setGeometry(200, 200 ,200, 200);
+    QPushButton* doneBtn1 = new QPushButton("Done");
+    connect(doneBtn1, SIGNAL(clicked(bool)), this, SLOT(closeGroupBoxCurrentLocationCbWidgetSlot()));
+    QHBoxLayout *doneBtn1HLayout = new QHBoxLayout;
+    doneBtn1HLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+    doneBtn1HLayout->addWidget(doneBtn1);
+    vboxFilter1->addLayout(doneBtn1HLayout);
 
     m_currentLocationCbFilter = new QPushButton("filter floors");
     m_currentLocationCbFilter->setStyleSheet(filterButtonStyle);
@@ -189,7 +173,12 @@ void Nav::initOnce()
     vboxFilter2->addStretch(1);
     m_groupBoxdestinationCbWidget->setLayout(vboxFilter2);
     m_groupBoxdestinationCbWidget->setGeometry(200, 200 ,200, 200);
-
+    QPushButton* doneBtn2 = new QPushButton("Done");
+    connect(doneBtn2, SIGNAL(clicked(bool)), this, SLOT(closeGroupBoxdestinationCbWidgetSlot()));
+    QHBoxLayout *doneBtn2HLayout = new QHBoxLayout;
+    doneBtn2HLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+    doneBtn2HLayout->addWidget(doneBtn2);
+    vboxFilter2->addLayout(doneBtn2HLayout);
 
     m_destinationCbFilter = new QPushButton("filter floors");
     m_destinationCbFilter->setStyleSheet(filterButtonStyle);
@@ -242,33 +231,47 @@ void Nav::initOnce()
     QVBoxLayout* videoLayout = new QVBoxLayout();
     m_mediaPlayer = new QMediaPlayer;
     m_videoWidget = new QVideoWidget;
+    QPalette palette = m_videoWidget->palette();
+    palette.setBrush(QPalette::Window, QBrush(QPixmap(picTest)));
+    m_videoWidget->setAutoFillBackground(true);
+    m_videoWidget->setPalette(palette);
+    m_mediaPlayer->setAudioRole(QAudio::VideoRole);
+
+
     m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
     QToolBar* tb = new QToolBar();
     QPushButton* play = new QPushButton("Play");
+    connect(play, SIGNAL(clicked(bool)), m_mediaPlayer, SLOT(play()));
     tb->addWidget(play);
-    QPushButton* pause = new QPushButton("pause");
-    tb->addWidget(pause);
-    QPushButton* stop = new QPushButton("Stop");
-    tb->addWidget(stop);
+
+
     QPushButton* rePlay = new QPushButton("rePlay");
+    connect(rePlay, SIGNAL(clicked(bool)), this, SLOT(replaySlot()));
     tb->addWidget(rePlay);
 
+    //m_videoWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
+    QSizePolicy p1(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding );
+    m_log->setSizePolicy(p1);
     videoLayout->addWidget(m_videoWidget);
     videoLayout->addWidget(tb);
+
 
     m_logSpacerLayout = new QHBoxLayout();
     m_logSpacerLayout->addLayout(videoLayout);
     m_logSpacerLayout->addLayout(logLayout);
+    m_logSpacerLayout->addLayout(groupBoxPrefLayout);
     //m_logSpacerLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
 
 
 
 }
 
+//could happen more than once(for example: if you press 'reset' button)
 void Nav::init()
 {
     /*general attributes*/
     m_mainVLayout = new QVBoxLayout;
+
     m_mainVLayout->setObjectName("main vertical layout");
     setLayout(m_mainVLayout);
 
@@ -284,12 +287,9 @@ void Nav::init()
 
     m_mainVLayout->addLayout(m_cbAndLabelsLayout);
     m_mainVLayout->addLayout(m_logSpacerLayout);
-
-    playVideoFromTo(videoTest,7000,8000);
-
-
 }
 
+//start over
 void Nav::resetSlot()
 {
     m_log->clear();
@@ -303,18 +303,20 @@ void Nav::resetSlot()
     init();
 }
 
+//given an attribute(QString), go over m_roomsObjects and look for it. return the Node with the name==str.
 Node *Nav::findNodeByStr(QString str)
 {
     int id = -1;
     for(QMap<QString,QString> room : m_roomsObjects)
     {
-        if(str == room[m_comboKey] || str == room[fieldNumber]|| str == room[fieldName]){ //some node has just Name or Just number
+        if(str == room[fieldName] || str == (room[fieldName] + "-" +room[fieldNumber])){
             id = room[fieldID].toInt();
         }
     }
     return m_nodesMap[id];
 }
 
+//the next 2 slots: always update the current and destanation rooms in members
 void Nav::currentLocationCbHasChangedSlot(){
     m_currentRoom = findNodeByStr(m_currentLocationCb->currentText());
 }
@@ -332,57 +334,45 @@ void Nav::goWasPressedSlot()
     if (currentRoom == destRoom )
         m_log->append( "Stay where you are :)" );
     else{
-        QList<pathRoomQt> shortestPathQt = translateShortestPathFromCppToQt();
-        appendShortestPathToLog(shortestPathQt);
+        QList<Node*> shortestPathQt = translateShortestPathFromCppToQt(); //ask graph class to find shortest path and convert list<Node*> to QT::QList.
+        appendShortestPathToLog(shortestPathQt);//write the path in QT::TextBox
+        m_roomVideoDisplay = shortestPathQt.at(0);
+        playVideoFromTo(m_roomVideoDisplay);//plays a video's part(could be 2 seconds from 10 seconds video) given a Node
     }
-
-
 }
 
-QList<pathRoomQt> Nav::translateShortestPathFromCppToQt(){
-    list<pathRoom> shortestPath = m_graph->GetShortestpath(m_currentRoom, m_destRoom, m_pref);
-    QList<pathRoomQt> shortestPathQt;
-    for(pathRoom room : shortestPath){
-        pathRoomQt roomQt;
-        roomQt.room = room.room;
-        roomQt.direction = room.direction.c_str();
-        roomQt.distance = room.distance;
-        roomQt.nextRoomInPathId = room.nextRoomInPathId;
-        shortestPathQt.push_back(roomQt);
+QList<Node *> Nav::translateShortestPathFromCppToQt(){
+    list<Node*> shortestPath = m_graph->GetShortestpath(m_currentRoom, m_destRoom, m_pref);//graph::GetShortestpath
+    QList<Node*> shortestPathQt;
+    for(Node* room : shortestPath){
+
+        shortestPathQt.push_back(room);
     }
     if(DEBUG) printShortestPath(shortestPathQt);
     return shortestPathQt;
 }
 
-void Nav::printShortestPath(QList<pathRoomQt> shortestPathQt)
+void Nav::printShortestPath(QList<Node*> shortestPathQt)//debuging function
 {
-    for (int i=0; i<shortestPathQt.size(); ++i )
+    for (Node* room : shortestPathQt)
     {
-        QString strRoomInfo("");
-        strRoomInfo.append(shortestPathQt[i].room->GetName().c_str());
-        strRoomInfo.append("; ");
-        strRoomInfo.append(shortestPathQt[i].direction);
-        strRoomInfo.append("; ");
-        strRoomInfo.append(QString::number(shortestPathQt[i].distance));
-        strRoomInfo.append("; ");
-        strRoomInfo.append(QString::number(shortestPathQt[i].nextRoomInPathId));
-        qDebug() << strRoomInfo;
+        qDebug() << room->ToString().c_str();
     }
 }
 
-void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
+void Nav::appendShortestPathToLog(QList<Node*> shortestPathQt) // 3 cases. elevator, stairs and regular. print by case.
 {
     QString currentRoom(m_currentLocationCb->currentText());
-    QString destRoom(m_destinationCb->currentText());
+    //QString destRoom(m_destinationCb->currentText());
     m_log->append("\nStart from " + currentRoom + " :");
     int i = 0;
-    for(pathRoomQt roomInPath: shortestPathQt ){
+    for(Node* roomInPath: shortestPathQt ){
 
-        QString roomName = roomInPath.room->GetName().c_str();
-        int nextRoomInPathId = roomInPath.nextRoomInPathId;
+        QString roomName = roomInPath->GetName().c_str();
+        int nextRoomInPathId = roomInPath->_roomPathNextRoomInPathId;
 
         if(roomName.contains(fieldElevator) && getRoomFieldById(nextRoomInPathId, fieldName).contains(fieldElevator)){
-            int currentFloor = roomInPath.room->GetNodeFloor();
+            int currentFloor = roomInPath->GetNodeFloor();
             int desFloor = getRoomFieldById(nextRoomInPathId,fieldFloor).toInt();
             QString text = currentFloor > desFloor ?
                         (QString::number(++i) + ") Use the Elevator to go down to Floor " + QString::number(desFloor) + ".") :
@@ -390,7 +380,7 @@ void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
             m_log->append(text);
         }
         else if(roomName.contains(fieldStairs)&& getRoomFieldById(nextRoomInPathId, fieldName).contains(fieldStairs)){
-            int currentFloor = roomInPath.room->GetNodeFloor();
+            int currentFloor = roomInPath->GetNodeFloor();
             int desFloor = getRoomFieldById(nextRoomInPathId,fieldFloor).toInt();
             QString text = currentFloor > desFloor ?
                         (QString::number(++i) + ") Go down the Stairs to Floor " + QString::number(desFloor) + ".") :
@@ -398,38 +388,35 @@ void Nav::appendShortestPathToLog(QList<pathRoomQt> shortestPathQt)
             m_log->append(text);
         }
         else{
-            QString dest(getRoomFieldById(nextRoomInPathId,m_comboKey));
-            if (m_comboKey == fieldNumber &&(dest == "-1"|| dest == "0")) dest = getRoomFieldById(nextRoomInPathId,fieldName);
-            m_log->append(QString::number(++i) + ") Walk " + QString::number(roomInPath.distance) +
-                          " meters " + roomInPath.direction +
+            QString dest(getRoomFieldById(nextRoomInPathId,fieldName));
+            m_log->append(QString::number(++i) + ") Walk " + QString::number(roomInPath->_roomPathDistance) +
+                          " meters " + roomInPath->_roomPathDirection.c_str() +
                           " to " + dest + "." );
         }
     }
 }
 
-void Nav::playVideoFromTo(QString videoPath, int from, int to)
+void Nav::playVideoFromTo(Node *current)//play Node's video part
 {
+    //cout << current->ToString().c_str();
+    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoTest)); //video location
+    m_mediaPlayer->setPosition(2000); // starting index time
 
-    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
-    m_mediaPlayer->setPosition(from); // starting index time
 
     m_videoWidget->show();
     m_mediaPlayer->play();
+    QTimer::singleShot(4000, m_mediaPlayer, SLOT(pause()));
+
+
 }
 
-QString Nav::getRoomFieldById(int id, QString field)
+QString Nav::getRoomFieldById(int id, QString field)//given an Id, retrun the wanted value.
 {
     for(QMap<QString,QString> room : m_roomsObjects){ if (room[fieldID] == QString::number(id)) return room[field]; }
     return NULL;
 }
 
-
-void Nav::viewRoomsByHasChangedSlot()
-{
-    m_comboKey = m_groupBoxViewByRadioName->isChecked() ? m_groupBoxViewByRadioName->text() : m_groupBoxViewByRadioNumber->text();
-    resetSlot();
-}
-
+//save in a member the user preference(regular, stairs, elavator)
 void Nav::prefWasChangedSlot()
 {
     if(m_groupBoxPrefRadioDefault->isChecked())
@@ -446,6 +433,7 @@ void Nav::prefWasChangedSlot()
     }
 }
 
+//the next 4 functions/slots are for filtering the floors. 2 for current location and 2 for destanation
 void Nav::showFilter1Slot()
 {
     m_groupBoxCurrentLocationCbWidget->show();
@@ -504,26 +492,48 @@ void Nav::updateFilter2Slot()
     destinationCbHasChangedSlot();
 }
 
+//replay was pressed
+void Nav::replaySlot()
+{
+    playVideoFromTo(m_roomVideoDisplay);
+}
+
+void Nav::closeGroupBoxdestinationCbWidgetSlot()
+{
+    m_groupBoxdestinationCbWidget->close();
+}
+
+void Nav::closeGroupBoxCurrentLocationCbWidgetSlot()
+{
+    m_groupBoxCurrentLocationCbWidget->close();
+}
+
+//function that build the combo boxes labels
 QStringList Nav::getRoomsTagsToPlaceInComboBox(QMap<int, QString> floorsToShow)
 {
     QStringList tags;
     QMap <int,QString> sortKeyAndTags;
+    int i = 0;
     for(QMap<QString,QString> room : m_roomsObjects){
         if(floorsToShow.isEmpty() || floorsToShow.values().contains(room[fieldFloor]))
         {
             if(room[fieldNumber] == "0"){ //rooms like bathroom with no number
                 //tags.push_back(room[fieldName]);
-                sortKeyAndTags.insert(room[fieldSort].toInt(), room[fieldName]);
+                sortKeyAndTags.insert(room[fieldFloor].toInt()*1000-(++i), room[fieldName]);
+                cout << room[fieldFloor].toInt()*1000+(i) << room[fieldName];
             }
             else if(room[fieldNumber] == "-1"){ //rooms that help on the route but are not a destanation
                 //do nothing
             }
             else{
-                //tags.push_back(room[m_comboKey]);
-                sortKeyAndTags.insert(room[fieldSort].toInt(), room[m_comboKey]);
+                QString tag = room[fieldName].contains(room[fieldNumber]) ? room[fieldName] : room[fieldName] + "-" + room[fieldNumber];
+                int tmpNum = room[fieldNumber].toInt();
+                int number = tmpNum  > 999 ? tmpNum : tmpNum*10; //check. if>999 -> number already normalized(for sorting)
+                sortKeyAndTags.insert(number, tag);
             }
         }
     }
+    cout << sortKeyAndTags;
     for(QMap<int,QString>::iterator it = sortKeyAndTags.begin(); it!=sortKeyAndTags.end(); ++it){
         tags.push_back(it.value());
     }

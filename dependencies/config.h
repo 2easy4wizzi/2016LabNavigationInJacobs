@@ -11,6 +11,7 @@ const QString edgesXmlPath = "../Nav/dependencies/edges.xml";
 //const QString roomsXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/rooms.xml";
 //const QString edgesXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/edges.xml";
 const QString videoTest = "../Nav/dependencies/fromDanToLab.avi";
+const QString picTest = "../Nav/dependencies/Capture.JPG";
 
 const QString projectTitleLabelText = "<project title>";
 const QString projectTitleLabelStyle  = "background-color: yellow;";
@@ -22,7 +23,6 @@ const QString destinationLabelStyle = "background-color: red;";
 const QString logLabelText = "directions";
 const QString logLabelStyle = "background-color: blue;";
 const QString logStyle = "background-color: grey;";
-const QString comboKey = "Name";
 const QString groupBoxPrefStyle = "";
 const QString groupBoxViewByStyle = "";
 const QString resetButtonStyle = "";

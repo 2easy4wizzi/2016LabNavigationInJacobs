@@ -16,13 +16,6 @@ struct comp {
 	}
 };
 
-//return nodes from GetShortestpath() in this struct
-struct pathRoom {
-    Node* room;
-    int distance;
-    string direction;
-    int nextRoomInPathId;
-};
 
 class Graph
 {
@@ -33,8 +26,8 @@ public:
     bool ParseXmlEdges(string xmlPathEdges);
     list<Node*> GetGrapghNodes() const;
     list<Edge*> GetGrapghEdges() const;
-    list<pathRoom> GetShortestpath(Node* start, Node* end, EdgeType pref);
-    list<pathRoom> GetShrinkendShortestPath(list<pathRoom> shortestPath);
+    list<Node*> GetShortestpath(Node* start, Node* end, EdgeType pref);
+    list<Node*> GetShrinkendShortestPath(list<Node*> shortestPath);
 
 private:
 	list<Node*>* _nodes;

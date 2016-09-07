@@ -43,17 +43,11 @@ const QString fieldStairs = "Stairs";
 const QString fieldElevator = "Elevator";
 const QString fieldFloor = "Floor";
 const QString fieldSort = "Sort";
+const QString fieldStartIndex = "StartIndex";
+const QString fieldEndIndex = "EndIndex";
 
 
 const QMap <Direction,QString> dirMap2 = { {  North, fieldNorth},{  East , fieldEast },{  South ,fieldSouth },{  West,fieldWest } };
-
-//return nodes from GetShortestpath() in this struct
-struct pathRoomQt {
-    Node* room;
-    int distance;
-    QString direction;
-    int nextRoomInPathId;
-};
 
 class Nav : public QWidget
 {
@@ -62,7 +56,6 @@ class Nav : public QWidget
 public:
     explicit Nav(QWidget *parent = 0);
     ~Nav();
-    void readAndCache();
     void readRoomsFromXml();
     void initOnce();
     void init();
@@ -70,10 +63,10 @@ public:
     QString getRoomFieldById(int id, QString field);
     QStringList getRoomsTagsToPlaceInComboBox(QMap <int,QString> floorsToShow = QMap<int, QString>());
     void translateRoomsFromCppToQt();
-    QList<pathRoomQt> translateShortestPathFromCppToQt();
-    void printShortestPath(QList<pathRoomQt> shortestPathQt);
-    void appendShortestPathToLog(QList<pathRoomQt> shortestPathQt);
-    void playVideoFromTo(QString videoPath,int from, int to);
+    QList<Node*> translateShortestPathFromCppToQt();
+    void printShortestPath(QList<Node*> shortestPathQt);
+    void appendShortestPathToLog(QList<Node *> shortestPathQt);
+    void playVideoFromTo(Node* current);
     void findWitchButtonIsOnPref();
 
 public slots:
@@ -81,13 +74,14 @@ public slots:
     void currentLocationCbHasChangedSlot();
     void destinationCbHasChangedSlot();
     void goWasPressedSlot();
-    void viewRoomsByHasChangedSlot();
     void prefWasChangedSlot();
     void showFilter1Slot();
     void showFilter2Slot();
     void updateFilter1Slot();
     void updateFilter2Slot();
-
+    void replaySlot();
+    void closeGroupBoxdestinationCbWidgetSlot();
+    void closeGroupBoxCurrentLocationCbWidgetSlot();
 
 signals:
 
@@ -108,7 +102,6 @@ private:
     QTextEdit* m_log;
     Graph* m_graph;
     QMap<int, Node*> m_nodesMap;
-    QString m_comboKey;
     Node* m_currentRoom;
     Node* m_destRoom;
     QHBoxLayout* m_titleLayout;
@@ -126,6 +119,7 @@ private:
     EdgeType m_pref;
     QMap <int,QString> m_floorToShow1;
     QMap <int,QString> m_floorToShow2;
+    Node* m_roomVideoDisplay;
 };
 
 #endif // NAV_H

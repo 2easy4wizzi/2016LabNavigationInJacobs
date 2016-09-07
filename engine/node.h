@@ -24,8 +24,10 @@ private:
 	int _videoEndIndex;
     Node* _previosNode; // used for backtracking the nodes on the shortest path
     neighborPair _neighbors[NUM_OF_NEIGBHORS]; // contains the neighbors at 4 directions
+
 public:
     Node(string name,string number,int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS],int videoStartIndex,int videoEndIndex, int sort);
+    //Node(Node* other);
     ~Node();
 
     string GetName() const;
@@ -44,6 +46,9 @@ public:
 	int GetVideoEndIndex() const;
     string GetNumber() const;
     string ToString() const;
+    int _roomPathDistance;
+    string _roomPathDirection;
+    int _roomPathNextRoomInPathId;
 };
 
 #endif // NODE_H
