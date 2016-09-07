@@ -1,7 +1,7 @@
 #include "edge.h"
 
 
-Edge::Edge(int weight, int floor, Node* node1, Node* node2, EdgeType edgeType )
+Edge::Edge(double weight, int floor, Node* node1, Node* node2, EdgeType edgeType )
 {
 //    if (weight < 0) /*throw new exception("Error! weight input is negative")*/;
 //    if (floor < 0) /*throw new exception("Error! floor input is out of range")*/;
@@ -20,12 +20,12 @@ Edge::~Edge()
     delete(_node2);
 }
 
-int Edge::GetWeight() const
+double Edge::GetWeight() const
 {
     return _weight;
 }
 
-void Edge::SetWeight(int eWeight)
+void Edge::SetWeight(double eWeight)
 {
     _weight = eWeight;
 }

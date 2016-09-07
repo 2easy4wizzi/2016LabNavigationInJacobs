@@ -6,7 +6,7 @@
 #include "edge.h"
 #define MAXNODES 10000
 #define INFVALUE 1000000
-#define qPair pair< Node*, int >
+#define qPair pair< Node*, double >
 #define INF 1000000;
 
 //comperator

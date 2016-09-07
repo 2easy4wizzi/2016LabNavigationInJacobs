@@ -37,17 +37,18 @@ const QString fieldNumber = "Number";
 const QString fieldName = "Name";
 const QString fieldNorth = "North";
 const QString fieldEast = "East";
-const QString fieldSouth = "South";
+const QString fieldSouth = "south";
 const QString fieldWest = "West";
 const QString fieldStairs = "Stairs";
 const QString fieldElevator = "Elevator";
 const QString fieldFloor = "Floor";
-const QString fieldSort = "Sort";
 const QString fieldStartIndex = "StartIndex";
 const QString fieldEndIndex = "EndIndex";
+const QString fieldVideoPath = "videoPath";
 
 
-const QMap <Direction,QString> dirMap2 = { {  North, fieldNorth},{  East , fieldEast },{  South ,fieldSouth },{  West,fieldWest } };
+
+const QMap <Direction,QString> dirMap2 = { {  North, fieldNorth},{  East , fieldEast },{  south ,fieldSouth },{  West,fieldWest } };
 
 class Nav : public QWidget
 {
@@ -63,10 +64,10 @@ public:
     QString getRoomFieldById(int id, QString field);
     QStringList getRoomsTagsToPlaceInComboBox(QMap <int,QString> floorsToShow = QMap<int, QString>());
     void translateRoomsFromCppToQt();
-    QList<Node*> translateShortestPathFromCppToQt();
-    void printShortestPath(QList<Node*> shortestPathQt);
-    void appendShortestPathToLog(QList<Node *> shortestPathQt);
-    void playVideoFromTo(Node* current);
+    void translateShortestPathFromCppToQt();
+    void printShortestPath();
+    void appendShortestPathToLog(QString color = "black");
+    void playVideoFromTo(bool replay = false);
     void findWitchButtonIsOnPref();
 
 public slots:
@@ -80,6 +81,7 @@ public slots:
     void updateFilter1Slot();
     void updateFilter2Slot();
     void replaySlot();
+    void nextSlot();
     void closeGroupBoxdestinationCbWidgetSlot();
     void closeGroupBoxCurrentLocationCbWidgetSlot();
 
@@ -120,6 +122,7 @@ private:
     QMap <int,QString> m_floorToShow1;
     QMap <int,QString> m_floorToShow2;
     Node* m_roomVideoDisplay;
+    QList<Node*> m_shortestPathQt;
 };
 
 #endif // NAV_H

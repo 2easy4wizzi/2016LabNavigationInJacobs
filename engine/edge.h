@@ -11,17 +11,17 @@ class Edge
 {
 
 private:
-    int _weight;
+    double _weight;
     int _floor;
     EdgeType _edgeType;
     Node* _node1;
     Node* _node2;
 public:
-    Edge(int weight, int floor, Node* node1, Node* node2, EdgeType edgeType = NotInitialized);
+    Edge(double weight, int floor, Node* node1, Node* node2, EdgeType edgeType = NotInitialized);
     ~Edge();
 
-    int GetWeight() const;
-    void SetWeight(int eWeight);
+    double GetWeight() const;
+    void SetWeight(double eWeight);
 
     int GetEdgeFloor() const;
     void SetEdgeFloor(int floorNum);

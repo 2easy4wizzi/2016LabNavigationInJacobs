@@ -2,6 +2,7 @@
 #include <QDebug>
 #define cout qDebug()<< __LINE__
 #define xxx qDebug()<< __LINE__ ;
+#define DEBUGCPP 1
 
 const char* fieldGraph= "Graph";
 const char* fieldEdge= "Edge";
@@ -22,7 +23,12 @@ const char* fieldVideoEndIndex= "VideoEndIndex";
 const char* fieldNeighbor= "Neighbor";
 const char* fieldDirection= "Direction";
 const char* fieldId= "Id";
-const char* fieldSort= "sort";
+const char* fieldVideoPath= "videoPath";
+const char* fieldClass0= "Class0";
+const char* fieldClass1= "Class1";
+const char* fieldClass2= "Class2";
+const char* fieldClass3= "Class3";
+const char* fieldClass4= "Class4";
 
 
 
@@ -59,10 +65,11 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
     int floor = -1;
 	int videoStartIndex = -1;
 	int videoEndIndex = -1;
-    int sortNum = 0;
     string name = "\0";
 	string number = "\0";
+    string videoPath = "\0";
     neighborPair neighbors[NUM_OF_NEIGBHORS];
+    int classes[NUMBER_OF_NEIGBHORS];
     Direction neighborDir;
     int neighborId = 0;
     for (xml_node<> * vertex_node = root->first_node(fieldNode); vertex_node; vertex_node = vertex_node->next_sibling())
@@ -72,7 +79,12 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
             floor = atoi(vertex_node->first_attribute(fieldFloor)->value());
             videoStartIndex = atoi(vertex_node->first_attribute(fieldVideoStartIndex)->value());
             videoEndIndex = atoi(vertex_node->first_attribute(fieldVideoEndIndex)->value());
-            sortNum = atoi(vertex_node->first_attribute(fieldSort)->value());
+            videoPath = vertex_node->first_attribute(fieldVideoPath)->value();
+            classes[0] = atoi(vertex_node->first_attribute(fieldClass0)->value());
+            classes[1] = atoi(vertex_node->first_attribute(fieldClass1)->value());
+            classes[2] = atoi(vertex_node->first_attribute(fieldClass2)->value());
+            classes[3] = atoi(vertex_node->first_attribute(fieldClass3)->value());
+            classes[4] = atoi(vertex_node->first_attribute(fieldClass4)->value());
 			// Interate over the nodes neighbors
             int i = 0;
             for (xml_node<> * neighbor_node = vertex_node->first_node(fieldNeighbor); neighbor_node; neighbor_node = neighbor_node->next_sibling())
@@ -84,7 +96,7 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
                     if (i > 3) { /*throw new exception("i is bigger then 3");*/ }
                     neighbors[i++] =  neighborPair(neighborDir, neighborId);
             }
-            Node *node = new Node(name,number, floor, neighbors, videoStartIndex, videoEndIndex, sortNum);
+            Node *node = new Node(name,number, floor, neighbors,classes, videoStartIndex, videoEndIndex, videoPath);
             _nodes->push_back(node);
     }
     return 1;
@@ -105,14 +117,14 @@ bool Graph::ParseXmlEdges(string xmlPathEdges)
     root = doc.first_node(fieldGraph);
     if (!root) return 0;
     // Iterate over the nodes
-    int weight = -1;
+    double weight = -1;
     int floor = -1;
     EdgeType type = NotInitialized;
     int nodeId1 = 0;
     int nodeId2 = 0;
     for (xml_node<> * vertex_node = root->first_node(fieldEdge); vertex_node; vertex_node = vertex_node->next_sibling())
     {
-            weight = atoi(vertex_node->first_attribute(fieldWeight)->value());
+            weight = atof(vertex_node->first_attribute(fieldWeight)->value());
             floor = atoi(vertex_node->first_attribute(fieldFloor)->value());
             string typeStr = vertex_node->first_attribute(fieldType)->value();
             type = typeMap.find(typeStr)->second;
@@ -162,7 +174,7 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
 	Node* v = NULL;
 	Node* startingNode = end;
 	Node* endingNode = start;
-	int weight = -1;
+    double weight = -1;
     int size;
 	// initizlized adjacency container
 	for (Edge* edge : *_edges)
@@ -219,6 +231,11 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     trace->_roomPathDirection = trace->GetNeighborDirection(trace->GetPreviosNode()->GetId());
     trace->_roomPathNextRoomInPathId = next->GetId();
     shortestNodesPath->push_back(trace);
+    if(DEBUGCPP)
+    {
+        cout << "###\nstart of full path";
+        cout << trace->GetId() << trace->GetName().c_str() << trace->_roomPathNextRoomInPathId << trace->_roomPathDirection.c_str();
+    }
     while (next != NULL && next != end)
     {
 		if (next->GetPreviosNode() != NULL)
@@ -227,6 +244,10 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
             next->_roomPathDirection = next->GetNeighborDirection(next->GetPreviosNode()->GetId());
             next->_roomPathNextRoomInPathId = next->GetPreviosNode()->GetId();
             shortestNodesPath->push_back(next);
+            if(DEBUGCPP)
+            {
+                cout << next->GetId() << next->GetName().c_str() << next->_roomPathNextRoomInPathId << next->_roomPathDirection.c_str();
+            }
 		}
 		next = next->GetPreviosNode();
 	}
@@ -235,6 +256,12 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     end->_roomPathDirection= "";
     end->_roomPathNextRoomInPathId = -1;
     shortestNodesPath->push_back(end);
+    if(DEBUGCPP)
+    {
+        cout << "end of full path\n###";
+        cout << trace->GetId() << trace->GetName().c_str() << trace->_roomPathNextRoomInPathId;
+    }
+    cout << end->GetName().c_str();
     // nothing to shrink if there is only one destination on the path
     return (shortestNodesPath->size() < 2) ? (*shortestNodesPath) :GetShrinkendShortestPath(*shortestNodesPath);
 }
@@ -247,7 +274,7 @@ list<Node *> Graph::GetShrinkendShortestPath(list<Node *> shortestPath)
     list<Node*>::iterator iter2 = shortestPath.begin();
     list<Node*>::iterator iterEnd = shortestPath.end();
 	++iter2;	
-    int distance;
+    double distance = 0;
 
 	while (iter2!= iterEnd )
 	{
@@ -264,7 +291,7 @@ list<Node *> Graph::GetShrinkendShortestPath(list<Node *> shortestPath)
 		}
 
         tmp1->_roomPathDistance = distance;
-        tmp1->_roomPathDirection = tmp1->_roomPathDirection;
+        tmp1->_roomPathDirection = tmp1->_roomPathDirection;//#mark
         tmp1->_roomPathNextRoomInPathId = tmp2->GetId();
         shrinkedShortestPath->push_back(tmp1);
 		if (advanced)

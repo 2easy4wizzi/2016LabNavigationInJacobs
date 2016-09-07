@@ -8,12 +8,10 @@ const QString globalTextAttributes = fontType + fontSize + border;
 
 const QString roomsXmlPath = "../Nav/dependencies/rooms.xml";
 const QString edgesXmlPath = "../Nav/dependencies/edges.xml";
-//const QString roomsXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/rooms.xml";
-//const QString edgesXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/edges.xml";
-const QString videoTest = "../Nav/dependencies/fromDanToLab.avi";
-const QString picTest = "../Nav/dependencies/Capture.JPG";
 
-const QString projectTitleLabelText = "<project title>";
+const QString projectLogo = "../Nav/dependencies/Capture.JPG";
+
+const QString projectTitleLabelText = "Navigation in Jacobs";
 const QString projectTitleLabelStyle  = "background-color: yellow;";
 const QString windowTitleText  = "<window title>";
 const QString currentLocationLabelText = "I am here: ";
@@ -35,6 +33,7 @@ const QString floorsNumbersWidgetHeader = "see only floors number:";
 const QString baseFloor = "3"; //used in the filter. come in use when user uncheck all floors
 
 #endif // CONFIG_H
+
 
 //const QString roomsXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/rooms.xml";
 //const QString edgesXmlPath = "C:/Users/Adam/Studies/Robotics Lab/Nav/dependencies/edges.xml";
