@@ -41,8 +41,10 @@ void Nav::translateRoomsFromCppToQt()
             room[dirMap2[neighbos[i].first]] = QString::number(neighbos[i].second);
         }
         const int * classes = node->GetClasses();
-        for (int i=0; i<NUMBER_OF_NEIGBHORS ; i++){
-            room["Class" + QString::number(i)] = QString::number(classes[i]);
+        QMap<int,QString> helper = {{0,"A"} , {1,"B"}, {2,"C"}, {3,"D"}, {4,"E"} };
+        for (int i=0; i<NUMBER_OF_CLASSES ; i++){
+            QString className("Class" + helper[i]);
+            room[className] = QString::number(classes[i]);
         }
         room[fieldFloor] = QString::number(node->GetNodeFloor());
         room[fieldNumber] = (node->GetNumber().c_str());
@@ -51,7 +53,6 @@ void Nav::translateRoomsFromCppToQt()
         room[fieldVideoPath] = node->GetVideoPath().c_str();
         m_roomsObjects.push_back(room);
     }
-    cout << m_roomsObjects;
 }
 
 //happens once
@@ -451,6 +452,45 @@ void Nav::playVideoFromTo(bool replay)//play Node's video part
 
 }
 
+void Nav::testingFuncton()
+{
+    QMap<int, QString> floorsToShow;
+    floorsToShow.insert(3,"3");
+    QStringList tagsC = getRoomsTagsToPlaceInComboBox(floorsToShow);
+    QStringList tagsD = getRoomsTagsToPlaceInComboBox(floorsToShow);
+
+
+    tagsC.clear();
+    tagsC += QString("Class-306");
+    cout << tagsC;
+    tagsD.clear();
+    tagsD += QString("Office-301");
+    cout << tagsD;
+
+    int itersOuter = 1;
+    int itersInner = 1;
+    for(QString strC : tagsC)
+    {
+        for(QString strD : tagsD)
+        {
+            m_currentLocationCb->setCurrentText(strC);
+            m_destinationCb->setCurrentText(strD);
+
+            m_currentRoom = findNodeByStr(m_currentLocationCb->currentText());
+            m_destRoom = findNodeByStr(m_destinationCb->currentText());
+
+            goWasPressedSlot();
+            for(int i = 0; i < m_shortestPathQt.size(); ++i)
+            {
+                nextSlot();
+            }
+            showQmsgBox(strC + " to " + strD);
+            if (++itersInner >= 3) break;
+        }
+        if (++itersOuter >= 1) break;
+    }
+}
+
 QString Nav::getRoomFieldById(int id, QString field)//given an Id, retrun the wanted value.
 {
     for(QMap<QString,QString> room : m_roomsObjects){ if (room[fieldID] == QString::number(id)) return room[field]; }
@@ -628,6 +668,7 @@ void Nav::exitProgramWithErrMsg(QString errMsg)
 void Nav::showQmsgBox(QString msg)
 {
     QMessageBox err;
+    err.move(300,300);
     err.setText(msg);
     err.exec();
 }

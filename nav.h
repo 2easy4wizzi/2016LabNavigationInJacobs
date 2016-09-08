@@ -69,6 +69,8 @@ public:
     void appendShortestPathToLog(QString color = "black");
     void playVideoFromTo(bool replay = false);
     void findWitchButtonIsOnPref();
+    void testingFuncton();
+
 
 public slots:
     void resetSlot();

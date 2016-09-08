@@ -28,6 +28,7 @@ public:
     list<Edge*> GetGrapghEdges() const;
     list<Node*> GetShortestpath(Node* start, Node* end, EdgeType pref);
     list<Node*> GetShrinkendShortestPath(list<Node*> shortestPath);
+    int findSameClass(Node* a, Node* b, int& sharedClass);
 
 private:
 	list<Node*>* _nodes;

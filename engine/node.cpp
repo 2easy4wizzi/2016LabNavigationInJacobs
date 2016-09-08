@@ -1,12 +1,16 @@
 #include "node.h"
 
-
 string Node::GetVideoPath() const
 {
     return _videoPath;
 }
 
-Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS], int (&classes)[NUMBER_OF_NEIGBHORS], int videoStartIndex, int videoEndIndex, string videoPath)
+int Node::howManyClassesFound() const
+{
+    return _howManyClassesFound;
+}
+
+Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS], int (&classes)[NUMBER_OF_CLASSES], int howManyClassesFound, int videoStartIndex, int videoEndIndex, string videoPath)
 {
         static int NodesId = 1; //#mark cahnge to attribute
 //    if (floor < 0) /*throw new exception("Error! floor input is out of range")*/;
@@ -22,10 +26,11 @@ Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM
     {
         _neighbors[i] = neighbors[i];
     }
-    for (int i = 0; i < NUMBER_OF_NEIGBHORS; i++)
+    for (int i = 0; i < NUMBER_OF_CLASSES; i++)
     {
         _classes[i] = classes[i];
     }
+    _howManyClassesFound = howManyClassesFound;
     _edgeWeightToPrevious = 0;
     _videoPath = videoPath;
 }
@@ -135,7 +140,21 @@ string Node::ToString() const
             "_videoPath:" + _videoPath + " " +
             "roomPathDistance:" + std::to_string(_roomPathDistance) + " " +
             "roomPathDirection:" + _roomPathDirection + " " +
-            "roomPathNextRoomInPathId:" + std::to_string(_roomPathNextRoomInPathId) + " "
+            "roomPathNextRoomInPathId:" + std::to_string(_roomPathNextRoomInPathId) + " " +
+            "classes" + ClassesToString()
             ;
     return toString;
+}
+
+string Node::ClassesToString() const
+{
+    int i = 0;
+    string classes = "Classes of Node id " + std::to_string(GetId()) + ": ";
+    while(_classes[i] != 0 && i < NUMBER_OF_CLASSES)
+    {
+        classes.append(std::to_string(_classes[i]));
+        classes.append(", ");
+        i++;
+    }
+    return (i!=0) ? classes : ""; //if i==0, then classes is empty
 }

@@ -1,6 +1,6 @@
 #include "graph.h"
 #include <QDebug>
-#define cout qDebug()<< __LINE__
+#define cout qDebug()
 #define xxx qDebug()<< __LINE__ ;
 #define DEBUGCPP 1
 
@@ -24,11 +24,11 @@ const char* fieldNeighbor= "Neighbor";
 const char* fieldDirection= "Direction";
 const char* fieldId= "Id";
 const char* fieldVideoPath= "videoPath";
-const char* fieldClass0= "Class0";
-const char* fieldClass1= "Class1";
-const char* fieldClass2= "Class2";
-const char* fieldClass3= "Class3";
-const char* fieldClass4= "Class4";
+const char* fieldClassA= "ClassA";
+const char* fieldClassB= "ClassB";
+const char* fieldClassC= "ClassC";
+const char* fieldClassD= "ClassD";
+const char* fieldClassE= "ClassE";
 
 
 
@@ -69,22 +69,29 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
 	string number = "\0";
     string videoPath = "\0";
     neighborPair neighbors[NUM_OF_NEIGBHORS];
-    int classes[NUMBER_OF_NEIGBHORS];
+    int classes[NUMBER_OF_CLASSES];
     Direction neighborDir;
     int neighborId = 0;
     for (xml_node<> * vertex_node = root->first_node(fieldNode); vertex_node; vertex_node = vertex_node->next_sibling())
     {
+            int howManyClassesFound = 0;
             name = vertex_node->first_attribute(fieldName)->value();
             number = vertex_node->first_attribute(fieldNumber)->value();
             floor = atoi(vertex_node->first_attribute(fieldFloor)->value());
             videoStartIndex = atoi(vertex_node->first_attribute(fieldVideoStartIndex)->value());
             videoEndIndex = atoi(vertex_node->first_attribute(fieldVideoEndIndex)->value());
             videoPath = vertex_node->first_attribute(fieldVideoPath)->value();
-            classes[0] = atoi(vertex_node->first_attribute(fieldClass0)->value());
-            classes[1] = atoi(vertex_node->first_attribute(fieldClass1)->value());
-            classes[2] = atoi(vertex_node->first_attribute(fieldClass2)->value());
-            classes[3] = atoi(vertex_node->first_attribute(fieldClass3)->value());
-            classes[4] = atoi(vertex_node->first_attribute(fieldClass4)->value());
+            classes[0] = atoi(vertex_node->first_attribute(fieldClassA)->value());
+            classes[1] = atoi(vertex_node->first_attribute(fieldClassB)->value());
+            classes[2] = atoi(vertex_node->first_attribute(fieldClassC)->value());
+            classes[3] = atoi(vertex_node->first_attribute(fieldClassD)->value());
+            classes[4] = atoi(vertex_node->first_attribute(fieldClassE)->value());
+            for(int cl=0; cl<NUMBER_OF_CLASSES; ++cl){
+                if (classes[cl] >0)//just a counter for loops to come
+                    howManyClassesFound++;
+                if (classes[cl] <= 0) //after first 0, all will be 0
+                    break;
+            }
 			// Interate over the nodes neighbors
             int i = 0;
             for (xml_node<> * neighbor_node = vertex_node->first_node(fieldNeighbor); neighbor_node; neighbor_node = neighbor_node->next_sibling())
@@ -96,7 +103,7 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
                     if (i > 3) { /*throw new exception("i is bigger then 3");*/ }
                     neighbors[i++] =  neighborPair(neighborDir, neighborId);
             }
-            Node *node = new Node(name,number, floor, neighbors,classes, videoStartIndex, videoEndIndex, videoPath);
+            Node *node = new Node(name,number, floor, neighbors,classes,howManyClassesFound, videoStartIndex, videoEndIndex, videoPath);
             _nodes->push_back(node);
     }
     return 1;
@@ -234,7 +241,7 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     if(DEBUGCPP)
     {
         cout << "###\nstart of full path";
-        cout << trace->GetId() << trace->GetName().c_str() << trace->_roomPathNextRoomInPathId << trace->_roomPathDirection.c_str();
+        cout << trace->GetId() << trace->GetName().c_str() << trace->_roomPathNextRoomInPathId << trace->_roomPathDirection.c_str() << trace->ClassesToString().c_str() << "dis: " << trace->_roomPathDistance;
     }
     while (next != NULL && next != end)
     {
@@ -246,7 +253,7 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
             shortestNodesPath->push_back(next);
             if(DEBUGCPP)
             {
-                cout << next->GetId() << next->GetName().c_str() << next->_roomPathNextRoomInPathId << next->_roomPathDirection.c_str();
+                cout << next->GetId() << next->GetName().c_str() << next->_roomPathNextRoomInPathId << next->_roomPathDirection.c_str()<< next->ClassesToString().c_str()<< "dis: " << next->_roomPathDistance;
             }
 		}
 		next = next->GetPreviosNode();
@@ -258,52 +265,117 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     shortestNodesPath->push_back(end);
     if(DEBUGCPP)
     {
+        cout << end->GetId() << end->GetName().c_str() << end->_roomPathNextRoomInPathId<< end->ClassesToString().c_str()<< "dis: " << end->_roomPathDistance;;
         cout << "end of full path\n###";
-        cout << trace->GetId() << trace->GetName().c_str() << trace->_roomPathNextRoomInPathId;
     }
-    cout << end->GetName().c_str();
     // nothing to shrink if there is only one destination on the path
     return (shortestNodesPath->size() < 2) ? (*shortestNodesPath) :GetShrinkendShortestPath(*shortestNodesPath);
 }
 
 list<Node *> Graph::GetShrinkendShortestPath(list<Node *> shortestPath)
 {
-    //if (shortestPath == NULL)
-    list<Node*>* shrinkedShortestPath = new list<Node*>;
-    list<Node*>::iterator iter1 = shortestPath.begin();
-    list<Node*>::iterator iter2 = shortestPath.begin();
-    list<Node*>::iterator iterEnd = shortestPath.end();
-	++iter2;	
-    double distance = 0;
+    list<Node*>* shrinkedShortestPathtmp = new list<Node*>;
+    list<Node*>::iterator it1 = shortestPath.begin();
+    list<Node*>::iterator it2 = shortestPath.begin();
+    list<Node*>::iterator itEnd = shortestPath.end();
+    ++it2;
+    int prevSharedClass = 0;
 
-	while (iter2!= iterEnd )
-	{
-		bool advanced = false;
-        Node* tmp1 = *iter1;
-        Node* tmp2 = *iter2;
-        distance = tmp1->_roomPathDistance; //distance to the next room on shortest path
-        while(iter2!=iterEnd && tmp1->_roomPathDirection== tmp2->_roomPathDirection && tmp1->_roomPathDirection != "")
-		{
-            distance += tmp2->_roomPathDistance;
-			++iter2;
-			advanced = true;
-            tmp2 = *iter2;
-		}
+    while(it2!= itEnd)
+    {
+        int sharedClass = 0;
+        int sharedClassLocal = 0;
 
-        tmp1->_roomPathDistance = distance;
-        tmp1->_roomPathDirection = tmp1->_roomPathDirection;//#mark
-        tmp1->_roomPathNextRoomInPathId = tmp2->GetId();
-        shrinkedShortestPath->push_back(tmp1);
-		if (advanced)
-		{
-			iter1 = iter2;
-		} 
-		else
-		{
-			++iter1;
-		}		
-		++iter2;
-	}
+        sharedClassLocal = findSameClass((*it1), (*it2), sharedClass);
+        while(sharedClassLocal!=0 && sharedClass == sharedClassLocal && prevSharedClass==0){
+            list<Node*>::iterator tmpNodeIter = it2;//tmpNodeIter will hold the next node. we will advance it2 to next only if we joined the node legaly
+            ++tmpNodeIter;
+            sharedClassLocal = (tmpNodeIter!= itEnd ) ? findSameClass((*it1), *tmpNodeIter, sharedClass) : 0;
+            if(sharedClassLocal!=0 && sharedClass == sharedClassLocal ){
+                (*it1)->_roomPathDistance += (*it2)->_roomPathDistance;
+                it2++;
+            }
+        }
+        (*it1)->_roomPathNextRoomInPathId = (*it2)->GetId();
+        shrinkedShortestPathtmp->push_back((*it1));
+        if(DEBUGCPP){
+            cout <<"shrinked" << (*it1)->GetId() << (*it1)->GetName().c_str() << (*it1)->_roomPathNextRoomInPathId << (*it1)->ClassesToString().c_str()<< "dis: " <<(*it1)->_roomPathDistance;
+        }
+        prevSharedClass = sharedClass;
+        it1 = it2;
+        ++it2;
+    }
+    return *shrinkedShortestPathtmp;
 
-    return *shrinkedShortestPath;
+
+
+
+
+
+
+
+
+
+//    //if (shortestPath == NULL)
+//    list<Node*>* shrinkedShortestPath = new list<Node*>;
+//    list<Node*>::iterator iter1 = shortestPath.begin();
+//    list<Node*>::iterator iter2 = shortestPath.begin();
+//    list<Node*>::iterator iterEnd = shortestPath.end();
+//    ++iter2;
+//    double distance = 0;
+//	while (iter2!= iterEnd )
+//	{
+//		bool advanced = false;
+//        Node* tmp1 = *iter1;
+//        Node* tmp2 = *iter2;
+//        distance = tmp1->_roomPathDistance; //distance to the next room on shortest path
+//        while(iter2!=iterEnd && tmp1->_roomPathDirection== tmp2->_roomPathDirection && tmp1->_roomPathDirection != "")
+//		{
+//            distance += tmp2->_roomPathDistance;
+//			++iter2;
+//			advanced = true;
+//            tmp2 = *iter2;
+//		}
+//        tmp1->_roomPathDistance = distance;
+//        tmp1->_roomPathNextRoomInPathId = tmp2->GetId();
+//        shrinkedShortestPath->push_back(tmp1);
+//        if(DEBUGCPP)
+//        {
+//            //cout <<"adam's " << tmp1->GetId() << tmp1->GetName().c_str() << tmp1->_roomPathNextRoomInPathId << tmp1->ClassesToString().c_str() <<"dis: " << tmp1->_roomPathDistance;
+//        }
+//		if (advanced)
+//		{
+//			iter1 = iter2;
+//		}
+//		else
+//		{
+//			++iter1;
+//		}
+//		++iter2;
+//	}
+
+//    return *shrinkedShortestPath;
+}
+
+int Graph::findSameClass(Node *a, Node *b, int &sharedClass)
+{
+    if(a->howManyClassesFound()==0 || b->howManyClassesFound()==0) return 0;
+    const int * classes1 = a->GetClasses();
+    const int * classes2 = b->GetClasses();
+    for(int cl=0; cl < a->howManyClassesFound(); ++cl)
+    {
+        for(int cl2=0; cl2 < b->howManyClassesFound(); ++cl2)
+        {
+            if(classes1[cl] == classes2[cl2])
+            {
+                int sharedClassLocal = classes1[cl];
+                if(sharedClass == 0)
+                {
+                    sharedClass = sharedClassLocal;
+                }
+                return sharedClassLocal;
+            }
+        }
+    }
+    return 0;
 }
