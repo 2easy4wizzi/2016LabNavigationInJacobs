@@ -35,10 +35,6 @@
 const QString fieldID = "Id";
 const QString fieldNumber = "Number";
 const QString fieldName = "Name";
-const QString fieldNorth = "North";
-const QString fieldEast = "East";
-const QString fieldSouth = "south";
-const QString fieldWest = "West";
 const QString fieldStairs = "Stairs";
 const QString fieldElevator = "Elevator";
 const QString fieldFloor = "Floor";
@@ -48,7 +44,6 @@ const QString fieldVideoPath = "videoPath";
 
 
 
-const QMap <Direction,QString> dirMap2 = { {  North, fieldNorth},{  East , fieldEast },{  south ,fieldSouth },{  West,fieldWest } };
 
 class Nav : public QWidget
 {

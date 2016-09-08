@@ -27,5 +27,4 @@ HEADERS  += nav.h \
     engine/rapidxml.h
 
 DISTFILES += \
-    dependencies/edges.xml \
     dependencies/rooms.xml

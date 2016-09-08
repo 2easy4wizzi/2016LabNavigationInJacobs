@@ -10,22 +10,41 @@ int Node::howManyClassesFound() const
     return _howManyClassesFound;
 }
 
-Node::Node(string name,  string number, int floor, neighborPair (&neighbors)[NUM_OF_NEIGBHORS], int (&classes)[NUMBER_OF_CLASSES], int howManyClassesFound, int videoStartIndex, int videoEndIndex, string videoPath)
+double Node::distanceToNextNodeInPath() const
 {
-        static int NodesId = 1; //#mark cahnge to attribute
-//    if (floor < 0) /*throw new exception("Error! floor input is out of range")*/;
-//    if (name.empty()) /*throw new exception("Error! name input is empty")*/;
-    _id = NodesId++;
+    return _distanceToNextNodeInPath;
+}
+
+void Node::setdistanceToNextNodeInPath(double distanceToNextNodeInPath)
+{
+    _distanceToNextNodeInPath = distanceToNextNodeInPath;
+}
+
+void Node::addTodistanceToNextNodeInPath(double add)
+{
+    _distanceToNextNodeInPath += add;
+}
+
+int Node::nextRoomInPathId() const
+{
+    return _nextRoomInPathId;
+}
+
+void Node::setnextRoomInPathId(int nextRoomInPathId)
+{
+    _nextRoomInPathId = nextRoomInPathId;
+}
+
+Node::Node(int id, string name,  string number, int floor, int (&classes)[NUMBER_OF_CLASSES], int howManyClassesFound, int videoStartIndex, int videoEndIndex, string videoPath)
+{
+    //static int NodesId = 1; //#mark cahnge to attribute
+    _id = id;
 	_videoStartIndex = videoStartIndex;
 	_videoEndIndex = videoEndIndex;
     _floor = floor;
     _name = name;
 	_number = number;
     _previosNode = NULL;
-    for (int i = 0; i < NUM_OF_NEIGBHORS; i++)
-    {
-        _neighbors[i] = neighbors[i];
-    }
     for (int i = 0; i < NUMBER_OF_CLASSES; i++)
     {
         _classes[i] = classes[i];
@@ -45,12 +64,6 @@ string Node::GetName() const
     return _name;
 }
 
-void Node::SetName(string const *name)
-{
-//    if ((*name).empty()) /*throw new exception("Error! input name is empty")*/;
-        _name = *name;
-}
-
 int Node::GetId() const
 {
     return _id;
@@ -61,12 +74,6 @@ int Node::GetNodeFloor() const
     return _floor;
 }
 
-void Node::SetNodeFloor(int floorNum)
-{
-//    if (floorNum < 0) /*throw new exception("Error!input floor number is negative")*/;
-    _floor = floorNum;
-}
-
 double Node::GetEdgeWeightToPrevious() const
 {
     return _edgeWeightToPrevious;
@@ -74,8 +81,6 @@ double Node::GetEdgeWeightToPrevious() const
 
 void Node::SetEdgeWeightToPrevious(double eWeight)
 {
-//    sif (eWeight < 0) /*throw new exception("Error!input Weight is negative")*/;
-
     _edgeWeightToPrevious = eWeight;
 }
 
@@ -87,24 +92,6 @@ Node* Node::GetPreviosNode() const
 void Node::SetPreviosNode(Node* previos)
 {
     _previosNode = previos;
-}
-
-const basic_string<char> Node::GetNeighborDirection(int neighborId)
-{
-    for (size_t i = 0; i < NUM_OF_NEIGBHORS; i++)
-	{
-        if (_neighbors[i].second == neighborId)
-        {
-            map<Direction,basic_string<char> >::const_iterator it = dirRevMap.find(_neighbors[i].first);
-            return (*it).second;
-        }
-	}
-    return "";
-}
-
- pair<Direction, int> * Node::GetNeihbors()
-{
-    return _neighbors;
 }
 
 int * Node::GetClasses()
@@ -130,18 +117,17 @@ string Node::GetNumber() const
 string Node::ToString() const
 {
     string toString =
-            "_name:" + _name + " " +
-            "_number:" + _number + " " +
-            "_id:" + std::to_string(_id) + " " +
-            "_floor:" + std::to_string(_floor) + " " +
-            "_edgeWPrev:" + std::to_string(_edgeWeightToPrevious) + " " +
-            "_videoSI:" + std::to_string(_videoStartIndex) + " " +
-            "_videoEI:" + std::to_string(_videoEndIndex) + " " +
-            "_videoPath:" + _videoPath + " " +
-            "roomPathDistance:" + std::to_string(_roomPathDistance) + " " +
-            "roomPathDirection:" + _roomPathDirection + " " +
-            "roomPathNextRoomInPathId:" + std::to_string(_roomPathNextRoomInPathId) + " " +
-            "classes" + ClassesToString()
+            "name:" + _name + "; " +
+            "number:" + _number + "; " +
+            "id:" + std::to_string(_id) + "; " +
+            "floor:" + std::to_string(_floor) + "; " +
+            "edgeWPrev:" + std::to_string(_edgeWeightToPrevious) + "; " +
+//            "videoSI:" + std::to_string(_videoStartIndex) + "; " +
+//            "videoEI:" + std::to_string(_videoEndIndex) + " "; +
+//            "videoPath:" + _videoPath + "; " +
+            "distanceToNext:" + std::to_string(_distanceToNextNodeInPath) + "; " +
+            "nextRoomId:" + std::to_string(_nextRoomInPathId) + "; " +
+            "classes:" + ClassesToString()
             ;
     return toString;
 }
@@ -149,12 +135,12 @@ string Node::ToString() const
 string Node::ClassesToString() const
 {
     int i = 0;
-    string classes = "Classes of Node id " + std::to_string(GetId()) + ": ";
+    string classes = "";
     while(_classes[i] != 0 && i < NUMBER_OF_CLASSES)
     {
         classes.append(std::to_string(_classes[i]));
         classes.append(", ");
         i++;
     }
-    return (i!=0) ? classes : ""; //if i==0, then classes is empty
+    return (i!=0) ? classes : ""; //if i==0, then classes are empty
 }

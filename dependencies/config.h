@@ -7,18 +7,16 @@ const QString border = "border: 1px solid black;";
 const QString globalTextAttributes = fontType + fontSize + border;
 
 const QString roomsXmlPath = "../Nav/dependencies/rooms.xml";
-const QString edgesXmlPath = "../Nav/dependencies/edges.xml";
-
-const QString projectLogo = "../Nav/dependencies/Capture.JPG";
+const QString projectLogo = "../Nav/dependencies/LOGO.JPG";
 
 const QString projectTitleLabelText = "Navigation in Jacobs";
 const QString projectTitleLabelStyle  = "background-color: yellow;";
-const QString windowTitleText  = "<window title>";
+const QString windowTitleText  = "Created By Adam Anan & Gilad Eini";
 const QString currentLocationLabelText = "I am here: ";
 const QString currentLocationLabelStyle = "background-color: green;";
 const QString destinationLabelText = "Take me to: ";
 const QString destinationLabelStyle = "background-color: red;";
-const QString logLabelText = "directions";
+const QString logLabelText = "Directions";
 const QString logLabelStyle = "background-color: blue;";
 const QString logStyle = "background-color: grey;";
 const QString groupBoxPrefStyle = "";
@@ -28,7 +26,7 @@ const QString filterButtonStyle = "";
 const QString goButtonStyle = "";
 const QString locationCBsStyle = "";
 const QString floorsNumbersWidgetStyle = "";
-const QString floorsNumbersWidgetHeader = "see only floors number:";
+const QString floorsNumbersWidgetHeader = "See only the following floors:";
 
 const QString baseFloor = "3"; //used in the filter. come in use when user uncheck all floors
 

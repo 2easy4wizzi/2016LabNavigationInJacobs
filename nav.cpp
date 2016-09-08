@@ -18,7 +18,7 @@ Nav::~Nav(){
 void Nav::readRoomsFromXml()
 {
     bool succesReadingXml;
-    m_graph = new Graph(roomsXmlPath.toUtf8().constData(), edgesXmlPath.toUtf8().constData(), succesReadingXml);
+    m_graph = new Graph(roomsXmlPath.toUtf8().constData(), succesReadingXml);
     if (!succesReadingXml){
         exitProgramWithErrMsg("Unable to read XML files.\nPlease check their paths in config.h are valid");
     }
@@ -36,10 +36,6 @@ void Nav::translateRoomsFromCppToQt()
         QMap<QString,QString> room;
         room[fieldID] = QString::number(node->GetId());
         room[fieldName] = node->GetName().c_str();
-        const pair<Direction, int> * neighbos = node->GetNeihbors();
-        for (int i=0; i<NUM_OF_NEIGBHORS ; i++){
-            room[dirMap2[neighbos[i].first]] = QString::number(neighbos[i].second);
-        }
         const int * classes = node->GetClasses();
         QMap<int,QString> helper = {{0,"A"} , {1,"B"}, {2,"C"}, {3,"D"}, {4,"E"} };
         for (int i=0; i<NUMBER_OF_CLASSES ; i++){
@@ -328,7 +324,7 @@ Node *Nav::findNodeByStr(QString str)
     int id = -1;
     for(QMap<QString,QString> room : m_roomsObjects)
     {
-        if(str == room[fieldName] || str == (room[fieldName] + "-" +room[fieldNumber])){
+        if(str == room[fieldName] || str == (room[fieldName] + "(" +room[fieldNumber] + ")")){
             id = room[fieldID].toInt();
         }
     }
@@ -372,6 +368,7 @@ void Nav::translateShortestPathFromCppToQt(){
 
         m_shortestPathQt.push_back(room);
     }
+    shortestPath.clear();
     if(DEBUG) printShortestPath();
 }
 
@@ -400,7 +397,7 @@ void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs an
     Node* roomInPath = m_roomVideoDisplay;
 
     QString roomName = roomInPath->GetName().c_str();
-    int nextRoomInPathId = roomInPath->_roomPathNextRoomInPathId;
+    int nextRoomInPathId = roomInPath->nextRoomInPathId();
 
     if(roomName.contains(fieldElevator) && getRoomFieldById(nextRoomInPathId, fieldName).contains(fieldElevator)){
         int currentFloor = roomInPath->GetNodeFloor();
@@ -410,7 +407,7 @@ void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs an
                     (QString::number(++i) + ") Use the elevator to go up to floor "   + QString::number(desFloor) + ".");
         m_log->append(textToAppend);
     }
-    else if(roomName.contains(fieldStairs)&& getRoomFieldById(nextRoomInPathId, fieldName).contains(fieldStairs)){
+    else if(roomName.contains(fieldStairs)&& getRoomFieldById(nextRoomInPathId, fieldName).contains(fieldStairs) && roomInPath->GetNodeFloor() != getRoomFieldById(nextRoomInPathId, fieldFloor).toInt()){
         int currentFloor = roomInPath->GetNodeFloor();
         int desFloor = getRoomFieldById(nextRoomInPathId,fieldFloor).toInt();
         textToAppend = currentFloor > desFloor ?
@@ -419,10 +416,13 @@ void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs an
         m_log->append(textToAppend);
     }
     else{
-        QString dest(getRoomFieldById(nextRoomInPathId,fieldName));
-        textToAppend = QString::number(++i) + ") Walk " + QString::number(roomInPath->_roomPathDistance) +
-                " meters " + roomInPath->_roomPathDirection.c_str() +
-                " to " + dest + "." ;
+        QString name = getRoomFieldById(roomInPath->nextRoomInPathId(), fieldName);
+        QString number = getRoomFieldById(roomInPath->nextRoomInPathId(), fieldNumber);
+
+        QString tag = name;
+        if (number != "0" && number != "-1" && !name.contains(number)) tag.append("(" + number + ")");
+        textToAppend = QString::number(++i) + ") Walk " + QString::number(roomInPath->distanceToNextNodeInPath()) +
+                " meters to " + tag + "." ;
         m_log->append(textToAppend);
     }
 }
@@ -455,20 +455,27 @@ void Nav::playVideoFromTo(bool replay)//play Node's video part
 void Nav::testingFuncton()
 {
     QMap<int, QString> floorsToShow;
+    floorsToShow.insert(4,"4");
     floorsToShow.insert(3,"3");
     QStringList tagsC = getRoomsTagsToPlaceInComboBox(floorsToShow);
     QStringList tagsD = getRoomsTagsToPlaceInComboBox(floorsToShow);
 
+    cout << tagsC << tagsC.size();
 
     tagsC.clear();
-    tagsC += QString("Class-306");
+    tagsC += QString("CS private room(418)");
+//    tagsC += QString("Class(303)");
+    //tagsC += QString("Copy room(404)");
     cout << tagsC;
-    tagsD.clear();
-    tagsD += QString("Office-301");
-    cout << tagsD;
-
+//    tagsD.clear();
+//    tagsD += QString("Or Donkelman(408)");
+////    tagsD += QString("Bathroom floor 3");
+////    tagsD += QString("Office(301)");
+//    cout << tagsD;
+    int iterNumber = 60000;
     int itersOuter = 1;
     int itersInner = 1;
+    int i = 0;
     for(QString strC : tagsC)
     {
         for(QString strD : tagsD)
@@ -485,10 +492,12 @@ void Nav::testingFuncton()
                 nextSlot();
             }
             showQmsgBox(strC + " to " + strD);
-            if (++itersInner >= 3) break;
+            i++;
+            if (++itersInner >= iterNumber) break;
         }
-        if (++itersOuter >= 1) break;
+        if (++itersOuter >= iterNumber) break;
     }
+    cout << "SUCCESS:" <<i;
 }
 
 QString Nav::getRoomFieldById(int id, QString field)//given an Id, retrun the wanted value.
@@ -645,7 +654,7 @@ QStringList Nav::getRoomsTagsToPlaceInComboBox(QMap<int, QString> floorsToShow)
                 //do nothing
             }
             else{
-                QString tag = room[fieldName].contains(room[fieldNumber]) ? room[fieldName] : room[fieldName] + "-" + room[fieldNumber];
+                QString tag = room[fieldName].contains(room[fieldNumber]) ? room[fieldName] : room[fieldName] + "(" + room[fieldNumber] + ")";
                 int tmpNum = room[fieldNumber].toInt();
                 int number = tmpNum  > 999 ? tmpNum : tmpNum*10; //check. if>999 -> number already normalized(for sorting)
                 sortKeyAndTags.insert(number, tag);
