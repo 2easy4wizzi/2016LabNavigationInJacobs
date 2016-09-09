@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Notice Id must be unique go from 1 to n, where n is the number of Nodes.
+Notice Id (must be unique) go from 1 to n, where n is the number of Nodes.
 -->
 <Graph>
 <!--Nodes floor 4-->

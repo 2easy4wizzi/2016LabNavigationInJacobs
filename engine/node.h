@@ -8,7 +8,7 @@
 class Node
 {
 public:
-    Node(int id, string name, string number, int floor, int (&classes)[NUMBER_OF_CLASSES],int howManyClassesFound, int videoStartIndex, int videoEndIndex, string videoPath);
+    Node(int id, string name, string number, int floor, int (&classes)[NUMBER_OF_CLASSES], int howManyClassesFound);
     ~Node();
     string GetName() const;
     int GetId() const;
@@ -18,12 +18,12 @@ public:
     Node* GetPreviosNode() const;
     void SetPreviosNode(Node* previos) ;
     int * GetClasses();
-	int GetVideoStartIndex() const;
-	int GetVideoEndIndex() const;
+    //int GetVideoStartIndex() const;
+    //int GetVideoEndIndex() const;
     string GetNumber() const;
     string ToString() const;
     string ClassesToString() const;
-    string GetVideoPath() const;
+    //string GetVideoPath() const;
     int howManyClassesFound() const;
     double distanceToNextNodeInPath() const;
     void setdistanceToNextNodeInPath(double distanceToNextNodeInPath);
@@ -38,12 +38,12 @@ private:
     int _id; // unique field
     int _floor;
     double _edgeWeightToPrevious; // used for back tracking the weights on the shortest path
-    int _videoStartIndex; // used for indexing the relative timing showing the node on the video - in miliseconds
-    int _videoEndIndex;
+//    int _videoStartIndex; // used for indexing the relative timing showing the node on the video - in miliseconds
+//    int _videoEndIndex;
     Node* _previosNode; // used for backtracking the nodes on the shortest path
     int _classes[NUMBER_OF_CLASSES];
     int _howManyClassesFound;
-    string _videoPath;
+//    string _videoPath;
     int _nextRoomInPathId;
     double _distanceToNextNodeInPath;
 };

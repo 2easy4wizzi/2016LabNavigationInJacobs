@@ -44,9 +44,9 @@ void Nav::translateRoomsFromCppToQt()
         }
         room[fieldFloor] = QString::number(node->GetNodeFloor());
         room[fieldNumber] = (node->GetNumber().c_str());
-        room[fieldStartIndex] = QString::number(node->GetVideoStartIndex());
-        room[fieldEndIndex] = QString::number(node->GetVideoEndIndex());
-        room[fieldVideoPath] = node->GetVideoPath().c_str();
+        //room[fieldStartIndex] = QString::number(node->GetVideoStartIndex());
+        //room[fieldEndIndex] = QString::number(node->GetVideoEndIndex());
+        //room[fieldVideoPath] = node->GetVideoPath().c_str();
         m_roomsObjects.push_back(room);
     }
 }
@@ -430,9 +430,9 @@ void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs an
 
 void Nav::playVideoFromTo(bool replay)//play Node's video part
 {
-    int startIndex = m_roomVideoDisplay->GetVideoStartIndex();
-    int endIndex = m_roomVideoDisplay->GetVideoEndIndex();
-    QString videoPath = m_roomVideoDisplay->GetVideoPath().c_str();
+    int startIndex = 0;//m_roomVideoDisplay->GetVideoStartIndex();
+    int endIndex = 0;//m_roomVideoDisplay->GetVideoEndIndex();
+    QString videoPath = "";//m_roomVideoDisplay->GetVideoPath().c_str();
 
     cout << videoPath;
     m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location

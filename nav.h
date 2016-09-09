@@ -38,9 +38,9 @@ const QString fieldName = "Name";
 const QString fieldStairs = "Stairs";
 const QString fieldElevator = "Elevator";
 const QString fieldFloor = "Floor";
-const QString fieldStartIndex = "StartIndex";
-const QString fieldEndIndex = "EndIndex";
-const QString fieldVideoPath = "videoPath";
+//const QString fieldStartIndex = "StartIndex";
+//const QString fieldEndIndex = "EndIndex";
+//const QString fieldVideoPath = "videoPath";
 
 
 

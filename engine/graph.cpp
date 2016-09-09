@@ -5,28 +5,34 @@
 #define DEBUGCPP 0
 
 const char* fieldGraph= "Graph";
-const char* fieldEdge= "Edge";
-const char* fieldWeight= "Weight";
-const char* fieldFloor= "Floor";
-const char* fieldType= "Type";
-const char* fieldNode1Id= "Node1Id";
-const char* fieldNode2= "Node2Id";
+
+/*nodes consts*/
 const char* fieldNode= "Node";
+const char* fieldId= "Id";
 const char* fieldName= "Name";
 const char* fieldNumber= "Number";
-const char* fieldRegular= "Regular";
-const char* fieldElevator= "Elevator";
-const char* fieldStairs= "Stairs";
-const char* fieldVideoStartIndex= "VideoStartIndex";
-const char* fieldVideoEndIndex= "VideoEndIndex";
-const char* fieldNeighbor= "Neighbor";
-const char* fieldId= "Id";
-const char* fieldVideoPath= "videoPath";
+const char* fieldFloor= "Floor";
 const char* fieldClassA= "ClassA";
 const char* fieldClassB= "ClassB";
 const char* fieldClassC= "ClassC";
 const char* fieldClassD= "ClassD";
 const char* fieldClassE= "ClassE";
+
+/*edges consts*/
+const char* fieldEdge= "Edge";
+const char* fieldWeight= "Weight";
+const char* fieldType= "Type";
+const char* fieldRegular= "Regular";
+const char* fieldElevator= "Elevator";
+const char* fieldStairs= "Stairs";
+const char* fieldNode1Id= "Node1Id";
+const char* fieldNode2= "Node2Id";
+const char* fieldVideo= "video";
+const char* fieldFromId= "fromId";
+const char* fieldToId= "toId";
+const char* fieldVideoStart= "videoStart";
+const char* fieldVideoEnd= "videoEnd";
+const char* fieldPathTovideo= "pathTovideo";
 
 
 
@@ -68,9 +74,6 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
         string name = vertex_node->first_attribute(fieldName)->value();
         string number = vertex_node->first_attribute(fieldNumber)->value();
         int floor = atoi(vertex_node->first_attribute(fieldFloor)->value());
-        int videoStartIndex = 0;//atoi(vertex_node->first_attribute(fieldVideoStartIndex)->value());
-        int videoEndIndex =0;// atoi(vertex_node->first_attribute(fieldVideoEndIndex)->value());
-        string videoPath = "";//vertex_node->first_attribute(fieldVideoPath)->value();
         int classes[NUMBER_OF_CLASSES];
         classes[0] = atoi(vertex_node->first_attribute(fieldClassA)->value());
         classes[1] = atoi(vertex_node->first_attribute(fieldClassB)->value());
@@ -84,7 +87,7 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
             if (classes[cl] <= 0) //after first 0, all will be 0
                 break;
         }
-        Node *node = new Node(id, name,number, floor,classes,howManyClassesFound, videoStartIndex, videoEndIndex, videoPath);
+        Node *node = new Node(id, name,number, floor,classes,howManyClassesFound);
         _nodes->push_back(node);
     }
     return 1;
@@ -129,6 +132,17 @@ bool Graph::ParseXmlEdges(string xmlPathEdges)
                 node2 = node;
             }
         }
+        /*todo - here save both videos*/
+//        int i = 0;
+//        for (xml_node<> * neighbor_node = vertex_node->first_node(fieldNeighbor); neighbor_node; neighbor_node = neighbor_node->next_sibling())
+//        {
+//            neighborId = atoi(neighbor_node->first_attribute(fieldId)->value());
+//            string tempDir = neighbor_node->first_attribute(fieldDirection)->value();
+//            map<basic_string<char>, Direction>::const_iterator it = dirMap.find(tempDir);
+//            neighborDir = (*it).second;
+//            if (i > 3) { /*throw new exception("i is bigger then 3");*/ }
+//            neighbors[i++] =  neighborPair(neighborDir, neighborId);
+//        }
         Edge *edge = new Edge(weight,node1,node2,type);
         _edges->push_back(edge);
     }

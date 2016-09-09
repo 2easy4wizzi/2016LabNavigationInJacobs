@@ -1,9 +1,9 @@
 #include "node.h"
 
-string Node::GetVideoPath() const
-{
-    return _videoPath;
-}
+//string Node::GetVideoPath() const
+//{
+//    return _videoPath;
+//}
 
 int Node::howManyClassesFound() const
 {
@@ -35,12 +35,11 @@ void Node::setnextRoomInPathId(int nextRoomInPathId)
     _nextRoomInPathId = nextRoomInPathId;
 }
 
-Node::Node(int id, string name,  string number, int floor, int (&classes)[NUMBER_OF_CLASSES], int howManyClassesFound, int videoStartIndex, int videoEndIndex, string videoPath)
+Node::Node(int id, string name,  string number, int floor, int (&classes)[NUMBER_OF_CLASSES], int howManyClassesFound)
 {
-    //static int NodesId = 1; //#mark cahnge to attribute
     _id = id;
-	_videoStartIndex = videoStartIndex;
-	_videoEndIndex = videoEndIndex;
+//	_videoStartIndex = videoStartIndex;
+//	_videoEndIndex = videoEndIndex;
     _floor = floor;
     _name = name;
 	_number = number;
@@ -51,7 +50,7 @@ Node::Node(int id, string name,  string number, int floor, int (&classes)[NUMBER
     }
     _howManyClassesFound = howManyClassesFound;
     _edgeWeightToPrevious = 0;
-    _videoPath = videoPath;
+//    _videoPath = videoPath;
 }
 
 
@@ -99,15 +98,15 @@ int * Node::GetClasses()
     return _classes;
 }
 
-int Node::GetVideoStartIndex() const
-{
-	return _videoStartIndex;
-}
+//int Node::GetVideoStartIndex() const
+//{
+//	return _videoStartIndex;
+//}
 
-int Node::GetVideoEndIndex() const
-{
-    return _videoEndIndex;
-}
+//int Node::GetVideoEndIndex() const
+//{
+//    return _videoEndIndex;
+//}
 
 string Node::GetNumber() const
 {
