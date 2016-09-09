@@ -68,9 +68,9 @@ bool Graph::ParseXmlNodes(string xmlPathNodes)
         string name = vertex_node->first_attribute(fieldName)->value();
         string number = vertex_node->first_attribute(fieldNumber)->value();
         int floor = atoi(vertex_node->first_attribute(fieldFloor)->value());
-        int videoStartIndex = atoi(vertex_node->first_attribute(fieldVideoStartIndex)->value());
-        int videoEndIndex = atoi(vertex_node->first_attribute(fieldVideoEndIndex)->value());
-        string videoPath = vertex_node->first_attribute(fieldVideoPath)->value();
+        int videoStartIndex = 0;//atoi(vertex_node->first_attribute(fieldVideoStartIndex)->value());
+        int videoEndIndex =0;// atoi(vertex_node->first_attribute(fieldVideoEndIndex)->value());
+        string videoPath = "";//vertex_node->first_attribute(fieldVideoPath)->value();
         int classes[NUMBER_OF_CLASSES];
         classes[0] = atoi(vertex_node->first_attribute(fieldClassA)->value());
         classes[1] = atoi(vertex_node->first_attribute(fieldClassB)->value());
@@ -107,7 +107,7 @@ bool Graph::ParseXmlEdges(string xmlPathEdges)
 
     // Iterate over the nodes
     _edges = new list<Edge*>();
-    for (xml_node<> * vertex_node = root->first_node(fieldEdge); vertex_node; vertex_node = vertex_node->next_sibling())//#mark add strcmp like above function
+    for (xml_node<> * vertex_node = root->first_node(fieldEdge); vertex_node && strcmp(vertex_node->name(), fieldEdge) == 0; vertex_node = vertex_node->next_sibling())//#mark add strcmp like above function
     {
         double weight = atof(vertex_node->first_attribute(fieldWeight)->value());
         string typeStr = vertex_node->first_attribute(fieldType)->value();

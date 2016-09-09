@@ -434,6 +434,7 @@ void Nav::playVideoFromTo(bool replay)//play Node's video part
     int endIndex = m_roomVideoDisplay->GetVideoEndIndex();
     QString videoPath = m_roomVideoDisplay->GetVideoPath().c_str();
 
+    cout << videoPath;
     m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
     m_mediaPlayer->setPosition(startIndex); // starting index time
     if(!replay)
@@ -463,15 +464,17 @@ void Nav::testingFuncton()
     cout << tagsC << tagsC.size();
 
     tagsC.clear();
-    tagsC += QString("CS private room(418)");
+    tagsC += QString("Jackbobs entrance");
+//    tagsC += QString("CS private room(418)");
 //    tagsC += QString("Class(303)");
     //tagsC += QString("Copy room(404)");
     cout << tagsC;
-//    tagsD.clear();
-//    tagsD += QString("Or Donkelman(408)");
-////    tagsD += QString("Bathroom floor 3");
-////    tagsD += QString("Office(301)");
-//    cout << tagsD;
+    tagsD.clear();
+    tagsD += QString("Class(303)");
+    //    tagsD += QString("Or Donkelman(408)");
+//    tagsD += QString("Bathroom floor 3");
+//    tagsD += QString("Office(301)");
+    cout << tagsD;
     int iterNumber = 60000;
     int itersOuter = 1;
     int itersInner = 1;
@@ -489,9 +492,9 @@ void Nav::testingFuncton()
             goWasPressedSlot();
             for(int i = 0; i < m_shortestPathQt.size(); ++i)
             {
-                nextSlot();
+                //nextSlot();
             }
-            showQmsgBox(strC + " to " + strD);
+            //showQmsgBox(strC + " to " + strD);
             i++;
             if (++itersInner >= iterNumber) break;
         }
