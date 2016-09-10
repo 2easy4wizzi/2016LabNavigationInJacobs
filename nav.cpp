@@ -374,7 +374,7 @@ void Nav::goWasPressedSlot()
         xxx
         m_videoPlayerCounter = 0;
         m_replay = false;
-        playVideoFromTo(m_replay);//plays a video's part(could be 2 seconds from 10 seconds video) given a Node
+        playVideoFromTo();//plays a video's part(could be 2 seconds from 10 seconds video) given a Node
     }
 }
 
@@ -447,9 +447,9 @@ void Nav::appendShortestPathToLog(QString movieMessege, QString color) // 3 case
 }
 
 
-void Nav::playVideoFromTo(bool replay)//play Node's video part
+void Nav::playVideoFromTo()//play Node's video part
 {
-    cout << m_doneWithThisNode << m_videoPlayerCounter << m_roomVideoDisplay->videoInfoOfNodesInPathConter();
+
     if(m_doneWithThisNode)
     {
         return;
@@ -463,20 +463,25 @@ void Nav::playVideoFromTo(bool replay)//play Node's video part
     int endIndex = currentVideoInf._endIndex;
     QString videoPath = currentVideoInf._pathToVideo.c_str();
 
-    if(!replay && !m_appendedToLog) //m_appendedToLog : could be in this function more than 1 time for the same node
+    if(!m_replay && !m_appendedToLog) //m_appendedToLog : could be in this function more than 1 time for the same node
     {
         QString movieMessege = (videoPath.isEmpty()) ? (" (Need to insert movie)") : "";
         appendShortestPathToLog(movieMessege, "red");
         m_appendedToLog = true;
     }
-
+    if(m_mediaPlayer->state() == QMediaPlayer::PausedState){
+        m_mediaPlayer->blockSignals(true);
+        m_mediaPlayer->stop();
+        m_mediaPlayer->blockSignals(false);
+    }
     m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
     m_mediaPlayer->setPosition(startIndex); // starting index time
     m_videoWidget->show();
     m_mediaPlayer->play();
     if(endIndex != -1)
     {
-        QTimer::singleShot(endIndex, m_mediaPlayer, SLOT(pause()));
+        cout << "                           shot";
+        QTimer::singleShot(endIndex-startIndex, m_mediaPlayer, SLOT(pause()));
     }
 
     m_videoPlayerCounter++;
@@ -630,7 +635,7 @@ void Nav::replaySlot()
             m_doneWithThisNode = false;
             m_videoPlayerCounter--;
             m_replay = true;
-            playVideoFromTo(m_replay);
+            playVideoFromTo();
         }
     }
 }
@@ -656,6 +661,13 @@ void Nav::nextSlot()
                 break;
             }
         }
+        disconnect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
+        delete m_mediaPlayer;
+        m_mediaPlayer = new QMediaPlayer;
+        connect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
+        m_mediaPlayer->setAudioRole(QAudio::VideoRole);
+        m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
+
         m_roomVideoDisplay = tmpRoom;
         if(tmpRoom)
         {
@@ -664,15 +676,9 @@ void Nav::nextSlot()
             m_videoPlayerCounter = 0;
             m_replay = false;
             cout << "nextSlot";
-            playVideoFromTo(m_replay);
+            playVideoFromTo();
         }
         else{
-            disconnect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
-            delete m_mediaPlayer;
-            m_mediaPlayer = new QMediaPlayer;
-            connect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
-            m_mediaPlayer->setAudioRole(QAudio::VideoRole);
-            m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
             m_log->append("\nThat was the last step.\nClick on Go to repeat the instructions");
         }
 
@@ -693,16 +699,18 @@ void Nav::stateOfMediaPlayerChangedSlot(QMediaPlayer::State state)
 {
     if(m_next){
         m_next = false;
+        cout << state <<"m_next is true";
         return;
     }
     if(m_replay)
     {
         m_replay = false;
+        cout << state <<"m_replay is true";
         return;
     }
     if(state == QMediaPlayer::StoppedState || state == QMediaPlayer::PausedState){
-        cout << "stateOfMediaPlayerChangedSlot";
-        playVideoFromTo(m_replay);
+        cout << state <<"stateOfMediaPlayerChangedSlot";
+        playVideoFromTo();
     }
 }
 

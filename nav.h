@@ -64,7 +64,7 @@ public:
     void translateShortestPathFromCppToQt();
     void printShortestPath();
     void appendShortestPathToLog(QString movieMessege, QString color = "black");
-    void playVideoFromTo(bool replay);
+    void playVideoFromTo();
     void findWitchButtonIsOnPref();
     void testingFuncton();
 

@@ -30,6 +30,14 @@ struct videoInfo{
     int _startIndex;
     int _endIndex;
     string _pathToVideo;
+    inline bool operator==(const videoInfo& rhs){
+        return (_fromId == rhs._fromId) &&
+               (_toId == rhs._toId) &&
+               (_startIndex == rhs._startIndex) &&
+               (_endIndex == rhs._endIndex) &&
+               (_pathToVideo == rhs._pathToVideo) ;
+
+    }
 };
 
 #endif // VIDEOINFO_H
