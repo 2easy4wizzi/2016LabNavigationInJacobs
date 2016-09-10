@@ -2,10 +2,15 @@
 <!--
 Notice:
     NODES:
-        Node attribute Id (must be unique) go from 1 to n, where n is the number of Nodes.
+        Node->Id (must be unique) go from 1 to n, where n is the number of Nodes.
+        Node->Number: 0 is for room with no number. -1 is for a node that we don't want to see if the list of rooms(gateway room).
+        Node->Classes : each class will start with the floor number so we don't get bugs by Nodes combining from diffrent floors.
+        Node->Classes : 2 nodes got the same class if we want to show play them in 1 video.for example: assume the route A->b->C is a very
+            short route and simple to see, so we will ignore node b and show the video from A to C directly.
     EDGES:
         Edge pair Node1Id="x" Node2Id="y"(must be unique).
         Edges videos: the first video is from the min(Node1Id,Node2Id) to max(Node1Id,Node2Id). the second is from max to min.
+        if Edge->video videoEnd is -1, than the movie will play till its end.
 -->
 <Graph>
 <!--Nodes floor 4-->

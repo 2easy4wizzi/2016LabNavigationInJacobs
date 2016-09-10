@@ -462,6 +462,16 @@ void Nav::playVideoFromTo()//play Node's video part
     int startIndex = currentVideoInf._startIndex;
     int endIndex = currentVideoInf._endIndex;
     QString videoPath = currentVideoInf._pathToVideo.c_str();
+    //
+    int tempCounter = m_videoPlayerCounter + 1 ;
+    while (tempCounter+1 <= m_roomVideoDisplay->videoInfoOfNodesInPathConter() && videoInfoOfNodesInPath[tempCounter]._pathToVideo == currentVideoInf._pathToVideo )
+    {
+        m_videoPlayerCounter = tempCounter;
+        endIndex = videoInfoOfNodesInPath[tempCounter]._endIndex;
+        tempCounter++;
+    }
+    cout << "end is now: " << endIndex;
+
 
     if(!m_replay && !m_appendedToLog) //m_appendedToLog : could be in this function more than 1 time for the same node
     {
