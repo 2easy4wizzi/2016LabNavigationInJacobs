@@ -32,6 +32,7 @@ public:
     videoInfo getMyVideoInfo();
     int videoInfoOfNodesInPathConter() const;
     videoInfo* GetAllVideoInfos();
+    void resetCounter();
 
 private:
     string _name;

@@ -368,10 +368,13 @@ void Nav::goWasPressedSlot()
         translateShortestPathFromCppToQt(); //ask graph class to find shortest path and convert list<Node*> to QT::QList.
 
         m_roomVideoDisplay = m_shortestPathQt.at(0);
+        m_next = false;
         m_appendedToLog = false;
         m_doneWithThisNode = false;
+        xxx
         m_videoPlayerCounter = 0;
-        playVideoFromTo();//plays a video's part(could be 2 seconds from 10 seconds video) given a Node
+        m_replay = false;
+        playVideoFromTo(m_replay);//plays a video's part(could be 2 seconds from 10 seconds video) given a Node
     }
 }
 
@@ -393,7 +396,7 @@ void Nav::printShortestPath()//debuging function
     }
 }
 
-void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs and regular. print by case.
+void Nav::appendShortestPathToLog(QString movieMessege, QString color) // 3 cases. elevator, stairs and regular. print by case.
 {
     int i = 0;
     for (Node*room : m_shortestPathQt)
@@ -418,6 +421,7 @@ void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs an
         textToAppend = currentFloor > desFloor ?
                     (QString::number(++i) + ") Use the elevator to go down to floor " + QString::number(desFloor) + ".") :
                     (QString::number(++i) + ") Use the elevator to go up to floor "   + QString::number(desFloor) + ".");
+        textToAppend.append(movieMessege);
         m_log->append(textToAppend);
     }
     else if(roomName.contains(fieldStairs)&& getRoomFieldById(nextRoomInPathId, fieldName).contains(fieldStairs) && roomInPath->GetNodeFloor() != getRoomFieldById(nextRoomInPathId, fieldFloor).toInt()){
@@ -426,6 +430,7 @@ void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs an
         textToAppend = currentFloor > desFloor ?
                     (QString::number(++i) + ") Go down the stairs to floor " + QString::number(desFloor) + ".") :
                     (QString::number(++i) + ") Go up the stairs to floor "   + QString::number(desFloor) + ".");
+        textToAppend.append(movieMessege);
         m_log->append(textToAppend);
     }
     else{
@@ -436,6 +441,7 @@ void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs an
         if (number != "0" && number != "-1" && !name.contains(number)) tag.append("(" + number + ")");
         textToAppend = QString::number(++i) + ") Walk " + QString::number(roomInPath->distanceToNextNodeInPath()) +
                 " meters to " + tag + "." ;
+        textToAppend.append(movieMessege);
         m_log->append(textToAppend);
     }
 }
@@ -443,23 +449,26 @@ void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs an
 
 void Nav::playVideoFromTo(bool replay)//play Node's video part
 {
+    cout << m_doneWithThisNode << m_videoPlayerCounter << m_roomVideoDisplay->videoInfoOfNodesInPathConter();
     if(m_doneWithThisNode)
     {
         return;
     }
 
 
-    if(!replay && !m_appendedToLog) //m_appendedToLog : could be in this function more than 1 time for the same node
-    {
-        appendShortestPathToLog("red");
-        m_appendedToLog = true;
-    }
     videoInfo* videoInfoOfNodesInPath =  m_roomVideoDisplay->GetAllVideoInfos();
     videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter];
     cout << currentVideoInf.ToString().c_str();
     int startIndex = currentVideoInf._startIndex;
     int endIndex = currentVideoInf._endIndex;
     QString videoPath = currentVideoInf._pathToVideo.c_str();
+
+    if(!replay && !m_appendedToLog) //m_appendedToLog : could be in this function more than 1 time for the same node
+    {
+        QString movieMessege = (videoPath.isEmpty()) ? (" (Need to insert movie)") : "";
+        appendShortestPathToLog(movieMessege, "red");
+        m_appendedToLog = true;
+    }
 
     m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
     m_mediaPlayer->setPosition(startIndex); // starting index time
@@ -475,6 +484,7 @@ void Nav::playVideoFromTo(bool replay)//play Node's video part
         m_appendedToLog = false;
         m_doneWithThisNode = true;
     }
+
 
 }
 
@@ -612,9 +622,16 @@ void Nav::replaySlot()
 {
     if(m_roomVideoDisplay)
     {
-        m_doneWithThisNode = false;
-        m_videoPlayerCounter--;
-        playVideoFromTo(true);
+        videoInfo* videoInfoOfNodesInPath =  m_roomVideoDisplay->GetAllVideoInfos();
+        videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter-1];
+        QString videoPath = currentVideoInf._pathToVideo.c_str();
+        if(!videoPath.isEmpty())
+        {
+            m_doneWithThisNode = false;
+            m_videoPlayerCounter--;
+            m_replay = true;
+            playVideoFromTo(m_replay);
+        }
     }
 }
 
@@ -622,13 +639,14 @@ void Nav::nextSlot()
 {
     if(m_roomVideoDisplay)
     {
+        m_next = true;
         QTextCursor cursor = m_log->textCursor();
         cursor.movePosition(QTextCursor::End);
         cursor.select(QTextCursor::LineUnderCursor);
         cursor.removeSelectedText();
         cursor.deletePreviousChar(); // Added to trim the newline char when removing last line
         m_log->setTextCursor(cursor);
-        appendShortestPathToLog();
+        appendShortestPathToLog("");
         Node* tmpRoom = NULL;
         for (int i=0; i < m_shortestPathQt.size(); ++i)
         {
@@ -644,7 +662,9 @@ void Nav::nextSlot()
             m_doneWithThisNode = false;
             m_appendedToLog = false;
             m_videoPlayerCounter = 0;
-            playVideoFromTo();
+            m_replay = false;
+            cout << "nextSlot";
+            playVideoFromTo(m_replay);
         }
         else{
             disconnect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
@@ -671,8 +691,18 @@ void Nav::closeGroupBoxCurrentLocationCbWidgetSlot()
 
 void Nav::stateOfMediaPlayerChangedSlot(QMediaPlayer::State state)
 {
+    if(m_next){
+        m_next = false;
+        return;
+    }
+    if(m_replay)
+    {
+        m_replay = false;
+        return;
+    }
     if(state == QMediaPlayer::StoppedState || state == QMediaPlayer::PausedState){
-        playVideoFromTo();
+        cout << "stateOfMediaPlayerChangedSlot";
+        playVideoFromTo(m_replay);
     }
 }
 

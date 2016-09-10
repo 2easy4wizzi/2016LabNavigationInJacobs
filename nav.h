@@ -63,8 +63,8 @@ public:
     void translateRoomsFromCppToQt();
     void translateShortestPathFromCppToQt();
     void printShortestPath();
-    void appendShortestPathToLog(QString color = "black");
-    void playVideoFromTo(bool replay = false);
+    void appendShortestPathToLog(QString movieMessege, QString color = "black");
+    void playVideoFromTo(bool replay);
     void findWitchButtonIsOnPref();
     void testingFuncton();
 
@@ -123,9 +123,10 @@ private:
     QMap <int,QString> m_floorToShow2;
     Node* m_roomVideoDisplay;
     QList<Node*> m_shortestPathQt;
-
+    bool m_replay;
     bool m_appendedToLog;
     bool m_doneWithThisNode;
+    bool m_next;
     int m_videoPlayerCounter;
 };
 

@@ -113,6 +113,11 @@ videoInfo* Node::GetAllVideoInfos()
     return _videoInfoOfNodesInPath;
 }
 
+void Node::resetCounter()
+{
+    _videoInfoOfNodesInPathConter = 0;
+}
+
 string Node::GetNumber() const
 {
     return _number;

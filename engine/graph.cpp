@@ -233,6 +233,7 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
 	// push to list the starting room
     start->setdistanceToNextNodeInPath(start->GetEdgeWeightToPrevious());
     start->setnextRoomInPathId(start->GetPreviosNode()->GetId());
+    start->resetCounter();
     start->saveVideoInfoOfNodesInPath( getVideoInfo(start) );
 
     shortestNodesPath->push_back(start);
@@ -248,6 +249,7 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
         {
             next->setdistanceToNextNodeInPath(next->GetEdgeWeightToPrevious());
             next->setnextRoomInPathId(next->GetPreviosNode()->GetId());
+            next->resetCounter();
             next->saveVideoInfoOfNodesInPath( getVideoInfo(next) );
             shortestNodesPath->push_back(next);
             if(DEBUGCPP)
@@ -262,6 +264,7 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
 	//push to the list the ending room
     end->setdistanceToNextNodeInPath(0);
     end->setnextRoomInPathId(-1);
+    end->resetCounter();
     end->saveVideoInfoOfNodesInPath(videoInfo(-1,-1,-1,-1,"-1")); //empty video info. end doesn't have from video
     shortestNodesPath->push_back(end);
     if(DEBUGCPP)
