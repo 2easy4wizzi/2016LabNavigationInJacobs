@@ -1,9 +1,5 @@
 #include "node.h"
-
-//string Node::GetVideoPath() const
-//{
-//    return _videoPath;
-//}
+#include "edge.h"
 
 int Node::howManyClassesFound() const
 {
@@ -35,11 +31,25 @@ void Node::setnextRoomInPathId(int nextRoomInPathId)
     _nextRoomInPathId = nextRoomInPathId;
 }
 
+void Node::saveVideoInfoOfNodesInPath(videoInfo vidInfo)
+{
+    _videoInfoOfNodesInPath[_videoInfoOfNodesInPathConter] = vidInfo;
+    _videoInfoOfNodesInPathConter++;
+}
+
+videoInfo Node::getMyVideoInfo()
+{
+    return _videoInfoOfNodesInPath[0];
+}
+
+int Node::videoInfoOfNodesInPathConter() const
+{
+    return _videoInfoOfNodesInPathConter;
+}
+
 Node::Node(int id, string name,  string number, int floor, int (&classes)[NUMBER_OF_CLASSES], int howManyClassesFound)
 {
     _id = id;
-//	_videoStartIndex = videoStartIndex;
-//	_videoEndIndex = videoEndIndex;
     _floor = floor;
     _name = name;
 	_number = number;
@@ -50,7 +60,7 @@ Node::Node(int id, string name,  string number, int floor, int (&classes)[NUMBER
     }
     _howManyClassesFound = howManyClassesFound;
     _edgeWeightToPrevious = 0;
-//    _videoPath = videoPath;
+    _videoInfoOfNodesInPathConter = 0;
 }
 
 
@@ -98,15 +108,10 @@ int * Node::GetClasses()
     return _classes;
 }
 
-//int Node::GetVideoStartIndex() const
-//{
-//	return _videoStartIndex;
-//}
-
-//int Node::GetVideoEndIndex() const
-//{
-//    return _videoEndIndex;
-//}
+videoInfo* Node::GetAllVideoInfos()
+{
+    return _videoInfoOfNodesInPath;
+}
 
 string Node::GetNumber() const
 {
@@ -121,9 +126,6 @@ string Node::ToString() const
             "id:" + std::to_string(_id) + "; " +
             "floor:" + std::to_string(_floor) + "; " +
             "edgeWPrev:" + std::to_string(_edgeWeightToPrevious) + "; " +
-//            "videoSI:" + std::to_string(_videoStartIndex) + "; " +
-//            "videoEI:" + std::to_string(_videoEndIndex) + " "; +
-//            "videoPath:" + _videoPath + "; " +
             "distanceToNext:" + std::to_string(_distanceToNextNodeInPath) + "; " +
             "nextRoomId:" + std::to_string(_nextRoomInPathId) + "; " +
             "classes:" + ClassesToString()

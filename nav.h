@@ -38,10 +38,12 @@ const QString fieldName = "Name";
 const QString fieldStairs = "Stairs";
 const QString fieldElevator = "Elevator";
 const QString fieldFloor = "Floor";
-//const QString fieldStartIndex = "StartIndex";
-//const QString fieldEndIndex = "EndIndex";
-//const QString fieldVideoPath = "videoPath";
 
+const QString fieldFromId = "fromId";
+const QString fieldToId = "toId";
+const QString fieldVideoStart = "videoStart";
+const QString fieldVideoEnd = "videoEnd";
+const QString fieldPathTovideo = "pathTovideo";
 
 
 
@@ -81,7 +83,7 @@ public slots:
     void nextSlot();
     void closeGroupBoxdestinationCbWidgetSlot();
     void closeGroupBoxCurrentLocationCbWidgetSlot();
-
+    void stateOfMediaPlayerChangedSlot(QMediaPlayer::State state);
 signals:
 
 
@@ -89,6 +91,7 @@ private:
     void exitProgramWithErrMsg(QString errMsg);
     void showQmsgBox(QString msg);
     QList<QMap<QString,QString>> m_roomsObjects;//each room object got a list of attributes
+    //QMap<QPair<int,int> ,videoInfo> m_roomsEdges;//each edge key is QPair(fromId,ToId). each value is a videoInfo with startIndex, endIndex and videoPath.
     QVBoxLayout* m_mainVLayout;
     QPushButton* m_resetButton;
     QComboBox * m_currentLocationCb;
@@ -120,6 +123,11 @@ private:
     QMap <int,QString> m_floorToShow2;
     Node* m_roomVideoDisplay;
     QList<Node*> m_shortestPathQt;
+
+    bool m_appendedToLog;
+    bool m_doneWithThisNode;
+    int m_videoPlayerCounter;
 };
+
 
 #endif // NAV_H

@@ -1,8 +1,9 @@
 #ifndef NODE_H
 #define NODE_H
 #include "includes.h"
+#include "videoinfo.h"
 
-
+#define ASSUMING_NO_MORE_THAN_NODES_IN_PATH 20
 #define NUMBER_OF_CLASSES 5
 
 class Node
@@ -18,19 +19,19 @@ public:
     Node* GetPreviosNode() const;
     void SetPreviosNode(Node* previos) ;
     int * GetClasses();
-    //int GetVideoStartIndex() const;
-    //int GetVideoEndIndex() const;
     string GetNumber() const;
     string ToString() const;
     string ClassesToString() const;
-    //string GetVideoPath() const;
     int howManyClassesFound() const;
     double distanceToNextNodeInPath() const;
     void setdistanceToNextNodeInPath(double distanceToNextNodeInPath);
     void addTodistanceToNextNodeInPath(double add);
     int nextRoomInPathId() const;
     void setnextRoomInPathId(int nextRoomInPathId);
-
+    void saveVideoInfoOfNodesInPath(videoInfo vidInfo);
+    videoInfo getMyVideoInfo();
+    int videoInfoOfNodesInPathConter() const;
+    videoInfo* GetAllVideoInfos();
 
 private:
     string _name;
@@ -38,14 +39,13 @@ private:
     int _id; // unique field
     int _floor;
     double _edgeWeightToPrevious; // used for back tracking the weights on the shortest path
-//    int _videoStartIndex; // used for indexing the relative timing showing the node on the video - in miliseconds
-//    int _videoEndIndex;
     Node* _previosNode; // used for backtracking the nodes on the shortest path
     int _classes[NUMBER_OF_CLASSES];
     int _howManyClassesFound;
-//    string _videoPath;
     int _nextRoomInPathId;
     double _distanceToNextNodeInPath;
+    videoInfo _videoInfoOfNodesInPath[ASSUMING_NO_MORE_THAN_NODES_IN_PATH];
+    int _videoInfoOfNodesInPathConter;
 };
 
 #endif // NODE_H

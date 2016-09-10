@@ -35,4 +35,24 @@ Node* Edge::GetNode2() const
     return _node2;
 }
 
+void Edge::SetVideoInfo(int index, videoInfo vidInfo)
+{
+    if(index == 1){
+        vidInfo1 = vidInfo;
+    }
+    else{//index == 2
+        vidInfo2 = vidInfo;
+    }
+}
+
+videoInfo Edge::GetVideoInfo(int index)
+{
+    if(index == 1){
+        return vidInfo1;
+    }
+    //else index == 2
+    return vidInfo2;
+
+}
+
 

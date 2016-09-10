@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Notice Id (must be unique) go from 1 to n, where n is the number of Nodes.
+Notice:
+    NODES:
+        Node attribute Id (must be unique) go from 1 to n, where n is the number of Nodes.
+    EDGES:
+        Edge pair Node1Id="x" Node2Id="y"(must be unique).
+        Edges videos: the first video is from the min(Node1Id,Node2Id) to max(Node1Id,Node2Id). the second is from max to min.
 -->
 <Graph>
 <!--Nodes floor 4-->
@@ -42,170 +47,170 @@ Notice Id (must be unique) go from 1 to n, where n is the number of Nodes.
     <Node Id="35" Name="Communication room" Number="304"  Floor="3" ClassA="31" ClassB=""   ClassC=""   ClassD=""   ClassE="" ></Node>
     <Node Id="36" Name="Class(305)"         Number="305"  Floor="3" ClassA="31" ClassB="32" ClassC=""   ClassD=""   ClassE=""></Node>
 <!--Edges Floor 4-->
-    <Edge Weight="2"    Type="Regular"  Node1Id="1"  Node2Id="5">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2" Type="Regular"  Node1Id="1"  Node2Id="5">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2.5"  Type="Regular"  Node1Id="5"  Node2Id="6">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2.5" Type="Regular"  Node1Id="5"  Node2Id="6">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2.5"  Type="Regular"  Node1Id="6"  Node2Id="7">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2.5" Type="Regular"  Node1Id="6"  Node2Id="7">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2"    Type="Regular"  Node1Id="7"  Node2Id="8">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2"   Type="Regular"  Node1Id="7"  Node2Id="8">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2.5"  Type="Regular"  Node1Id="8"  Node2Id="9">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2.5" Type="Regular"  Node1Id="8"  Node2Id="9">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="3.5"  Type="Regular"  Node1Id="9"  Node2Id="10">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="3.5" Type="Regular"  Node1Id="9"  Node2Id="10">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="3"    Type="Regular"  Node1Id="10" Node2Id="11">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="3"   Type="Regular"  Node1Id="10" Node2Id="11">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="1"    Type="Regular"  Node1Id="11" Node2Id="12">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="1"   Type="Regular"  Node1Id="11" Node2Id="12">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="3"    Type="Regular"  Node1Id="9"  Node2Id="13">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="3"   Type="Regular"  Node1Id="9"  Node2Id="13">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="3"    Type="Regular"  Node1Id="13" Node2Id="14">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="3"   Type="Regular"  Node1Id="13" Node2Id="14">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="1"    Type="Regular"  Node1Id="14" Node2Id="15">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="1"   Type="Regular"  Node1Id="14" Node2Id="15">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="3"    Type="Regular"  Node1Id="15" Node2Id="16">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="3"   Type="Regular"  Node1Id="15" Node2Id="16">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="1.5"  Type="Regular"  Node1Id="16" Node2Id="17">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="1.5" Type="Regular"  Node1Id="16" Node2Id="17">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="5.5"  Type="Regular"  Node1Id="17" Node2Id="18">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="5.5" Type="Regular"  Node1Id="17" Node2Id="18">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2"    Type="Regular"  Node1Id="18" Node2Id="19">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2"   Type="Regular"  Node1Id="18" Node2Id="19">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2"    Type="Regular"  Node1Id="19" Node2Id="20">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2"   Type="Regular"  Node1Id="19" Node2Id="20">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2.5"  Type="Regular"  Node1Id="20" Node2Id="21">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2.5" Type="Regular"  Node1Id="20" Node2Id="21">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="4.5"  Type="Regular"  Node1Id="21" Node2Id="22">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="4.5" Type="Regular"  Node1Id="21" Node2Id="22">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="6"    Type="Regular"  Node1Id="21" Node2Id="4">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="6"   Type="Regular"  Node1Id="21" Node2Id="4">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="1"    Type="Regular"  Node1Id="4"  Node2Id="3">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="1"   Type="Regular"  Node1Id="4"  Node2Id="3">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2.5"  Type="Regular"  Node1Id="23" Node2Id="2">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2.5" Type="Regular"  Node1Id="23" Node2Id="2">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2.5"  Type="Regular"  Node1Id="23" Node2Id="3">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2.5" Type="Regular"  Node1Id="23" Node2Id="3">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="4.5"  Type="Regular"  Node1Id="3"  Node2Id="1">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="4.5" Type="Regular"  Node1Id="3"  Node2Id="1">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
 <!--Crossing Edges Floor 3 To Floor 4-->
-    <Edge Weight="6"    Type="Stairs"   Node1Id="3"  Node2Id="28">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="6"   Type="Stairs"   Node1Id="3"  Node2Id="28">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="0"    Type="Elevator" Node1Id="27" Node2Id="23">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="0"   Type="Elevator" Node1Id="27" Node2Id="23">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
 <!--Edges Floor 3-->
-    <Edge Weight="2.5"  Type="Regular"  Node1Id="25" Node2Id="27">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2.5" Type="Regular"  Node1Id="25" Node2Id="27">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="1.5"  Type="Regular"  Node1Id="27" Node2Id="26">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="1.5" Type="Regular"  Node1Id="27" Node2Id="26">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="5"    Type="Regular"  Node1Id="25" Node2Id="24">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="5"   Type="Regular"  Node1Id="25" Node2Id="24">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="7"    Type="Regular"  Node1Id="25" Node2Id="36">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="7"   Type="Regular"  Node1Id="25" Node2Id="36">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="2.5"  Type="Regular"  Node1Id="25" Node2Id="28">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="2.5" Type="Regular"  Node1Id="25" Node2Id="28">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="5.5"  Type="Regular"  Node1Id="28" Node2Id="29">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="5.5" Type="Regular"  Node1Id="28" Node2Id="29">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="3"    Type="Regular"  Node1Id="29" Node2Id="30">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="3"   Type="Regular"  Node1Id="29" Node2Id="30">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="1.5"  Type="Regular"  Node1Id="29" Node2Id="31">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="1.5" Type="Regular"  Node1Id="29" Node2Id="31">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="6"    Type="Regular"  Node1Id="29" Node2Id="33">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="6"   Type="Regular"  Node1Id="29" Node2Id="33">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="0.5"  Type="Regular"  Node1Id="31" Node2Id="32">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="0.5" Type="Regular"  Node1Id="31" Node2Id="32">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="7.5"  Type="Regular"  Node1Id="32" Node2Id="33">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="7.5" Type="Regular"  Node1Id="32" Node2Id="33">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="10"   Type="Regular"  Node1Id="31" Node2Id="34">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="10"  Type="Regular"  Node1Id="31" Node2Id="34">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="4.5"  Type="Regular"  Node1Id="33" Node2Id="34">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="4.5" Type="Regular"  Node1Id="33" Node2Id="34">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="4.5"  Type="Regular"  Node1Id="34" Node2Id="35">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="4.5" Type="Regular"  Node1Id="34" Node2Id="35">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="3.5"  Type="Regular"  Node1Id="35" Node2Id="36">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="3.5" Type="Regular"  Node1Id="35" Node2Id="36">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
-    <Edge Weight="6.5"  Type="Regular"  Node1Id="36" Node2Id="24">
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
-        <video fromId="" toId="" videoStart="" videoEnd="" pathTovideo=""></video>
+    <Edge Weight="6.5" Type="Regular"  Node1Id="36" Node2Id="24">
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
 </Graph>

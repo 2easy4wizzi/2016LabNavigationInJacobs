@@ -2,7 +2,7 @@
 #include <QDebug>
 #define cout qDebug()
 #define xxx qDebug()<< __LINE__ ;
-#define DEBUGCPP 0
+#define DEBUGCPP 1
 
 const char* fieldGraph= "Graph";
 
@@ -132,18 +132,21 @@ bool Graph::ParseXmlEdges(string xmlPathEdges)
                 node2 = node;
             }
         }
-        /*todo - here save both videos*/
-//        int i = 0;
-//        for (xml_node<> * neighbor_node = vertex_node->first_node(fieldNeighbor); neighbor_node; neighbor_node = neighbor_node->next_sibling())
-//        {
-//            neighborId = atoi(neighbor_node->first_attribute(fieldId)->value());
-//            string tempDir = neighbor_node->first_attribute(fieldDirection)->value();
-//            map<basic_string<char>, Direction>::const_iterator it = dirMap.find(tempDir);
-//            neighborDir = (*it).second;
-//            if (i > 3) { /*throw new exception("i is bigger then 3");*/ }
-//            neighbors[i++] =  neighborPair(neighborDir, neighborId);
-//        }
         Edge *edge = new Edge(weight,node1,node2,type);
+        //first video goes from minId to MaxId. second if from max to min
+        int videoIndex = 1;
+        int minId = (nodeId1 < nodeId2) ? nodeId1 : nodeId2;
+        int maxId = (nodeId1 > nodeId2) ? nodeId1 : nodeId2;
+        for (xml_node<> * video_node = vertex_node->first_node(fieldVideo); video_node&& strcmp(vertex_node->name(), fieldEdge) == 0; video_node = video_node->next_sibling())
+        {
+            int fromId = (videoIndex==1) ? minId : maxId;
+            int toId   = (videoIndex==1) ? maxId : minId;
+            int videoStart = atoi(video_node->first_attribute(fieldVideoStart)->value());
+            int videoEnd = atoi(video_node->first_attribute(fieldVideoEnd)->value());
+            string pathTovideo = video_node->first_attribute(fieldPathTovideo)->value();
+            videoInfo vidInfo(fromId, toId, videoStart, videoEnd, pathTovideo);
+            edge->SetVideoInfo(videoIndex++,vidInfo);
+        }
         _edges->push_back(edge);
     }
     return 1;
@@ -152,6 +155,10 @@ bool Graph::ParseXmlEdges(string xmlPathEdges)
 list<Node*> Graph::GetGrapghNodes() const
 {
     return *_nodes;
+}
+list<Edge*> Graph::GetGrapghEdges() const
+{
+    return *_edges;
 }
 
 list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
@@ -225,7 +232,9 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     list<Node*>* shortestNodesPath = new list<Node*>;
 	// push to list the starting room
     start->setdistanceToNextNodeInPath(start->GetEdgeWeightToPrevious());
-    start->setnextRoomInPathId(start->GetPreviosNode()->GetId()); //#mark
+    start->setnextRoomInPathId(start->GetPreviosNode()->GetId());
+    start->saveVideoInfoOfNodesInPath( getVideoInfo(start) );
+
     shortestNodesPath->push_back(start);
     if(DEBUGCPP)
     {
@@ -239,6 +248,7 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
         {
             next->setdistanceToNextNodeInPath(next->GetEdgeWeightToPrevious());
             next->setnextRoomInPathId(next->GetPreviosNode()->GetId());
+            next->saveVideoInfoOfNodesInPath( getVideoInfo(next) );
             shortestNodesPath->push_back(next);
             if(DEBUGCPP)
             {
@@ -252,6 +262,7 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
 	//push to the list the ending room
     end->setdistanceToNextNodeInPath(0);
     end->setnextRoomInPathId(-1);
+    end->saveVideoInfoOfNodesInPath(videoInfo(-1,-1,-1,-1,"-1")); //empty video info. end doesn't have from video
     shortestNodesPath->push_back(end);
     if(DEBUGCPP)
     {
@@ -285,6 +296,7 @@ list<Node *> Graph::GetShrinkendShortestPath(list<Node *> shortestPath)
             sharedClassLocal = (tmpNodeIter!= itEnd ) ? findSameClass((*it1), *tmpNodeIter, sharedClass) : 0;
             if(sharedClassLocal!=0 && sharedClass == sharedClassLocal ){
                 (*it1)->addTodistanceToNextNodeInPath((*it2)->distanceToNextNodeInPath());
+                (*it1)->saveVideoInfoOfNodesInPath((*it2)->getMyVideoInfo());
                 it2++;
             }
         }
@@ -322,6 +334,22 @@ int Graph::findSameClass(Node *a, Node *b, int &sharedClass)
         }
     }
     return 0;
+}
+
+videoInfo Graph::getVideoInfo(Node* node)
+{
+    for (Edge* edge : *_edges)
+    {
+        if (edge->GetNode1() == node || edge->GetNode2() == node)
+        {
+            for(int i=1; i<=2; ++i){
+                videoInfo vidInfo = edge->GetVideoInfo(i);
+                if(vidInfo._fromId == node->GetId() && vidInfo._toId == node->nextRoomInPathId())
+                    return vidInfo;
+            }
+        }
+    }
+    return videoInfo(-1,-1,-1,-1,"-1");
 }
 
 

@@ -1,5 +1,4 @@
 #include "nav.h"
-
 Nav::Nav(QWidget *parent):QWidget(parent)
 {
     setObjectName("Nav gui manager");
@@ -25,9 +24,10 @@ void Nav::readRoomsFromXml()
     translateRoomsFromCppToQt();
 }
 
-//creating 2 containers.
+//creating 3 containers.
 //1. m_roomsObjects - mapping each field name(QString) to his value(QString)
 //2. m_nodesMap     - mapping each id(int) to his Node object(Node*)
+//3. m_roomsEdges   - mapping each pair of nodes Ids to his videoInfo object
 void Nav::translateRoomsFromCppToQt()
 {
     list<Node*> nodetList =  m_graph->GetGrapghNodes();
@@ -44,11 +44,17 @@ void Nav::translateRoomsFromCppToQt()
         }
         room[fieldFloor] = QString::number(node->GetNodeFloor());
         room[fieldNumber] = (node->GetNumber().c_str());
-        //room[fieldStartIndex] = QString::number(node->GetVideoStartIndex());
-        //room[fieldEndIndex] = QString::number(node->GetVideoEndIndex());
-        //room[fieldVideoPath] = node->GetVideoPath().c_str();
         m_roomsObjects.push_back(room);
     }
+//    list<Edge*> edgesList =  m_graph->GetGrapghEdges();
+//    for (Edge* edge : edgesList){
+//        for(int i=1; i<=2; ++i)
+//        {
+//            videoInfo vidInfo = edge->GetVideoInfo(i);
+//            QPair<int,int> key(vidInfo._fromId, vidInfo._toId);
+//            m_roomsEdges[key] = vidInfo;
+//        }
+//    }
 }
 
 //happens once
@@ -276,6 +282,7 @@ void Nav::initOnce()
 void Nav::init()
 {
     m_mediaPlayer = new QMediaPlayer;
+    connect(m_mediaPlayer, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
     m_mediaPlayer->setAudioRole(QAudio::VideoRole);
     m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
     /*general attributes*/
@@ -312,6 +319,8 @@ void Nav::resetSlot()
     m_shortestPathQt.clear();
     QColor qcolor("black");
     m_log->setTextColor(qcolor);
+    disconnect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
+
     delete m_mediaPlayer;
     delete m_mainVLayout;
 
@@ -357,7 +366,11 @@ void Nav::goWasPressedSlot()
         QString currentRoom(m_currentLocationCb->currentText());
         m_log->append("\nStart from " + currentRoom + " :");
         translateShortestPathFromCppToQt(); //ask graph class to find shortest path and convert list<Node*> to QT::QList.
+
         m_roomVideoDisplay = m_shortestPathQt.at(0);
+        m_appendedToLog = false;
+        m_doneWithThisNode = false;
+        m_videoPlayerCounter = 0;
         playVideoFromTo();//plays a video's part(could be 2 seconds from 10 seconds video) given a Node
     }
 }
@@ -430,26 +443,38 @@ void Nav::appendShortestPathToLog(QString color) // 3 cases. elevator, stairs an
 
 void Nav::playVideoFromTo(bool replay)//play Node's video part
 {
-    int startIndex = 0;//m_roomVideoDisplay->GetVideoStartIndex();
-    int endIndex = 0;//m_roomVideoDisplay->GetVideoEndIndex();
-    QString videoPath = "";//m_roomVideoDisplay->GetVideoPath().c_str();
-
-    cout << videoPath;
-    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
-    m_mediaPlayer->setPosition(startIndex); // starting index time
-    if(!replay)
+    if(m_doneWithThisNode)
     {
-        appendShortestPathToLog("red");
+        return;
     }
 
+
+    if(!replay && !m_appendedToLog) //m_appendedToLog : could be in this function more than 1 time for the same node
+    {
+        appendShortestPathToLog("red");
+        m_appendedToLog = true;
+    }
+    videoInfo* videoInfoOfNodesInPath =  m_roomVideoDisplay->GetAllVideoInfos();
+    videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter];
+    cout << currentVideoInf.ToString().c_str();
+    int startIndex = currentVideoInf._startIndex;
+    int endIndex = currentVideoInf._endIndex;
+    QString videoPath = currentVideoInf._pathToVideo.c_str();
+
+    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
+    m_mediaPlayer->setPosition(startIndex); // starting index time
     m_videoWidget->show();
     m_mediaPlayer->play();
-
     if(endIndex != -1)
     {
         QTimer::singleShot(endIndex, m_mediaPlayer, SLOT(pause()));
     }
 
+    m_videoPlayerCounter++;
+    if(m_videoPlayerCounter >= m_roomVideoDisplay->videoInfoOfNodesInPathConter()){ //no more videos for this node
+        m_appendedToLog = false;
+        m_doneWithThisNode = true;
+    }
 
 }
 
@@ -461,7 +486,7 @@ void Nav::testingFuncton()
     QStringList tagsC = getRoomsTagsToPlaceInComboBox(floorsToShow);
     QStringList tagsD = getRoomsTagsToPlaceInComboBox(floorsToShow);
 
-    cout << tagsC << tagsC.size();
+//    /cout << tagsC << tagsC.size();
 
     tagsC.clear();
     tagsC += QString("Jackbobs entrance");
@@ -470,14 +495,14 @@ void Nav::testingFuncton()
     //tagsC += QString("Copy room(404)");
     cout << tagsC;
     tagsD.clear();
-    tagsD += QString("Class(303)");
+    tagsD += QString("Dan Feldman(413)");
     //    tagsD += QString("Or Donkelman(408)");
 //    tagsD += QString("Bathroom floor 3");
 //    tagsD += QString("Office(301)");
     cout << tagsD;
-    int iterNumber = 60000;
-    int itersOuter = 1;
-    int itersInner = 1;
+//    int iterNumber = 60000;
+//    int itersOuter = 1;
+//    int itersInner = 1;
     int i = 0;
     for(QString strC : tagsC)
     {
@@ -496,11 +521,8 @@ void Nav::testingFuncton()
             }
             //showQmsgBox(strC + " to " + strD);
             i++;
-            if (++itersInner >= iterNumber) break;
         }
-        if (++itersOuter >= iterNumber) break;
     }
-    cout << "SUCCESS:" <<i;
 }
 
 QString Nav::getRoomFieldById(int id, QString field)//given an Id, retrun the wanted value.
@@ -590,6 +612,8 @@ void Nav::replaySlot()
 {
     if(m_roomVideoDisplay)
     {
+        m_doneWithThisNode = false;
+        m_videoPlayerCounter--;
         playVideoFromTo(true);
     }
 }
@@ -617,11 +641,16 @@ void Nav::nextSlot()
         m_roomVideoDisplay = tmpRoom;
         if(tmpRoom)
         {
+            m_doneWithThisNode = false;
+            m_appendedToLog = false;
+            m_videoPlayerCounter = 0;
             playVideoFromTo();
         }
         else{
+            disconnect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
             delete m_mediaPlayer;
             m_mediaPlayer = new QMediaPlayer;
+            connect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
             m_mediaPlayer->setAudioRole(QAudio::VideoRole);
             m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
             m_log->append("\nThat was the last step.\nClick on Go to repeat the instructions");
@@ -639,6 +668,14 @@ void Nav::closeGroupBoxCurrentLocationCbWidgetSlot()
 {
     m_groupBoxCurrentLocationCbWidget->close();
 }
+
+void Nav::stateOfMediaPlayerChangedSlot(QMediaPlayer::State state)
+{
+    if(state == QMediaPlayer::StoppedState || state == QMediaPlayer::PausedState){
+        playVideoFromTo();
+    }
+}
+
 
 //function that build the combo boxes labels
 QStringList Nav::getRoomsTagsToPlaceInComboBox(QMap<int, QString> floorsToShow)

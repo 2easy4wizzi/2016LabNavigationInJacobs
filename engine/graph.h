@@ -25,13 +25,18 @@ public:
     bool ParseXmlNodes(string xmlPathNodes);
     bool ParseXmlEdges(string xmlPathEdges);
     list<Node*> GetGrapghNodes() const;
+    list<Edge*> GetGrapghEdges() const;
     list<Node*> GetShortestpath(Node* start, Node* end, EdgeType pref);
     int findSameClass(Node* a, Node* b, int& sharedClass);
+    videoInfo getVideoInfo(Node *node);
 
 private:
     list<Node*> GetShrinkendShortestPath(list<Node*> shortestPath);
 	list<Node*>* _nodes;
 	list<Edge*>* _edges;
 };
+
+
+
 
 #endif // GRAPH_H

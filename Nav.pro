@@ -24,7 +24,8 @@ HEADERS  += nav.h \
     engine/graph.h \
     engine/node.h \
     engine/edge.h \
-    engine/rapidxml.h
+    engine/rapidxml.h \
+    engine/videoinfo.h
 
 DISTFILES += \
     dependencies/rooms.xml
