@@ -242,7 +242,7 @@ void Nav::playVideoFromTo(bool appendedThisMoveToLogBefore)//play Node's video p
         appendShortestPathToLog(movieMessege, "red");
     }
 
-    m_rePlay->setDisabled(videoPath.isEmpty());
+    m_rePlay->setDisabled(videoPath.isEmpty() || m_playWithOutPause);
     if(!videoPath.isEmpty()){
         while (tempCounter+1 <= m_roomVideoDisplay->videoInfoOfNodesInPathConter() && videoInfoOfNodesInPath[tempCounter]._pathToVideo == currentVideoInf._pathToVideo )
         {
@@ -280,8 +280,8 @@ void Nav::playVideoFromTo(bool appendedThisMoveToLogBefore)//play Node's video p
 void Nav::testingFuncton()
 {
     bool testingmode;
-    testingmode = false;
     testingmode = true;
+    testingmode = false;
     if(!testingmode) return;
     QMap<int, QString> floorsToShow;
     floorsToShow.insert(4,"4");
