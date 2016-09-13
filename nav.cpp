@@ -232,6 +232,7 @@ void Nav::playVideoFromTo(bool appendedThisMoveToLogBefore)//play Node's video p
     int startIndex = currentVideoInf._startIndex;
     int endIndex = currentVideoInf._endIndex;
     QString videoPath = currentVideoInf._pathToVideo.c_str();
+    //cout << QFile::exists(videoPath) << videoPath;
 
     int tempCounter = m_videoPlayerCounter + 1 ;//try to combine videos. if we have route 1->2 and 2->3 and they share the same video, play it like its one video 1->3
 
@@ -280,8 +281,8 @@ void Nav::playVideoFromTo(bool appendedThisMoveToLogBefore)//play Node's video p
 void Nav::testingFuncton()
 {
     bool testingmode;
-    testingmode = true;
     testingmode = false;
+    testingmode = true;
     if(!testingmode) return;
     QMap<int, QString> floorsToShow;
     floorsToShow.insert(4,"4");
@@ -298,9 +299,9 @@ void Nav::testingFuncton()
     //tagsC += QString("Copy room(404)");
     //cout << tagsC;
     tagsD.clear();
-//    tagsD += QString("Dan Feldman(413)");
+    tagsD += QString("Dan Feldman(413)");
     //    tagsD += QString("Or Donkelman(408)");
-    tagsD += QString("Bathroom floor 3");
+//    tagsD += QString("Bathroom floor 3");
 //    tagsD += QString("Office(301)");
     //cout << tagsD;
 //    int iterNumber = 60000;
@@ -316,7 +317,7 @@ void Nav::testingFuncton()
 
             m_currentRoom = findNodeByStr(m_currentLocationCb->currentText());
             m_destRoom = findNodeByStr(m_destinationCb->currentText());
-//            m_playWithOutPauseCheckBox->setChecked(true);
+            //m_playWithOutPauseCheckBox->setChecked(true);
             goWasPressedSlot();
 //            for(int i = 0; i < m_shortestPathQt.size(); ++i)
 //            {
