@@ -1,8 +1,4 @@
 #include "graph.h"
-#include <QDebug>
-#define cout qDebug()
-#define xxx qDebug()<< __LINE__ ;
-#define DEBUGCPP 0
 
 const char* fieldGraph= "Graph";
 
@@ -187,10 +183,6 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
         }
         Adjacency[u->GetId()].push_back(qPair(v, weight + prefAddon));
         Adjacency[v->GetId()].push_back(qPair(u, weight + prefAddon));
-        if(u->GetId() == 37 || v->GetId()==37)
-        {
-            cout << "edge:" << u->GetId() << v->GetId() << weight << prefAddon;
-        }
     }
 
 
@@ -237,11 +229,6 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     start->saveVideoInfoOfNodesInPath( getVideoInfo(start) );
 
     shortestNodesPath->push_back(start);
-    if(DEBUGCPP)
-    {
-        cout << "###\nstart of full path";
-        cout << start->GetId() << start->GetName().c_str() << start->nextRoomInPathId() << start->ClassesToString().c_str() << "dis: " << start->distanceToNextNodeInPath();
-    }
     Node *next = start->GetPreviosNode();
     while (next != NULL && next != end)
     {
@@ -252,10 +239,6 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
             next->resetCounter();
             next->saveVideoInfoOfNodesInPath( getVideoInfo(next) );
             shortestNodesPath->push_back(next);
-            if(DEBUGCPP)
-            {
-                cout << next->GetId() << next->GetName().c_str() << next->nextRoomInPathId() <<  next->ClassesToString().c_str()<< "dis: " << next->distanceToNextNodeInPath();
-            }
 		}
 		next = next->GetPreviosNode();
 	}
@@ -267,11 +250,6 @@ list<Node *> Graph::GetShortestpath(Node* start, Node* end, EdgeType pref)
     end->resetCounter();
     end->saveVideoInfoOfNodesInPath(videoInfo(-1,-1,-1,-1,"-1")); //empty video info. end doesn't have from video
     shortestNodesPath->push_back(end);
-    if(DEBUGCPP)
-    {
-        cout << end->GetId() << end->GetName().c_str() << end->nextRoomInPathId()<< end->ClassesToString().c_str()<< "dis: " << end->distanceToNextNodeInPath();
-        cout << "end of full path\n###";
-    }
     // nothing to shrink if there is only one destination on the path
     return (shortestNodesPath->size() < 2) ? (*shortestNodesPath) :GetShrinkendShortestPath(*shortestNodesPath);
 }
@@ -305,9 +283,6 @@ list<Node *> Graph::GetShrinkendShortestPath(list<Node *> shortestPath)
         }
         (*it1)->setnextRoomInPathId((*it2)->GetId());
         shrinkedShortestPathtmp->push_back((*it1));
-        if(DEBUGCPP){
-            cout <<"shrinked" << (*it1)->GetId() << (*it1)->GetName().c_str() << (*it1)->nextRoomInPathId() << (*it1)->ClassesToString().c_str()<< "dis: " <<(*it1)->distanceToNextNodeInPath();
-        }
         it1 = it2;
         ++it2;
     }
@@ -354,51 +329,3 @@ videoInfo Graph::getVideoInfo(Node* node)
     }
     return videoInfo(-1,-1,-1,-1,"-1");
 }
-
-
-
-
-
-
-
-
-
-//    //if (shortestPath == NULL)
-//    list<Node*>* shrinkedShortestPath = new list<Node*>;
-//    list<Node*>::iterator iter1 = shortestPath.begin();
-//    list<Node*>::iterator iter2 = shortestPath.begin();
-//    list<Node*>::iterator iterEnd = shortestPath.end();
-//    ++iter2;
-//    double distance = 0;
-//	while (iter2!= iterEnd )
-//	{
-//		bool advanced = false;
-//        Node* tmp1 = *iter1;
-//        Node* tmp2 = *iter2;
-//        distance = tmp1->_distanceToNextNodeInPath; //distance to the next room on shortest path
-//        while(iter2!=iterEnd && tmp1->_roomPathDirection== tmp2->_roomPathDirection && tmp1->_roomPathDirection != "")
-//		{
-//            distance += tmp2->_distanceToNextNodeInPath;
-//			++iter2;
-//			advanced = true;
-//            tmp2 = *iter2;
-//		}
-//        tmp1->_distanceToNextNodeInPath = distance;
-//        tmp1->_nextRoomInPathId = tmp2->GetId();
-//        shrinkedShortestPath->push_back(tmp1);
-//        if(DEBUGCPP)
-//        {
-//            //cout <<"adam's " << tmp1->GetId() << tmp1->GetName().c_str() << tmp1->_nextRoomInPathId << tmp1->ClassesToString().c_str() <<"dis: " << tmp1->_distanceToNextNodeInPath;
-//        }
-//		if (advanced)
-//		{
-//			iter1 = iter2;
-//		}
-//		else
-//		{
-//			++iter1;
-//		}
-//		++iter2;
-//	}
-
-//    return *shrinkedShortestPath;

@@ -49,7 +49,7 @@ Notice:
     <Node Id="32" Name="Office(301)"        Number="301"  Floor="3" ClassA="35" ClassB=""   ClassC=""   ClassD=""   ClassE="" ></Node>
     <Node Id="33" Name="Stairs to floor 2"  Number="-1"   Floor="3" ClassA="34" ClassB=""   ClassC=""   ClassD=""   ClassE=""></Node>
     <Node Id="34" Name="Class(303)"         Number="303"  Floor="3" ClassA="31" ClassB="34" ClassC="35" ClassD=""   ClassE=""></Node>
-    <Node Id="35" Name="Communication room" Number="304"  Floor="3" ClassA="31" ClassB=""   ClassC=""   ClassD=""   ClassE="" ></Node>
+    <Node Id="35" Name="Communication" Number="304"  Floor="3" ClassA="31" ClassB=""   ClassC=""   ClassD=""   ClassE="" ></Node>
     <Node Id="36" Name="Class(305)"         Number="305"  Floor="3" ClassA="31" ClassB="32" ClassC=""   ClassD=""   ClassE=""></Node>
 <!--Edges Floor 4-->
     <Edge Weight="2" Type="Regular"  Node1Id="1"  Node2Id="5">

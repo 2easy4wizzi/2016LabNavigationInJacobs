@@ -45,68 +45,38 @@ const QString fieldVideoEnd = "videoEnd";
 const QString fieldPathTovideo = "pathTovideo";
 
 struct configVars{
+    //todo - change all config fields to Private and use getters instead config->field.
+    //to make the fields "const"
+    configVars(QMap<QString,QString> configHeaderToValue);
 
+    QString fontType;// = "font-family: \"Times New Roman\", Times, serif;";
+    QString fontSize;// = "font-size: 20px;";
+    QString border;// = "border: 1px solid black;";
+    QString globalTextAttributes;// = fontType + fontSize + border;
+    QString roomsXmlPath;// = "../Nav/dependencies/rooms.xml";
 
-configVars(QMap<QString,QString> configHeaderToValue)
-{
-    fontType = configHeaderToValue.contains("fontType") ? configHeaderToValue["fontType"] : "";
-    fontSize = configHeaderToValue.contains("fontSize") ? configHeaderToValue["fontSize"] : "";
-    border = configHeaderToValue.contains("border") ? configHeaderToValue["border"] : "";
-    globalTextAttributes = fontType + fontSize + border;
-    roomsXmlPath = configHeaderToValue.contains("roomsXmlPath") ? configHeaderToValue["roomsXmlPath"] : "";
+    QString projectLogo;// = "../Nav/dependencies/LOGO.JPG";
+    QString projectTitleLabelText;// = "Navigation in Jacobs";
+    QString projectTitleLabelStyle;//  = "background-color: yellow;";
+    QString windowTitleText;//  = "Created By Adam Anan & Gilad Eini";
+    QString currentLocationLabelText;// = "I am here: ";
 
-    projectLogo = configHeaderToValue.contains("projectLogo") ? configHeaderToValue["projectLogo"] : "";
-    projectTitleLabelText = configHeaderToValue.contains("projectTitleLabelText") ? configHeaderToValue["projectTitleLabelText"] : "";
-    projectTitleLabelStyle = configHeaderToValue.contains("projectTitleLabelStyle") ? configHeaderToValue["projectTitleLabelStyle"] : "";
-    windowTitleText = configHeaderToValue.contains("windowTitleText") ? configHeaderToValue["windowTitleText"] : "";
-    currentLocationLabelText = configHeaderToValue.contains("currentLocationLabelText") ? configHeaderToValue["currentLocationLabelText"] : "";
+    QString currentLocationLabelStyle;// = "background-color: green;";
+    QString destinationLabelText;// = "Take me to: ";
+    QString destinationLabelStyle;// = "background-color: red;";
+    QString logLabelText;// = "Directions";
+    QString logLabelStyle;// = "background-color: blue;";
 
-    currentLocationLabelStyle = configHeaderToValue.contains("currentLocationLabelStyle") ? configHeaderToValue["currentLocationLabelStyle"] : "";
-    destinationLabelText = configHeaderToValue.contains("destinationLabelText") ? configHeaderToValue["destinationLabelText"] : "";
-    destinationLabelStyle = configHeaderToValue.contains("destinationLabelStyle") ? configHeaderToValue["destinationLabelStyle"] : "";
-    logLabelText = configHeaderToValue.contains("logLabelText") ? configHeaderToValue["logLabelText"] : "";
-    logLabelStyle = configHeaderToValue.contains("logLabelStyle") ? configHeaderToValue["logLabelStyle"] : "";
+    QString logStyle;// = "background-color: grey;";
+    QString groupBoxPrefStyle;// = "";
+    QString resetButtonStyle;// = "";
+    QString filterButtonStyle;// = "";
+    QString goButtonStyle;// = "";
 
-    logStyle = configHeaderToValue.contains("logStyle") ? configHeaderToValue["logStyle"] : "";
-    groupBoxPrefStyle = configHeaderToValue.contains("groupBoxPrefStyle") ? configHeaderToValue["groupBoxPrefStyle"] : "";
-    resetButtonStyle = configHeaderToValue.contains("resetButtonStyle") ? configHeaderToValue["resetButtonStyle"] : "";
-    filterButtonStyle = configHeaderToValue.contains("filterButtonStyle") ? configHeaderToValue["filterButtonStyle"] : "";
-    goButtonStyle = configHeaderToValue.contains("goButtonStyle") ? configHeaderToValue["goButtonStyle"] : "";
-
-    locationCBsStyle = configHeaderToValue.contains("locationCBsStyle") ? configHeaderToValue["locationCBsStyle"] : "";
-    floorsNumbersWidgetStyle = configHeaderToValue.contains("floorsNumbersWidgetStyle") ? configHeaderToValue["floorsNumbersWidgetStyle"] : "";
-    floorsNumbersWidgetHeader = configHeaderToValue.contains("floorsNumbersWidgetHeader") ? configHeaderToValue["floorsNumbersWidgetHeader"] : "";
-    baseFloor = configHeaderToValue.contains("baseFloor") ? configHeaderToValue["baseFloor"] : "";
-}
-
-QString fontType;// = "font-family: \"Times New Roman\", Times, serif;";
-QString fontSize;// = "font-size: 20px;";
-QString border;// = "border: 1px solid black;";
-QString globalTextAttributes;// = fontType + fontSize + border;
-QString roomsXmlPath;// = "../Nav/dependencies/rooms.xml";
-
-QString projectLogo;// = "../Nav/dependencies/LOGO.JPG";
-QString projectTitleLabelText;// = "Navigation in Jacobs";
-QString projectTitleLabelStyle;//  = "background-color: yellow;";
-QString windowTitleText;//  = "Created By Adam Anan & Gilad Eini";
-QString currentLocationLabelText;// = "I am here: ";
-
-QString currentLocationLabelStyle;// = "background-color: green;";
-QString destinationLabelText;// = "Take me to: ";
-QString destinationLabelStyle;// = "background-color: red;";
-QString logLabelText;// = "Directions";
-QString logLabelStyle;// = "background-color: blue;";
-
-QString logStyle;// = "background-color: grey;";
-QString groupBoxPrefStyle;// = "";
-QString resetButtonStyle;// = "";
-QString filterButtonStyle;// = "";
-QString goButtonStyle;// = "";
-
-QString locationCBsStyle;// = "";
-QString floorsNumbersWidgetStyle;// = "";
-QString floorsNumbersWidgetHeader;// = "See only the following floors:";
-QString baseFloor;// = "3"; //used in the filter. come in use when user uncheck all floors
+    QString locationCBsStyle;// = "";
+    QString floorsNumbersWidgetStyle;// = "";
+    QString floorsNumbersWidgetHeader;// = "See only the following floors:";
+    QString baseFloor;// = "3"; //used in the filter. come in use when user uncheck all floors
 };
 
 class Nav : public QWidget
@@ -125,12 +95,11 @@ public:
     QStringList getRoomsTagsToPlaceInComboBox(QMap <int,QString> floorsToShow = QMap<int, QString>());
     void translateRoomsFromCppToQt();
     void translateShortestPathFromCppToQt();
-    void printShortestPath();
     void appendShortestPathToLog(QString movieMessege, QString color = "black");
-    void playVideoFromTo();
+    void playVideoFromTo(bool appendedThisMoveToLogBefore);
     void findWitchButtonIsOnPref();
     void testingFuncton();
-
+    void stopDeleteAndMakeNewMediaPlayer(bool firstTime);
 
 public slots:
     void resetSlot();
@@ -142,11 +111,13 @@ public slots:
     void showFilter2Slot();
     void updateFilter1Slot();
     void updateFilter2Slot();
-    void replaySlot();
+    void rePlaySlot();
     void nextSlot();
     void closeGroupBoxdestinationCbWidgetSlot();
     void closeGroupBoxCurrentLocationCbWidgetSlot();
-    void stateOfMediaPlayerChangedSlot(QMediaPlayer::State state);
+    void stateOfMediaPlayerChangedSlot(QMediaPlayer::State state = QMediaPlayer::StoppedState);
+    void qTimerTimeoutSlot();
+
 signals:
 
 
@@ -154,16 +125,11 @@ private:
     void exitProgramWithErrMsg(QString errMsg);
     void showQmsgBox(QString msg);
     QList<QMap<QString,QString>> m_roomsObjects;//each room object got a list of attributes
-    //QMap<QPair<int,int> ,videoInfo> m_roomsEdges;//each edge key is QPair(fromId,ToId). each value is a videoInfo with startIndex, endIndex and videoPath.
     QVBoxLayout* m_mainVLayout;
-    QPushButton* m_resetButton;
     QComboBox * m_currentLocationCb;
-    QPushButton * m_currentLocationCbFilter;
     QGroupBox *m_groupBoxCurrentLocationCbWidget;
     QComboBox * m_destinationCb;
-    QPushButton * m_destinationCbFilter;
     QGroupBox *m_groupBoxdestinationCbWidget;
-    QPushButton* m_goButton;
     QTextEdit* m_log;
     Graph* m_graph;
     QMap<int, Node*> m_nodesMap;
@@ -175,23 +141,23 @@ private:
     QHBoxLayout* m_logSpacerLayout;
     QMediaPlayer* m_mediaPlayer;
     QVideoWidget* m_videoWidget;
-    QMediaPlaylist* m_playlist;
     QRadioButton *m_groupBoxPrefRadioDefault;
     QRadioButton *m_groupBoxPrefRadioStairs;
     QRadioButton *m_groupBoxPrefRadioElevator;
     QRadioButton *m_groupBoxViewByRadioName;
-    QRadioButton *m_groupBoxViewByRadioNumber;
     EdgeType m_pref;
     QMap <int,QString> m_floorToShow1;
     QMap <int,QString> m_floorToShow2;
     Node* m_roomVideoDisplay;
     QList<Node*> m_shortestPathQt;
-    bool m_replay;
-    bool m_appendedToLog;
-    bool m_doneWithThisNode;
-    bool m_next;
     int m_videoPlayerCounter;
     configVars* config;
+    bool m_playWithOutPause;
+    QCheckBox* m_playWithOutPauseCheckBox;
+    QTimer* m_qTimer;
+    bool m_moreVideoToShowOnThisNode;
+    QPushButton* m_rePlay;
+    QPushButton* m_next;
 };
 
 

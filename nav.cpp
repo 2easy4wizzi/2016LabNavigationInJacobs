@@ -3,16 +3,9 @@
 Nav::Nav(QWidget *parent):QWidget(parent)
 {
     setObjectName("Nav gui manager");
-    m_roomVideoDisplay = NULL;
-    m_shortestPathQt.clear();
     readRoomsFromXml();
     initOnce();
     init();
-}
-
-Nav::~Nav(){
-    m_groupBoxCurrentLocationCbWidget->close();
-    m_groupBoxdestinationCbWidget->close();
 }
 
 void Nav::readRoomsFromXml()
@@ -26,7 +19,7 @@ void Nav::readRoomsFromXml()
     translateRoomsFromCppToQt();
 }
 
-QMap<QString, QString> Nav::readConfigXml(QString attName, QString attValue, QString xmlPath)
+QMap<QString, QString> Nav::readConfigXml(QString attName, QString attValue, QString xmlPath)//read properties of gui styleing and text
 {
     QDomDocument xmlBOM;
     QFile f(xmlPath);
@@ -54,12 +47,9 @@ QMap<QString, QString> Nav::readConfigXml(QString attName, QString attValue, QSt
     return retMap;
 }
 
-
-
 //creating 3 containers.
 //1. m_roomsObjects - mapping each field name(QString) to his value(QString)
 //2. m_nodesMap     - mapping each id(int) to his Node object(Node*)
-//3. m_roomsEdges   - mapping each pair of nodes Ids to his videoInfo object
 void Nav::translateRoomsFromCppToQt()
 {
     list<Node*> nodetList =  m_graph->GetGrapghNodes();
@@ -78,245 +68,13 @@ void Nav::translateRoomsFromCppToQt()
         room[fieldNumber] = (node->GetNumber().c_str());
         m_roomsObjects.push_back(room);
     }
-//    list<Edge*> edgesList =  m_graph->GetGrapghEdges();
-//    for (Edge* edge : edgesList){
-//        for(int i=1; i<=2; ++i)
-//        {
-//            videoInfo vidInfo = edge->GetVideoInfo(i);
-//            QPair<int,int> key(vidInfo._fromId, vidInfo._toId);
-//            m_roomsEdges[key] = vidInfo;
-//        }
-//    }
 }
 
-//happens once
-void Nav::initOnce()
-{
-    /*general attributes*/
-    this->setFixedSize(QSize(1280,720));
-
-    resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
-    /*widow title*/
-    setWindowTitle(config->windowTitleText);
-    /*project title*/
-    QLabel* projectLabel = new QLabel(config->projectTitleLabelText);
-    projectLabel->setStyleSheet(config->globalTextAttributes + config->projectTitleLabelStyle);
-    projectLabel->setAlignment(Qt::AlignCenter);
-    projectLabel->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
-
-    m_titleLayout = new QHBoxLayout();
-    m_titleLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
-    m_titleLayout->addWidget(projectLabel);
-    m_titleLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
-
-    /*control buttons*/
-
-
-    m_resetButton = new QPushButton("reset");
-    m_resetButton->setStyleSheet(config->resetButtonStyle);
-    connect(m_resetButton,SIGNAL(clicked(bool)),this,SLOT(resetSlot()));
-
-
-    m_controlButtonsHLayout = new QHBoxLayout();
-    m_controlButtonsHLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
-    m_controlButtonsHLayout->addWidget(m_resetButton);
-
-
-    /*group box preference - elevator vs stairs*/
-    QGroupBox *groupBoxPref = new QGroupBox("Take me from the");
-    groupBoxPref->setStyleSheet(config->groupBoxPrefStyle);
-    m_groupBoxPrefRadioDefault = new QRadioButton("Fastest way");
-    m_groupBoxPrefRadioStairs = new QRadioButton(fieldStairs);
-    m_groupBoxPrefRadioElevator = new QRadioButton(fieldElevator);
-
-    connect(m_groupBoxPrefRadioDefault, SIGNAL(clicked(bool)), this, SLOT(prefWasChangedSlot()));
-    connect(m_groupBoxPrefRadioStairs, SIGNAL(clicked(bool)), this, SLOT(prefWasChangedSlot()));
-    connect(m_groupBoxPrefRadioElevator, SIGNAL(clicked(bool)), this, SLOT(prefWasChangedSlot()));
-    prefWasChangedSlot();
-
-    m_groupBoxPrefRadioDefault->setChecked(true);
-    QVBoxLayout *vboxPref = new QVBoxLayout;
-    vboxPref->addWidget(m_groupBoxPrefRadioDefault);
-    vboxPref->addWidget(m_groupBoxPrefRadioStairs);
-    vboxPref->addWidget(m_groupBoxPrefRadioElevator);
-    vboxPref->addStretch(1);
-    groupBoxPref->setLayout(vboxPref);
-
-    QVBoxLayout *groupBoxPrefLayout = new QVBoxLayout;
-    groupBoxPrefLayout->addWidget(groupBoxPref);
-    groupBoxPrefLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::Maximum, QSizePolicy::MinimumExpanding));
-
-
-
-
-    /*combos labels*/
-    QLabel* currentLocationLabel = new QLabel(config->currentLocationLabelText);
-    currentLocationLabel->setStyleSheet(config->globalTextAttributes + config->currentLocationLabelStyle);
-    QLabel* destinationLabel = new QLabel(config->destinationLabelText);
-    destinationLabel->setStyleSheet(config->globalTextAttributes + config->destinationLabelStyle);
-
-    /*combos inside text*/
-    m_currentLocationCb = new QComboBox();
-    m_currentLocationCb->setStyleSheet(config->locationCBsStyle);
-    connect(m_currentLocationCb, SIGNAL(activated(int)), this, SLOT(currentLocationCbHasChangedSlot()));
-
-    m_destinationCb = new QComboBox();
-    m_destinationCb->setStyleSheet(config->locationCBsStyle);
-    connect(m_destinationCb, SIGNAL(activated(int)), this, SLOT(destinationCbHasChangedSlot()));
-
-    /*combos filer*/
-
-
-    for (QMap<QString,QString> room : m_roomsObjects){
-        if(!m_floorToShow1.keys().contains(room[fieldFloor].toInt())){
-            m_floorToShow1.insert(room[fieldFloor].toInt(),room[fieldFloor]);
-            m_floorToShow2.insert(room[fieldFloor].toInt(),room[fieldFloor]);
-        }
-    }
-
-    m_groupBoxCurrentLocationCbWidget = new QGroupBox(config->floorsNumbersWidgetHeader);
-    m_groupBoxCurrentLocationCbWidget->setStyleSheet(config->floorsNumbersWidgetStyle);
-    m_groupBoxCurrentLocationCbWidget->setFlat(true);
-    QVBoxLayout *vboxFilter1 = new QVBoxLayout;
-    for (int uniqueFloorNum : m_floorToShow1.keys()){
-        QCheckBox *checkBox = new QCheckBox(m_floorToShow1[uniqueFloorNum]);
-        checkBox->setChecked(true);
-        checkBox->setObjectName("filter1");
-        connect(checkBox, SIGNAL(clicked(bool)),this, SLOT(updateFilter1Slot()));
-        vboxFilter1->addWidget(checkBox);
-    }
-    vboxFilter1->addStretch(1);
-    m_groupBoxCurrentLocationCbWidget->setLayout(vboxFilter1);
-    m_groupBoxCurrentLocationCbWidget->setGeometry(200, 200 ,200, 200);
-    QPushButton* doneBtn1 = new QPushButton("Done");
-    connect(doneBtn1, SIGNAL(clicked(bool)), this, SLOT(closeGroupBoxCurrentLocationCbWidgetSlot()));
-    QHBoxLayout *doneBtn1HLayout = new QHBoxLayout;
-    doneBtn1HLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
-    doneBtn1HLayout->addWidget(doneBtn1);
-    vboxFilter1->addLayout(doneBtn1HLayout);
-
-    m_currentLocationCbFilter = new QPushButton("filter floors");
-    m_currentLocationCbFilter->setStyleSheet(config->filterButtonStyle);
-
-    connect(m_currentLocationCbFilter, SIGNAL(clicked(bool)),this, SLOT(showFilter1Slot()));
-
-
-    m_groupBoxdestinationCbWidget = new QGroupBox(config->floorsNumbersWidgetHeader);
-    m_groupBoxdestinationCbWidget->setStyleSheet(config->floorsNumbersWidgetStyle);
-    m_groupBoxdestinationCbWidget->setFlat(true);
-    QVBoxLayout *vboxFilter2 = new QVBoxLayout;
-    for (int uniqueFloorNum : m_floorToShow2.keys()){
-        QCheckBox *checkBox = new QCheckBox(m_floorToShow2[uniqueFloorNum]);
-        checkBox->setChecked(true);
-        connect(checkBox, SIGNAL(clicked(bool)),this, SLOT(updateFilter2Slot()));
-        checkBox->setObjectName("filter2");
-        vboxFilter2->addWidget(checkBox);
-    }
-    vboxFilter2->addStretch(1);
-    m_groupBoxdestinationCbWidget->setLayout(vboxFilter2);
-    m_groupBoxdestinationCbWidget->setGeometry(200, 200 ,200, 200);
-    QPushButton* doneBtn2 = new QPushButton("Done");
-    connect(doneBtn2, SIGNAL(clicked(bool)), this, SLOT(closeGroupBoxdestinationCbWidgetSlot()));
-    QHBoxLayout *doneBtn2HLayout = new QHBoxLayout;
-    doneBtn2HLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
-    doneBtn2HLayout->addWidget(doneBtn2);
-    vboxFilter2->addLayout(doneBtn2HLayout);
-
-    m_destinationCbFilter = new QPushButton("filter floors");
-    m_destinationCbFilter->setStyleSheet(config->filterButtonStyle);
-    connect(m_destinationCbFilter, SIGNAL(clicked(bool)),this, SLOT(showFilter2Slot()));
-
-
-    /*go button*/
-    m_goButton = new QPushButton("GO");
-    m_goButton->setStyleSheet(config->goButtonStyle);
-    connect(m_goButton,SIGNAL(clicked(bool)),this,SLOT(goWasPressedSlot()));
-
-    /*combos layout*/
-    QVBoxLayout* combosLabelsLayout = new QVBoxLayout;
-    combosLabelsLayout->addWidget(currentLocationLabel);
-    combosLabelsLayout->addWidget(destinationLabel);
-
-    QVBoxLayout* cBLayout = new QVBoxLayout();
-    cBLayout->addWidget(m_currentLocationCb);
-    cBLayout->addWidget(m_destinationCb);
-
-    QVBoxLayout* multiCheckBoxesFiltersLayout = new QVBoxLayout();
-    multiCheckBoxesFiltersLayout->addWidget(m_currentLocationCbFilter);
-    multiCheckBoxesFiltersLayout->addWidget(m_destinationCbFilter);
-
-    m_cbAndLabelsLayout = new QHBoxLayout();
-    m_cbAndLabelsLayout->addLayout(combosLabelsLayout);
-    m_cbAndLabelsLayout->addLayout(cBLayout);
-    m_cbAndLabelsLayout->addLayout(multiCheckBoxesFiltersLayout);
-    m_cbAndLabelsLayout->addWidget(m_goButton);
-    m_cbAndLabelsLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
-
-    /*text box for direction and video player*/
-
-    QLabel* logLabel = new QLabel(config->logLabelText);
-    logLabel->setStyleSheet(config->globalTextAttributes + config->logLabelStyle);
-    logLabel->setAlignment(Qt::AlignCenter);
-
-    m_log = new QTextEdit();
-    m_log->setStyleSheet(config->globalTextAttributes + config->logStyle);
-    m_log->setReadOnly(true);
-
-
-
-
-    QVBoxLayout* logLayout = new QVBoxLayout();
-    logLayout->addWidget(logLabel);
-    logLayout->addWidget(m_log);
-
-
-    QVBoxLayout* videoLayout = new QVBoxLayout();
-
-    m_videoWidget = new QVideoWidget;
-
-    QPixmap pic(config->projectLogo);
-    QPixmap scaled=pic.scaled ( m_videoWidget->height(), m_videoWidget->width(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
-
-    QLabel *label = new QLabel(m_videoWidget);
-    label->setPixmap(scaled);
-    label->move(45,100);
-    //label->setAlignment(Qt::AlignCenter);
-    //label->setPixmap(QPixmap::fromMimeSource("someimg.png"));
-
-
-    QToolBar* tb = new QToolBar();
-
-    QPushButton* rePlay = new QPushButton("rePlay");
-    connect(rePlay, SIGNAL(clicked(bool)), this, SLOT(replaySlot()));
-    tb->addWidget(rePlay);
-
-    QPushButton* next = new QPushButton("next");
-    connect(next, SIGNAL(clicked(bool)), this, SLOT(nextSlot()));
-    tb->addWidget(next);
-    //m_videoWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-    QSizePolicy p1(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding );
-    m_log->setSizePolicy(p1);
-    videoLayout->addWidget(m_videoWidget);
-    videoLayout->addWidget(tb);
-
-
-    m_logSpacerLayout = new QHBoxLayout();
-    m_logSpacerLayout->addLayout(videoLayout);
-    m_logSpacerLayout->addLayout(logLayout);
-    m_logSpacerLayout->addLayout(groupBoxPrefLayout);
-    //m_logSpacerLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
-
-
-
-}
 
 //could happen more than once(for example: if you press 'reset' button)
 void Nav::init()
 {
-    m_mediaPlayer = new QMediaPlayer;
-    connect(m_mediaPlayer, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
-    m_mediaPlayer->setAudioRole(QAudio::VideoRole);
-    m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
+    stopDeleteAndMakeNewMediaPlayer(true);
     /*general attributes*/
     m_mainVLayout = new QVBoxLayout;
 
@@ -352,10 +110,7 @@ void Nav::resetSlot()
     QColor qcolor("black");
     m_log->setTextColor(qcolor);
     disconnect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
-
-    delete m_mediaPlayer;
     delete m_mainVLayout;
-
     init();
 }
 
@@ -398,35 +153,26 @@ void Nav::goWasPressedSlot()
         QString currentRoom(m_currentLocationCb->currentText());
         m_log->append("\nStart from " + currentRoom + " :");
         translateShortestPathFromCppToQt(); //ask graph class to find shortest path and convert list<Node*> to QT::QList.
-
-        m_roomVideoDisplay = m_shortestPathQt.at(0);
-        m_next = false;
-        m_appendedToLog = false;
-        m_doneWithThisNode = false;
+        m_roomVideoDisplay = m_shortestPathQt.at(0);//set m_roomVideoDisplay to first video assuming the graph is well connected(otherwise it might be null)
         m_videoPlayerCounter = 0;
-        m_replay = false;
-        playVideoFromTo();//plays a video's part(could be 2 seconds from 10 seconds video) given a Node
+        m_playWithOutPause = m_playWithOutPauseCheckBox->isChecked();
+        //disable buttons if user asked for no pauses
+        m_next->setDisabled(m_playWithOutPause);
+        m_rePlay->setDisabled(m_playWithOutPause);
+        playVideoFromTo(false);//plays a video's part(could be 2 seconds from 10 seconds video) given a Node
     }
 }
 
-void Nav::translateShortestPathFromCppToQt(){
+void Nav::translateShortestPathFromCppToQt(){//get the shortest pass from s to t (and with preference) and copy it to QT object
     list<Node*> shortestPath = m_graph->GetShortestpath(m_currentRoom, m_destRoom, m_pref);//graph::GetShortestpath
     for(Node* room : shortestPath){
-
         m_shortestPathQt.push_back(room);
     }
     shortestPath.clear();
-    if(DEBUG) printShortestPath();
 }
 
-void Nav::printShortestPath()//debuging function
-{
-    for (Node* room : m_shortestPathQt)
-    {
-        qDebug() << room->ToString().c_str();
-    }
-}
 
+//appending instructions to the Log.
 void Nav::appendShortestPathToLog(QString movieMessege, QString color) // 3 cases. elevator, stairs and regular. print by case.
 {
     int i = 0;
@@ -478,79 +224,77 @@ void Nav::appendShortestPathToLog(QString movieMessege, QString color) // 3 case
 }
 
 
-void Nav::playVideoFromTo()//play Node's video part
+void Nav::playVideoFromTo(bool appendedThisMoveToLogBefore)//play Node's video part
 {
-
-    if(m_doneWithThisNode)
-    {
-        return;
-    }
-
-
-    videoInfo* videoInfoOfNodesInPath =  m_roomVideoDisplay->GetAllVideoInfos();
-    videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter];
-    //cout << currentVideoInf.ToString().c_str();
+    /*for this node in the path: look in his list of movies how many could be combined on this move*/
+    videoInfo* videoInfoOfNodesInPath =  m_roomVideoDisplay->GetAllVideoInfos();//get all videos in current step
+    videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter];//start with just 1
     int startIndex = currentVideoInf._startIndex;
     int endIndex = currentVideoInf._endIndex;
     QString videoPath = currentVideoInf._pathToVideo.c_str();
-    int tempCounter = m_videoPlayerCounter + 1 ;
+
+    int tempCounter = m_videoPlayerCounter + 1 ;//try to combine videos. if we have route 1->2 and 2->3 and they share the same video, play it like its one video 1->3
     while (tempCounter+1 <= m_roomVideoDisplay->videoInfoOfNodesInPathConter() && videoInfoOfNodesInPath[tempCounter]._pathToVideo == currentVideoInf._pathToVideo )
     {
         m_videoPlayerCounter = tempCounter;
-        endIndex = videoInfoOfNodesInPath[tempCounter]._endIndex;
+        endIndex = videoInfoOfNodesInPath[tempCounter]._endIndex;//keep "pushing" the end index if video is the same
         tempCounter++;
     }
-    //cout << "end is now: " << endIndex;
 
-
-    if(!m_replay && !m_appendedToLog) //m_appendedToLog : could be in this function more than 1 time for the same node
+    if(!appendedThisMoveToLogBefore) //if pressed replay, dont append to log again
     {
         QString movieMessege = (videoPath.isEmpty()) ? (" (Need to insert movie)") : "";
         appendShortestPathToLog(movieMessege, "red");
-        m_appendedToLog = true;
     }
-    if(m_mediaPlayer->state() == QMediaPlayer::PausedState){
-        m_mediaPlayer->blockSignals(true);
-        m_mediaPlayer->stop();
+
+    if(!videoPath.isEmpty()){
+        m_mediaPlayer->blockSignals(true); //changing media cause unwanted signals to fire
+        m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
+        m_mediaPlayer->setPosition(startIndex); // starting index time
+        m_videoWidget->show();
+        m_mediaPlayer->play();
         m_mediaPlayer->blockSignals(false);
+        if(endIndex != -1)//if != -1 than the movie needs to be pause at endindex - startIndex
+        {
+            m_qTimer->stop();
+            m_qTimer->setInterval(endIndex-startIndex);
+            m_qTimer->setSingleShot(true);
+            m_qTimer->start();
+        }
     }
-    m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
-    m_mediaPlayer->setPosition(startIndex); // starting index time
-    m_videoWidget->show();
-    m_mediaPlayer->play();
-    if(endIndex != -1)
-    {
-        cout << "                           shot";
-        QTimer::singleShot(endIndex-startIndex, m_mediaPlayer, SLOT(pause()));
-    }
-
-    m_videoPlayerCounter++;
-    if(m_videoPlayerCounter >= m_roomVideoDisplay->videoInfoOfNodesInPathConter()){ //no more videos for this node
-        m_appendedToLog = false;
-        m_doneWithThisNode = true;
+    else{//no movie
+        if (m_playWithOutPause)//wait 1.5 secs for the user to read and continue
+            QTimer::singleShot(1500,this, SLOT(stateOfMediaPlayerChangedSlot()));
+        else
+            stopDeleteAndMakeNewMediaPlayer(false); //no video - show default logo
     }
 
-
+    m_videoPlayerCounter++;//advance the movie index of this current node.
+    //let the program know this node didnt finish all his movies. he played just 1 part(possibly combined)
+    m_moreVideoToShowOnThisNode = (m_videoPlayerCounter >= m_roomVideoDisplay->videoInfoOfNodesInPathConter()) ? false : true ;
 }
 
+//testing function. remove the comment in main.cpp and change the wanted actions. will help saving time debugging
 void Nav::testingFuncton()
 {
+    bool testingmode = false;
+    if(!testingmode) return;
     QMap<int, QString> floorsToShow;
     floorsToShow.insert(4,"4");
     floorsToShow.insert(3,"3");
     QStringList tagsC = getRoomsTagsToPlaceInComboBox(floorsToShow);
     QStringList tagsD = getRoomsTagsToPlaceInComboBox(floorsToShow);
 
-//    /cout << tagsC << tagsC.size();
+    //cout << tagsC << tagsC.size();
 
-    tagsC.clear();
-    tagsC += QString("Jackbobs entrance");
+//    tagsC.clear();
+//    tagsC += QString("Jackbobs entrance");
 //    tagsC += QString("CS private room(418)");
 //    tagsC += QString("Class(303)");
     //tagsC += QString("Copy room(404)");
     //cout << tagsC;
-    tagsD.clear();
-    tagsD += QString("Dan Feldman(413)");
+//    tagsD.clear();
+//    tagsD += QString("Dan Feldman(413)");
     //    tagsD += QString("Or Donkelman(408)");
 //    tagsD += QString("Bathroom floor 3");
 //    tagsD += QString("Office(301)");
@@ -572,12 +316,24 @@ void Nav::testingFuncton()
             goWasPressedSlot();
             for(int i = 0; i < m_shortestPathQt.size(); ++i)
             {
-                //nextSlot();
+                nextSlot();
             }
-            //showQmsgBox(strC + " to " + strD);
+            showQmsgBox(strC + " to " + strD);
             i++;
         }
     }
+}
+
+void Nav::stopDeleteAndMakeNewMediaPlayer(bool firstTime)
+{
+    if(!firstTime){
+        m_mediaPlayer->stop();
+        delete m_mediaPlayer;
+    }
+    m_mediaPlayer = new QMediaPlayer;
+    connect(m_mediaPlayer, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
+    m_mediaPlayer->setAudioRole(QAudio::VideoRole);
+    m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
 }
 
 QString Nav::getRoomFieldById(int id, QString field)//given an Id, retrun the wanted value.
@@ -603,17 +359,19 @@ void Nav::prefWasChangedSlot()
     }
 }
 
-//the next 4 functions/slots are for filtering the floors. 2 for current location and 2 for destanation
+//show current filter widget
 void Nav::showFilter1Slot()
 {
     m_groupBoxCurrentLocationCbWidget->show();
 }
 
+//show destanation filter widget
 void Nav::showFilter2Slot()
 {
     m_groupBoxdestinationCbWidget->show();
 }
 
+//rebuild current combo box rooms
 void Nav::updateFilter1Slot()
 {
     m_floorToShow1.clear();
@@ -638,6 +396,7 @@ void Nav::updateFilter1Slot()
     currentLocationCbHasChangedSlot();
 }
 
+//rebuild destanation combo box rooms
 void Nav::updateFilter2Slot()
 {
     m_floorToShow2.clear();
@@ -663,19 +422,25 @@ void Nav::updateFilter2Slot()
 }
 
 //replay was pressed
-void Nav::replaySlot()
+void Nav::rePlaySlot()
 {
+    m_qTimer->stop();
     if(m_roomVideoDisplay)
     {
-        videoInfo* videoInfoOfNodesInPath =  m_roomVideoDisplay->GetAllVideoInfos();
-        videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter-1];
-        QString videoPath = currentVideoInf._pathToVideo.c_str();
+        //todo - save previous node start on a member
+        m_videoPlayerCounter--;
+        videoInfo* videoInfoOfNodesInPath =  m_roomVideoDisplay->GetAllVideoInfos();//get all videos in current step
+        videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter];//get current
+        QString videoPath = currentVideoInf._pathToVideo.c_str();//save video path
         if(!videoPath.isEmpty())
         {
-            m_doneWithThisNode = false;
-            m_videoPlayerCounter--;
-            m_replay = true;
-            playVideoFromTo();
+            int tempCounter = m_videoPlayerCounter - 1;
+            while (tempCounter-1 >= 0 && videoInfoOfNodesInPath[tempCounter]._pathToVideo == currentVideoInf._pathToVideo )//reverting counter back to the begining (not necessarily 0)
+            {
+                m_videoPlayerCounter = tempCounter;
+                tempCounter--;
+            }
+            playVideoFromTo(true);
         }
     }
 }
@@ -684,14 +449,18 @@ void Nav::nextSlot()
 {
     if(m_roomVideoDisplay)
     {
-        m_next = true;
+        m_qTimer->stop();
+        /*clear last Red Line in Log*/
         QTextCursor cursor = m_log->textCursor();
         cursor.movePosition(QTextCursor::End);
         cursor.select(QTextCursor::LineUnderCursor);
         cursor.removeSelectedText();
         cursor.deletePreviousChar(); // Added to trim the newline char when removing last line
         m_log->setTextCursor(cursor);
-        appendShortestPathToLog("");
+
+        appendShortestPathToLog("");//append Black Line
+
+        //look for next room. todo - keep index as member
         Node* tmpRoom = NULL;
         for (int i=0; i < m_shortestPathQt.size(); ++i)
         {
@@ -701,27 +470,18 @@ void Nav::nextSlot()
                 break;
             }
         }
-        disconnect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
-        delete m_mediaPlayer;
-        m_mediaPlayer = new QMediaPlayer;
-        connect(m_mediaPlayer,  SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateOfMediaPlayerChangedSlot(QMediaPlayer::State)) );
-        m_mediaPlayer->setAudioRole(QAudio::VideoRole);
-        m_mediaPlayer->setVideoOutput(m_videoWidget); //where to stream the video
-
-        m_roomVideoDisplay = tmpRoom;
-        if(tmpRoom)
+        if(tmpRoom)//if room exist, continue
         {
-            m_doneWithThisNode = false;
-            m_appendedToLog = false;
+            m_roomVideoDisplay = tmpRoom;
             m_videoPlayerCounter = 0;
-            m_replay = false;
-            cout << "nextSlot";
-            playVideoFromTo();
+            playVideoFromTo(false);
         }
         else{
             m_log->append("\nThat was the last step.\nClick on Go to repeat the instructions");
+            m_next->setDisabled(true);
+            m_rePlay->setDisabled(true);
+            stopDeleteAndMakeNewMediaPlayer(false);
         }
-
     }
 }
 
@@ -737,23 +497,20 @@ void Nav::closeGroupBoxCurrentLocationCbWidgetSlot()
 
 void Nav::stateOfMediaPlayerChangedSlot(QMediaPlayer::State state)
 {
-    if(m_next){
-        m_next = false;
-        //cout << state <<"m_next is true";
-        return;
-    }
-    if(m_replay)
-    {
-        m_replay = false;
-        //cout << state <<"m_replay is true";
-        return;
-    }
     if(state == QMediaPlayer::StoppedState || state == QMediaPlayer::PausedState){
-        //cout << state <<"stateOfMediaPlayerChangedSlot";
-        playVideoFromTo();
+        if(m_moreVideoToShowOnThisNode){
+            playVideoFromTo(true);
+        }
+        else if(m_playWithOutPause){
+            nextSlot();
+        }
     }
 }
 
+void Nav::qTimerTimeoutSlot()
+{
+    m_mediaPlayer->pause();
+}
 
 //function that build the combo boxes labels
 QStringList Nav::getRoomsTagsToPlaceInComboBox(QMap<int, QString> floorsToShow)
@@ -765,7 +522,6 @@ QStringList Nav::getRoomsTagsToPlaceInComboBox(QMap<int, QString> floorsToShow)
         if(floorsToShow.isEmpty() || floorsToShow.values().contains(room[fieldFloor]))
         {
             if(room[fieldNumber] == "0"){ //rooms like bathroom with no number
-                //tags.push_back(room[fieldName]);
                 sortKeyAndTags.insert(room[fieldFloor].toInt()*1000-(++i), room[fieldName]);
             }
             else if(room[fieldNumber] == "-1"){ //rooms that help on the route but are not a destanation
@@ -798,4 +554,253 @@ void Nav::showQmsgBox(QString msg)
     err.move(300,300);
     err.setText(msg);
     err.exec();
+}
+
+configVars::configVars(QMap<QString, QString> configHeaderToValue)
+{
+    fontType = configHeaderToValue.contains("fontType") ? configHeaderToValue["fontType"] : "";
+    fontSize = configHeaderToValue.contains("fontSize") ? configHeaderToValue["fontSize"] : "";
+    border = configHeaderToValue.contains("border") ? configHeaderToValue["border"] : "";
+    globalTextAttributes = fontType + fontSize + border;
+    roomsXmlPath = configHeaderToValue.contains("roomsXmlPath") ? configHeaderToValue["roomsXmlPath"] : "";
+
+    projectLogo = configHeaderToValue.contains("projectLogo") ? configHeaderToValue["projectLogo"] : "";
+    projectTitleLabelText = configHeaderToValue.contains("projectTitleLabelText") ? configHeaderToValue["projectTitleLabelText"] : "";
+    projectTitleLabelStyle = configHeaderToValue.contains("projectTitleLabelStyle") ? configHeaderToValue["projectTitleLabelStyle"] : "";
+    windowTitleText = configHeaderToValue.contains("windowTitleText") ? configHeaderToValue["windowTitleText"] : "";
+    currentLocationLabelText = configHeaderToValue.contains("currentLocationLabelText") ? configHeaderToValue["currentLocationLabelText"] : "";
+
+    currentLocationLabelStyle = configHeaderToValue.contains("currentLocationLabelStyle") ? configHeaderToValue["currentLocationLabelStyle"] : "";
+    destinationLabelText = configHeaderToValue.contains("destinationLabelText") ? configHeaderToValue["destinationLabelText"] : "";
+    destinationLabelStyle = configHeaderToValue.contains("destinationLabelStyle") ? configHeaderToValue["destinationLabelStyle"] : "";
+    logLabelText = configHeaderToValue.contains("logLabelText") ? configHeaderToValue["logLabelText"] : "";
+    logLabelStyle = configHeaderToValue.contains("logLabelStyle") ? configHeaderToValue["logLabelStyle"] : "";
+
+    logStyle = configHeaderToValue.contains("logStyle") ? configHeaderToValue["logStyle"] : "";
+    groupBoxPrefStyle = configHeaderToValue.contains("groupBoxPrefStyle") ? configHeaderToValue["groupBoxPrefStyle"] : "";
+    resetButtonStyle = configHeaderToValue.contains("resetButtonStyle") ? configHeaderToValue["resetButtonStyle"] : "";
+    filterButtonStyle = configHeaderToValue.contains("filterButtonStyle") ? configHeaderToValue["filterButtonStyle"] : "";
+    goButtonStyle = configHeaderToValue.contains("goButtonStyle") ? configHeaderToValue["goButtonStyle"] : "";
+
+    locationCBsStyle = configHeaderToValue.contains("locationCBsStyle") ? configHeaderToValue["locationCBsStyle"] : "";
+    floorsNumbersWidgetStyle = configHeaderToValue.contains("floorsNumbersWidgetStyle") ? configHeaderToValue["floorsNumbersWidgetStyle"] : "";
+    floorsNumbersWidgetHeader = configHeaderToValue.contains("floorsNumbersWidgetHeader") ? configHeaderToValue["floorsNumbersWidgetHeader"] : "";
+    baseFloor = configHeaderToValue.contains("baseFloor") ? configHeaderToValue["baseFloor"] : "";
+}
+
+//happens once
+void Nav::initOnce()
+{
+    m_roomVideoDisplay = NULL;
+    m_shortestPathQt.clear();
+    m_qTimer = new QTimer();
+    connect(m_qTimer, SIGNAL(timeout()), SLOT(qTimerTimeoutSlot()));
+    /*general attributes*/
+    this->setFixedSize(QSize(1280,720));
+
+    resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
+    /*widow title*/
+    setWindowTitle(config->windowTitleText);
+    /*project title*/
+    QLabel* projectLabel = new QLabel(config->projectTitleLabelText);
+    projectLabel->setStyleSheet(config->globalTextAttributes + config->projectTitleLabelStyle);
+    projectLabel->setAlignment(Qt::AlignCenter);
+    projectLabel->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
+
+    m_titleLayout = new QHBoxLayout();
+    m_titleLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+    m_titleLayout->addWidget(projectLabel);
+    m_titleLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+
+    /*control buttons*/
+
+
+    QPushButton* m_resetButton = new QPushButton("reset");
+    m_resetButton->setStyleSheet(config->resetButtonStyle);
+    connect(m_resetButton,SIGNAL(clicked(bool)),this,SLOT(resetSlot()));
+
+    m_playWithOutPauseCheckBox = new QCheckBox("play without pause");
+    //m_playWithOutPauseCheckBox->setStyleSheet(config->resetButtonStyle);
+
+
+    QVBoxLayout *controlButtonsVLayout = new QVBoxLayout;
+    controlButtonsVLayout->addWidget(m_resetButton);
+    controlButtonsVLayout->addWidget(m_playWithOutPauseCheckBox);
+
+    m_controlButtonsHLayout = new QHBoxLayout();
+    m_controlButtonsHLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+    m_controlButtonsHLayout->addLayout(controlButtonsVLayout);
+
+
+    /*group box preference - elevator vs stairs*/
+    QGroupBox *groupBoxPref = new QGroupBox("Take me from the");
+    groupBoxPref->setStyleSheet(config->groupBoxPrefStyle);
+    m_groupBoxPrefRadioDefault = new QRadioButton("Fastest way");
+    m_groupBoxPrefRadioStairs = new QRadioButton(fieldStairs);
+    m_groupBoxPrefRadioElevator = new QRadioButton(fieldElevator);
+
+    connect(m_groupBoxPrefRadioDefault, SIGNAL(clicked(bool)), this, SLOT(prefWasChangedSlot()));
+    connect(m_groupBoxPrefRadioStairs, SIGNAL(clicked(bool)), this, SLOT(prefWasChangedSlot()));
+    connect(m_groupBoxPrefRadioElevator, SIGNAL(clicked(bool)), this, SLOT(prefWasChangedSlot()));
+    prefWasChangedSlot();
+
+    m_groupBoxPrefRadioDefault->setChecked(true);
+    QVBoxLayout *vboxPref = new QVBoxLayout;
+    vboxPref->addWidget(m_groupBoxPrefRadioDefault);
+    vboxPref->addWidget(m_groupBoxPrefRadioStairs);
+    vboxPref->addWidget(m_groupBoxPrefRadioElevator);
+    vboxPref->addStretch(1);
+    groupBoxPref->setLayout(vboxPref);
+
+    QVBoxLayout *groupBoxPrefLayout = new QVBoxLayout;
+    groupBoxPrefLayout->addWidget(groupBoxPref);
+    groupBoxPrefLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::Maximum, QSizePolicy::MinimumExpanding));
+
+    /*combos labels*/
+    QLabel* currentLocationLabel = new QLabel(config->currentLocationLabelText);
+    currentLocationLabel->setStyleSheet(config->globalTextAttributes + config->currentLocationLabelStyle);
+    QLabel* destinationLabel = new QLabel(config->destinationLabelText);
+    destinationLabel->setStyleSheet(config->globalTextAttributes + config->destinationLabelStyle);
+
+    /*combos inside text*/
+    m_currentLocationCb = new QComboBox();
+    m_currentLocationCb->setStyleSheet(config->locationCBsStyle);
+    connect(m_currentLocationCb, SIGNAL(activated(int)), this, SLOT(currentLocationCbHasChangedSlot()));
+
+    m_destinationCb = new QComboBox();
+    m_destinationCb->setStyleSheet(config->locationCBsStyle);
+    connect(m_destinationCb, SIGNAL(activated(int)), this, SLOT(destinationCbHasChangedSlot()));
+
+    /*combos filer*/
+    for (QMap<QString,QString> room : m_roomsObjects){
+        if(!m_floorToShow1.keys().contains(room[fieldFloor].toInt())){
+            m_floorToShow1.insert(room[fieldFloor].toInt(),room[fieldFloor]);
+            m_floorToShow2.insert(room[fieldFloor].toInt(),room[fieldFloor]);
+        }
+    }
+
+    m_groupBoxCurrentLocationCbWidget = new QGroupBox(config->floorsNumbersWidgetHeader);
+    m_groupBoxCurrentLocationCbWidget->setStyleSheet(config->floorsNumbersWidgetStyle);
+    m_groupBoxCurrentLocationCbWidget->setFlat(true);
+    QVBoxLayout *vboxFilter1 = new QVBoxLayout;
+    for (int uniqueFloorNum : m_floorToShow1.keys()){
+        QCheckBox *checkBox = new QCheckBox(m_floorToShow1[uniqueFloorNum]);
+        checkBox->setChecked(true);
+        checkBox->setObjectName("filter1");
+        connect(checkBox, SIGNAL(clicked(bool)),this, SLOT(updateFilter1Slot()));
+        vboxFilter1->addWidget(checkBox);
+    }
+    vboxFilter1->addStretch(1);
+    m_groupBoxCurrentLocationCbWidget->setLayout(vboxFilter1);
+    m_groupBoxCurrentLocationCbWidget->setGeometry(200, 200 ,200, 200);
+    QPushButton* doneBtn1 = new QPushButton("Done");
+    connect(doneBtn1, SIGNAL(clicked(bool)), this, SLOT(closeGroupBoxCurrentLocationCbWidgetSlot()));
+    QHBoxLayout *doneBtn1HLayout = new QHBoxLayout;
+    doneBtn1HLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+    doneBtn1HLayout->addWidget(doneBtn1);
+    vboxFilter1->addLayout(doneBtn1HLayout);
+
+    QPushButton * m_currentLocationCbFilter = new QPushButton("filter floors");
+    m_currentLocationCbFilter->setStyleSheet(config->filterButtonStyle);
+
+    connect(m_currentLocationCbFilter, SIGNAL(clicked(bool)),this, SLOT(showFilter1Slot()));
+
+    m_groupBoxdestinationCbWidget = new QGroupBox(config->floorsNumbersWidgetHeader);
+    m_groupBoxdestinationCbWidget->setStyleSheet(config->floorsNumbersWidgetStyle);
+    m_groupBoxdestinationCbWidget->setFlat(true);
+    QVBoxLayout *vboxFilter2 = new QVBoxLayout;
+    for (int uniqueFloorNum : m_floorToShow2.keys()){
+        QCheckBox *checkBox = new QCheckBox(m_floorToShow2[uniqueFloorNum]);
+        checkBox->setChecked(true);
+        connect(checkBox, SIGNAL(clicked(bool)),this, SLOT(updateFilter2Slot()));
+        checkBox->setObjectName("filter2");
+        vboxFilter2->addWidget(checkBox);
+    }
+    vboxFilter2->addStretch(1);
+    m_groupBoxdestinationCbWidget->setLayout(vboxFilter2);
+    m_groupBoxdestinationCbWidget->setGeometry(200, 200 ,200, 200);
+    QPushButton* doneBtn2 = new QPushButton("Done");
+    connect(doneBtn2, SIGNAL(clicked(bool)), this, SLOT(closeGroupBoxdestinationCbWidgetSlot()));
+    QHBoxLayout *doneBtn2HLayout = new QHBoxLayout;
+    doneBtn2HLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+    doneBtn2HLayout->addWidget(doneBtn2);
+    vboxFilter2->addLayout(doneBtn2HLayout);
+
+    QPushButton * m_destinationCbFilter = new QPushButton("filter floors");
+    m_destinationCbFilter->setStyleSheet(config->filterButtonStyle);
+    connect(m_destinationCbFilter, SIGNAL(clicked(bool)),this, SLOT(showFilter2Slot()));
+
+    /*go button*/
+    QPushButton* m_goButton = new QPushButton("GO");
+    m_goButton->setStyleSheet(config->goButtonStyle);
+    connect(m_goButton,SIGNAL(clicked(bool)),this,SLOT(goWasPressedSlot()));
+
+    /*combos layout*/
+    QVBoxLayout* combosLabelsLayout = new QVBoxLayout;
+    combosLabelsLayout->addWidget(currentLocationLabel);
+    combosLabelsLayout->addWidget(destinationLabel);
+
+    QVBoxLayout* cBLayout = new QVBoxLayout();
+    cBLayout->addWidget(m_currentLocationCb);
+    cBLayout->addWidget(m_destinationCb);
+
+    QVBoxLayout* multiCheckBoxesFiltersLayout = new QVBoxLayout();
+    multiCheckBoxesFiltersLayout->addWidget(m_currentLocationCbFilter);
+    multiCheckBoxesFiltersLayout->addWidget(m_destinationCbFilter);
+
+    m_cbAndLabelsLayout = new QHBoxLayout();
+    m_cbAndLabelsLayout->addLayout(combosLabelsLayout);
+    m_cbAndLabelsLayout->addLayout(cBLayout);
+    m_cbAndLabelsLayout->addLayout(multiCheckBoxesFiltersLayout);
+    m_cbAndLabelsLayout->addWidget(m_goButton);
+    m_cbAndLabelsLayout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::Maximum));
+
+    /*text box for direction and video player*/
+
+    QLabel* logLabel = new QLabel(config->logLabelText);
+    logLabel->setStyleSheet(config->globalTextAttributes + config->logLabelStyle);
+    logLabel->setAlignment(Qt::AlignCenter);
+
+    m_log = new QTextEdit();
+    m_log->setStyleSheet(config->globalTextAttributes + config->logStyle);
+    m_log->setReadOnly(true);
+
+    QVBoxLayout* logLayout = new QVBoxLayout();
+    logLayout->addWidget(logLabel);
+    logLayout->addWidget(m_log);
+
+    QVBoxLayout* videoLayout = new QVBoxLayout();
+
+    m_videoWidget = new QVideoWidget;
+
+    QPixmap pic(config->projectLogo);
+    QPixmap scaled=pic.scaled ( m_videoWidget->height(), m_videoWidget->width(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+    QLabel *label = new QLabel(m_videoWidget);
+    label->setPixmap(scaled);
+    label->move(45,100);
+
+
+    QToolBar* tb = new QToolBar();
+
+    m_rePlay = new QPushButton("rePlay");
+    connect(m_rePlay, SIGNAL(clicked(bool)), this, SLOT(rePlaySlot()));
+    tb->addWidget(m_rePlay);
+
+    m_next = new QPushButton("next");
+    connect(m_next, SIGNAL(clicked(bool)), this, SLOT(nextSlot()));
+    tb->addWidget(m_next);
+    QSizePolicy p1(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding );
+    m_log->setSizePolicy(p1);
+    videoLayout->addWidget(m_videoWidget);
+    videoLayout->addWidget(tb);
+    m_logSpacerLayout = new QHBoxLayout();
+    m_logSpacerLayout->addLayout(videoLayout);
+    m_logSpacerLayout->addLayout(logLayout);
+    m_logSpacerLayout->addLayout(groupBoxPrefLayout);
+}
+
+Nav::~Nav(){
+    m_groupBoxCurrentLocationCbWidget->close();
+    m_groupBoxdestinationCbWidget->close();
 }
