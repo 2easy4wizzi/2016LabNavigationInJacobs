@@ -126,11 +126,11 @@ Notice:
     </Edge>
     <Edge Weight="6"   Type="Regular"  Node1Id="21" Node2Id="4">
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
-        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo="../Nav/dependencies/Videos/floor4/CsLounge401ToLab417.mp4"></video>
     </Edge>
     <Edge Weight="1"   Type="Regular"  Node1Id="4"  Node2Id="3">
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
-        <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo="../Nav/dependencies/Videos/floor4/CsLounge401ToLab417.mp4"></video>
     </Edge>
     <Edge Weight="2.5" Type="Regular"  Node1Id="23" Node2Id="2">
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>

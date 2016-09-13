@@ -234,12 +234,7 @@ void Nav::playVideoFromTo(bool appendedThisMoveToLogBefore)//play Node's video p
     QString videoPath = currentVideoInf._pathToVideo.c_str();
 
     int tempCounter = m_videoPlayerCounter + 1 ;//try to combine videos. if we have route 1->2 and 2->3 and they share the same video, play it like its one video 1->3
-    while (tempCounter+1 <= m_roomVideoDisplay->videoInfoOfNodesInPathConter() && videoInfoOfNodesInPath[tempCounter]._pathToVideo == currentVideoInf._pathToVideo )
-    {
-        m_videoPlayerCounter = tempCounter;
-        endIndex = videoInfoOfNodesInPath[tempCounter]._endIndex;//keep "pushing" the end index if video is the same
-        tempCounter++;
-    }
+
 
     if(!appendedThisMoveToLogBefore) //if pressed replay, dont append to log again
     {
@@ -247,7 +242,14 @@ void Nav::playVideoFromTo(bool appendedThisMoveToLogBefore)//play Node's video p
         appendShortestPathToLog(movieMessege, "red");
     }
 
+    m_rePlay->setDisabled(videoPath.isEmpty());
     if(!videoPath.isEmpty()){
+        while (tempCounter+1 <= m_roomVideoDisplay->videoInfoOfNodesInPathConter() && videoInfoOfNodesInPath[tempCounter]._pathToVideo == currentVideoInf._pathToVideo )
+        {
+            m_videoPlayerCounter = tempCounter;
+            endIndex = videoInfoOfNodesInPath[tempCounter]._endIndex;//keep "pushing" the end index if video is the same
+            tempCounter++;
+        }
         m_mediaPlayer->blockSignals(true); //changing media cause unwanted signals to fire
         m_mediaPlayer->setMedia(QUrl::fromLocalFile(videoPath)); //video location
         m_mediaPlayer->setPosition(startIndex); // starting index time
@@ -277,7 +279,9 @@ void Nav::playVideoFromTo(bool appendedThisMoveToLogBefore)//play Node's video p
 //testing function. remove the comment in main.cpp and change the wanted actions. will help saving time debugging
 void Nav::testingFuncton()
 {
-    bool testingmode = false;
+    bool testingmode;
+    testingmode = false;
+    testingmode = true;
     if(!testingmode) return;
     QMap<int, QString> floorsToShow;
     floorsToShow.insert(4,"4");
@@ -287,16 +291,16 @@ void Nav::testingFuncton()
 
     //cout << tagsC << tagsC.size();
 
-//    tagsC.clear();
-//    tagsC += QString("Jackbobs entrance");
+    tagsC.clear();
+    tagsC += QString("Jackbobs entrance");
 //    tagsC += QString("CS private room(418)");
 //    tagsC += QString("Class(303)");
     //tagsC += QString("Copy room(404)");
     //cout << tagsC;
-//    tagsD.clear();
+    tagsD.clear();
 //    tagsD += QString("Dan Feldman(413)");
     //    tagsD += QString("Or Donkelman(408)");
-//    tagsD += QString("Bathroom floor 3");
+    tagsD += QString("Bathroom floor 3");
 //    tagsD += QString("Office(301)");
     //cout << tagsD;
 //    int iterNumber = 60000;
@@ -312,13 +316,13 @@ void Nav::testingFuncton()
 
             m_currentRoom = findNodeByStr(m_currentLocationCb->currentText());
             m_destRoom = findNodeByStr(m_destinationCb->currentText());
-            m_playWithOutPauseCheckBox->setChecked(true);
+//            m_playWithOutPauseCheckBox->setChecked(true);
             goWasPressedSlot();
 //            for(int i = 0; i < m_shortestPathQt.size(); ++i)
 //            {
 //                nextSlot();
 //            }
-            showQmsgBox(strC + " to " + strD);
+//            showQmsgBox(strC + " to " + strD);
             i++;
         }
     }
@@ -428,13 +432,14 @@ void Nav::rePlaySlot()
     if(m_roomVideoDisplay)
     {
         //todo - save previous node start on a member
-        m_videoPlayerCounter--;
         videoInfo* videoInfoOfNodesInPath =  m_roomVideoDisplay->GetAllVideoInfos();//get all videos in current step
-        videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter];//get current
+        videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter - 1];//get current
         QString videoPath = currentVideoInf._pathToVideo.c_str();//save video path
         if(!videoPath.isEmpty())
         {
+            m_videoPlayerCounter--;
             int tempCounter = m_videoPlayerCounter - 1;
+            //#mark
             while (tempCounter-1 >= 0 && videoInfoOfNodesInPath[tempCounter]._pathToVideo == currentVideoInf._pathToVideo )//reverting counter back to the begining (not necessarily 0)
             {
                 m_videoPlayerCounter = tempCounter;
