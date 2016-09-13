@@ -2,7 +2,7 @@
 #include <QDebug>
 #define cout qDebug()
 #define xxx qDebug()<< __LINE__ ;
-#define DEBUGCPP 1
+#define DEBUGCPP 0
 
 const char* fieldGraph= "Graph";
 

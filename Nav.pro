@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui multimedia multimediawidgets
+QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,7 +21,6 @@ SOURCES += main.cpp\
 
 HEADERS  += nav.h \
     engine/includes.h \
-    dependencies/config.h \
     engine/graph.h \
     engine/node.h \
     engine/edge.h \

@@ -1,4 +1,5 @@
 #include "nav.h"
+
 Nav::Nav(QWidget *parent):QWidget(parent)
 {
     setObjectName("Nav gui manager");
@@ -16,13 +17,44 @@ Nav::~Nav(){
 
 void Nav::readRoomsFromXml()
 {
+    config = new configVars( readConfigXml("Name", "Value", "../Nav/dependencies/config.xml") );
     bool succesReadingXml;
-    m_graph = new Graph(roomsXmlPath.toUtf8().constData(), succesReadingXml);
+    m_graph = new Graph(config->roomsXmlPath.toUtf8().constData(), succesReadingXml);
     if (!succesReadingXml){
-        exitProgramWithErrMsg("Unable to read XML files.\nPlease check their paths in config.h are valid");
+        exitProgramWithErrMsg("Unable to read XML files.\nPlease check that their paths in config.xml are valid");
     }
     translateRoomsFromCppToQt();
 }
+
+QMap<QString, QString> Nav::readConfigXml(QString attName, QString attValue, QString xmlPath)
+{
+    QDomDocument xmlBOM;
+    QFile f(xmlPath);
+    if (!f.open(QIODevice::ReadOnly )){
+        exitProgramWithErrMsg("Cant find ../Nav/dependencies/config.xml");
+    }
+    xmlBOM.setContent(&f);
+    f.close();
+    QDomElement root = xmlBOM.documentElement();
+    QDomElement child = root.firstChild().toElement();
+    QMap<QString, QString> retMap;
+    // Loop while there is a child
+    while(!child.isNull())
+    {
+        if (child.tagName()=="Entry")
+        {
+            QString name = child.attribute(attName,"No name");
+            QString value = child.attribute(attValue,"No value");
+            value.replace("\\'","\"");
+            retMap[name] = value;
+
+        }
+        child = child.nextSibling().toElement();
+    }
+    return retMap;
+}
+
+
 
 //creating 3 containers.
 //1. m_roomsObjects - mapping each field name(QString) to his value(QString)
@@ -65,10 +97,10 @@ void Nav::initOnce()
 
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
     /*widow title*/
-    setWindowTitle(windowTitleText);
+    setWindowTitle(config->windowTitleText);
     /*project title*/
-    QLabel* projectLabel = new QLabel(projectTitleLabelText);
-    projectLabel->setStyleSheet(globalTextAttributes + projectTitleLabelStyle);
+    QLabel* projectLabel = new QLabel(config->projectTitleLabelText);
+    projectLabel->setStyleSheet(config->globalTextAttributes + config->projectTitleLabelStyle);
     projectLabel->setAlignment(Qt::AlignCenter);
     projectLabel->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
 
@@ -81,7 +113,7 @@ void Nav::initOnce()
 
 
     m_resetButton = new QPushButton("reset");
-    m_resetButton->setStyleSheet(resetButtonStyle);
+    m_resetButton->setStyleSheet(config->resetButtonStyle);
     connect(m_resetButton,SIGNAL(clicked(bool)),this,SLOT(resetSlot()));
 
 
@@ -92,7 +124,7 @@ void Nav::initOnce()
 
     /*group box preference - elevator vs stairs*/
     QGroupBox *groupBoxPref = new QGroupBox("Take me from the");
-    groupBoxPref->setStyleSheet(groupBoxPrefStyle);
+    groupBoxPref->setStyleSheet(config->groupBoxPrefStyle);
     m_groupBoxPrefRadioDefault = new QRadioButton("Fastest way");
     m_groupBoxPrefRadioStairs = new QRadioButton(fieldStairs);
     m_groupBoxPrefRadioElevator = new QRadioButton(fieldElevator);
@@ -118,18 +150,18 @@ void Nav::initOnce()
 
 
     /*combos labels*/
-    QLabel* currentLocationLabel = new QLabel(currentLocationLabelText);
-    currentLocationLabel->setStyleSheet(globalTextAttributes + currentLocationLabelStyle);
-    QLabel* destinationLabel = new QLabel(destinationLabelText);
-    destinationLabel->setStyleSheet(globalTextAttributes + destinationLabelStyle);
+    QLabel* currentLocationLabel = new QLabel(config->currentLocationLabelText);
+    currentLocationLabel->setStyleSheet(config->globalTextAttributes + config->currentLocationLabelStyle);
+    QLabel* destinationLabel = new QLabel(config->destinationLabelText);
+    destinationLabel->setStyleSheet(config->globalTextAttributes + config->destinationLabelStyle);
 
     /*combos inside text*/
     m_currentLocationCb = new QComboBox();
-    m_currentLocationCb->setStyleSheet(locationCBsStyle);
+    m_currentLocationCb->setStyleSheet(config->locationCBsStyle);
     connect(m_currentLocationCb, SIGNAL(activated(int)), this, SLOT(currentLocationCbHasChangedSlot()));
 
     m_destinationCb = new QComboBox();
-    m_destinationCb->setStyleSheet(locationCBsStyle);
+    m_destinationCb->setStyleSheet(config->locationCBsStyle);
     connect(m_destinationCb, SIGNAL(activated(int)), this, SLOT(destinationCbHasChangedSlot()));
 
     /*combos filer*/
@@ -142,8 +174,8 @@ void Nav::initOnce()
         }
     }
 
-    m_groupBoxCurrentLocationCbWidget = new QGroupBox(floorsNumbersWidgetHeader);
-    m_groupBoxCurrentLocationCbWidget->setStyleSheet(floorsNumbersWidgetStyle);
+    m_groupBoxCurrentLocationCbWidget = new QGroupBox(config->floorsNumbersWidgetHeader);
+    m_groupBoxCurrentLocationCbWidget->setStyleSheet(config->floorsNumbersWidgetStyle);
     m_groupBoxCurrentLocationCbWidget->setFlat(true);
     QVBoxLayout *vboxFilter1 = new QVBoxLayout;
     for (int uniqueFloorNum : m_floorToShow1.keys()){
@@ -164,13 +196,13 @@ void Nav::initOnce()
     vboxFilter1->addLayout(doneBtn1HLayout);
 
     m_currentLocationCbFilter = new QPushButton("filter floors");
-    m_currentLocationCbFilter->setStyleSheet(filterButtonStyle);
+    m_currentLocationCbFilter->setStyleSheet(config->filterButtonStyle);
 
     connect(m_currentLocationCbFilter, SIGNAL(clicked(bool)),this, SLOT(showFilter1Slot()));
 
 
-    m_groupBoxdestinationCbWidget = new QGroupBox(floorsNumbersWidgetHeader);
-    m_groupBoxdestinationCbWidget->setStyleSheet(floorsNumbersWidgetStyle);
+    m_groupBoxdestinationCbWidget = new QGroupBox(config->floorsNumbersWidgetHeader);
+    m_groupBoxdestinationCbWidget->setStyleSheet(config->floorsNumbersWidgetStyle);
     m_groupBoxdestinationCbWidget->setFlat(true);
     QVBoxLayout *vboxFilter2 = new QVBoxLayout;
     for (int uniqueFloorNum : m_floorToShow2.keys()){
@@ -191,13 +223,13 @@ void Nav::initOnce()
     vboxFilter2->addLayout(doneBtn2HLayout);
 
     m_destinationCbFilter = new QPushButton("filter floors");
-    m_destinationCbFilter->setStyleSheet(filterButtonStyle);
+    m_destinationCbFilter->setStyleSheet(config->filterButtonStyle);
     connect(m_destinationCbFilter, SIGNAL(clicked(bool)),this, SLOT(showFilter2Slot()));
 
 
     /*go button*/
     m_goButton = new QPushButton("GO");
-    m_goButton->setStyleSheet(goButtonStyle);
+    m_goButton->setStyleSheet(config->goButtonStyle);
     connect(m_goButton,SIGNAL(clicked(bool)),this,SLOT(goWasPressedSlot()));
 
     /*combos layout*/
@@ -222,12 +254,12 @@ void Nav::initOnce()
 
     /*text box for direction and video player*/
 
-    QLabel* logLabel = new QLabel(logLabelText);
-    logLabel->setStyleSheet(globalTextAttributes + logLabelStyle);
+    QLabel* logLabel = new QLabel(config->logLabelText);
+    logLabel->setStyleSheet(config->globalTextAttributes + config->logLabelStyle);
     logLabel->setAlignment(Qt::AlignCenter);
 
     m_log = new QTextEdit();
-    m_log->setStyleSheet(globalTextAttributes + logStyle);
+    m_log->setStyleSheet(config->globalTextAttributes + config->logStyle);
     m_log->setReadOnly(true);
 
 
@@ -242,7 +274,7 @@ void Nav::initOnce()
 
     m_videoWidget = new QVideoWidget;
 
-    QPixmap pic(projectLogo);
+    QPixmap pic(config->projectLogo);
     QPixmap scaled=pic.scaled ( m_videoWidget->height(), m_videoWidget->width(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
     QLabel *label = new QLabel(m_videoWidget);
@@ -371,7 +403,6 @@ void Nav::goWasPressedSlot()
         m_next = false;
         m_appendedToLog = false;
         m_doneWithThisNode = false;
-        xxx
         m_videoPlayerCounter = 0;
         m_replay = false;
         playVideoFromTo();//plays a video's part(could be 2 seconds from 10 seconds video) given a Node
@@ -458,11 +489,10 @@ void Nav::playVideoFromTo()//play Node's video part
 
     videoInfo* videoInfoOfNodesInPath =  m_roomVideoDisplay->GetAllVideoInfos();
     videoInfo currentVideoInf = videoInfoOfNodesInPath[m_videoPlayerCounter];
-    cout << currentVideoInf.ToString().c_str();
+    //cout << currentVideoInf.ToString().c_str();
     int startIndex = currentVideoInf._startIndex;
     int endIndex = currentVideoInf._endIndex;
     QString videoPath = currentVideoInf._pathToVideo.c_str();
-    //
     int tempCounter = m_videoPlayerCounter + 1 ;
     while (tempCounter+1 <= m_roomVideoDisplay->videoInfoOfNodesInPathConter() && videoInfoOfNodesInPath[tempCounter]._pathToVideo == currentVideoInf._pathToVideo )
     {
@@ -470,7 +500,7 @@ void Nav::playVideoFromTo()//play Node's video part
         endIndex = videoInfoOfNodesInPath[tempCounter]._endIndex;
         tempCounter++;
     }
-    cout << "end is now: " << endIndex;
+    //cout << "end is now: " << endIndex;
 
 
     if(!m_replay && !m_appendedToLog) //m_appendedToLog : could be in this function more than 1 time for the same node
@@ -518,13 +548,13 @@ void Nav::testingFuncton()
 //    tagsC += QString("CS private room(418)");
 //    tagsC += QString("Class(303)");
     //tagsC += QString("Copy room(404)");
-    cout << tagsC;
+    //cout << tagsC;
     tagsD.clear();
     tagsD += QString("Dan Feldman(413)");
     //    tagsD += QString("Or Donkelman(408)");
 //    tagsD += QString("Bathroom floor 3");
 //    tagsD += QString("Office(301)");
-    cout << tagsD;
+    //cout << tagsD;
 //    int iterNumber = 60000;
 //    int itersOuter = 1;
 //    int itersInner = 1;
@@ -596,7 +626,7 @@ void Nav::updateFilter1Slot()
     if(m_floorToShow1.size() == 0)
     {
         for(QCheckBox* checkbox : checkBoxes){
-            if(checkbox->text() == baseFloor){
+            if(checkbox->text() == config->baseFloor){
                 checkbox->setChecked(true);
                 m_floorToShow1.insert(checkbox->text().toInt(), checkbox->text());
             }
@@ -620,7 +650,7 @@ void Nav::updateFilter2Slot()
     if(m_floorToShow2.size() == 0)
     {
         for(QCheckBox* checkbox : checkBoxes){
-            if(checkbox->text() == baseFloor){
+            if(checkbox->text() == config->baseFloor){
                 checkbox->setChecked(true);
                 m_floorToShow2.insert(checkbox->text().toInt(), checkbox->text());
             }
@@ -709,17 +739,17 @@ void Nav::stateOfMediaPlayerChangedSlot(QMediaPlayer::State state)
 {
     if(m_next){
         m_next = false;
-        cout << state <<"m_next is true";
+        //cout << state <<"m_next is true";
         return;
     }
     if(m_replay)
     {
         m_replay = false;
-        cout << state <<"m_replay is true";
+        //cout << state <<"m_replay is true";
         return;
     }
     if(state == QMediaPlayer::StoppedState || state == QMediaPlayer::PausedState){
-        cout << state <<"stateOfMediaPlayerChangedSlot";
+        //cout << state <<"stateOfMediaPlayerChangedSlot";
         playVideoFromTo();
     }
 }

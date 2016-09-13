@@ -19,10 +19,9 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QToolBar>
+#include <QtXml>
+#include <QFile>
 
-
-
-#include "dependencies/config.h"
 #include "engine/includes.h"
 #include "engine/edge.h"
 #include "engine/node.h"
@@ -45,7 +44,70 @@ const QString fieldVideoStart = "videoStart";
 const QString fieldVideoEnd = "videoEnd";
 const QString fieldPathTovideo = "pathTovideo";
 
+struct configVars{
 
+
+configVars(QMap<QString,QString> configHeaderToValue)
+{
+    fontType = configHeaderToValue.contains("fontType") ? configHeaderToValue["fontType"] : "";
+    fontSize = configHeaderToValue.contains("fontSize") ? configHeaderToValue["fontSize"] : "";
+    border = configHeaderToValue.contains("border") ? configHeaderToValue["border"] : "";
+    globalTextAttributes = fontType + fontSize + border;
+    roomsXmlPath = configHeaderToValue.contains("roomsXmlPath") ? configHeaderToValue["roomsXmlPath"] : "";
+
+    projectLogo = configHeaderToValue.contains("projectLogo") ? configHeaderToValue["projectLogo"] : "";
+    projectTitleLabelText = configHeaderToValue.contains("projectTitleLabelText") ? configHeaderToValue["projectTitleLabelText"] : "";
+    projectTitleLabelStyle = configHeaderToValue.contains("projectTitleLabelStyle") ? configHeaderToValue["projectTitleLabelStyle"] : "";
+    windowTitleText = configHeaderToValue.contains("windowTitleText") ? configHeaderToValue["windowTitleText"] : "";
+    currentLocationLabelText = configHeaderToValue.contains("currentLocationLabelText") ? configHeaderToValue["currentLocationLabelText"] : "";
+
+    currentLocationLabelStyle = configHeaderToValue.contains("currentLocationLabelStyle") ? configHeaderToValue["currentLocationLabelStyle"] : "";
+    destinationLabelText = configHeaderToValue.contains("destinationLabelText") ? configHeaderToValue["destinationLabelText"] : "";
+    destinationLabelStyle = configHeaderToValue.contains("destinationLabelStyle") ? configHeaderToValue["destinationLabelStyle"] : "";
+    logLabelText = configHeaderToValue.contains("logLabelText") ? configHeaderToValue["logLabelText"] : "";
+    logLabelStyle = configHeaderToValue.contains("logLabelStyle") ? configHeaderToValue["logLabelStyle"] : "";
+
+    logStyle = configHeaderToValue.contains("logStyle") ? configHeaderToValue["logStyle"] : "";
+    groupBoxPrefStyle = configHeaderToValue.contains("groupBoxPrefStyle") ? configHeaderToValue["groupBoxPrefStyle"] : "";
+    resetButtonStyle = configHeaderToValue.contains("resetButtonStyle") ? configHeaderToValue["resetButtonStyle"] : "";
+    filterButtonStyle = configHeaderToValue.contains("filterButtonStyle") ? configHeaderToValue["filterButtonStyle"] : "";
+    goButtonStyle = configHeaderToValue.contains("goButtonStyle") ? configHeaderToValue["goButtonStyle"] : "";
+
+    locationCBsStyle = configHeaderToValue.contains("locationCBsStyle") ? configHeaderToValue["locationCBsStyle"] : "";
+    floorsNumbersWidgetStyle = configHeaderToValue.contains("floorsNumbersWidgetStyle") ? configHeaderToValue["floorsNumbersWidgetStyle"] : "";
+    floorsNumbersWidgetHeader = configHeaderToValue.contains("floorsNumbersWidgetHeader") ? configHeaderToValue["floorsNumbersWidgetHeader"] : "";
+    baseFloor = configHeaderToValue.contains("baseFloor") ? configHeaderToValue["baseFloor"] : "";
+}
+
+QString fontType;// = "font-family: \"Times New Roman\", Times, serif;";
+QString fontSize;// = "font-size: 20px;";
+QString border;// = "border: 1px solid black;";
+QString globalTextAttributes;// = fontType + fontSize + border;
+QString roomsXmlPath;// = "../Nav/dependencies/rooms.xml";
+
+QString projectLogo;// = "../Nav/dependencies/LOGO.JPG";
+QString projectTitleLabelText;// = "Navigation in Jacobs";
+QString projectTitleLabelStyle;//  = "background-color: yellow;";
+QString windowTitleText;//  = "Created By Adam Anan & Gilad Eini";
+QString currentLocationLabelText;// = "I am here: ";
+
+QString currentLocationLabelStyle;// = "background-color: green;";
+QString destinationLabelText;// = "Take me to: ";
+QString destinationLabelStyle;// = "background-color: red;";
+QString logLabelText;// = "Directions";
+QString logLabelStyle;// = "background-color: blue;";
+
+QString logStyle;// = "background-color: grey;";
+QString groupBoxPrefStyle;// = "";
+QString resetButtonStyle;// = "";
+QString filterButtonStyle;// = "";
+QString goButtonStyle;// = "";
+
+QString locationCBsStyle;// = "";
+QString floorsNumbersWidgetStyle;// = "";
+QString floorsNumbersWidgetHeader;// = "See only the following floors:";
+QString baseFloor;// = "3"; //used in the filter. come in use when user uncheck all floors
+};
 
 class Nav : public QWidget
 {
@@ -55,6 +117,7 @@ public:
     explicit Nav(QWidget *parent = 0);
     ~Nav();
     void readRoomsFromXml();
+    QMap<QString,QString> readConfigXml(QString attName, QString attValue, QString xmlPath);
     void initOnce();
     void init();
     Node* findNodeByStr(QString str);
@@ -128,6 +191,7 @@ private:
     bool m_doneWithThisNode;
     bool m_next;
     int m_videoPlayerCounter;
+    configVars* config;
 };
 
 
