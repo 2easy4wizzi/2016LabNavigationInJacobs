@@ -28,4 +28,5 @@ HEADERS  += nav.h \
     engine/videoinfo.h
 
 DISTFILES += \
-    dependencies/rooms.xml
+    dependencies/rooms.xml \
+    dependencies/config.xml
