@@ -9,6 +9,7 @@
 #include <string>
 #include <map>
 #include <fstream>
+#include <string.h>
 
 using namespace std;
 

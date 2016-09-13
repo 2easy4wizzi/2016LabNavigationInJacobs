@@ -312,12 +312,12 @@ void Nav::testingFuncton()
 
             m_currentRoom = findNodeByStr(m_currentLocationCb->currentText());
             m_destRoom = findNodeByStr(m_destinationCb->currentText());
-
+            m_playWithOutPauseCheckBox->setChecked(true);
             goWasPressedSlot();
-            for(int i = 0; i < m_shortestPathQt.size(); ++i)
-            {
-                nextSlot();
-            }
+//            for(int i = 0; i < m_shortestPathQt.size(); ++i)
+//            {
+//                nextSlot();
+//            }
             showQmsgBox(strC + " to " + strD);
             i++;
         }
