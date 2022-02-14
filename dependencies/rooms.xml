@@ -53,19 +53,19 @@ Notice:
     <Node Id="36" Name="Class(305)"         Number="305"  Floor="3" ClassA="31" ClassB="32" ClassC=""   ClassD=""   ClassE=""></Node>
 <!--Edges Floor 4-->
     <Edge Weight="2" Type="Regular"  Node1Id="1"  Node2Id="5">
-        <video videoStart="0" videoEnd="1250" pathTovideo="../Nav/dependencies/Videos/floor4/Lab417To412.mp4"></video>
+        <video videoStart="0" videoEnd="1250" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor4/Lab417To412.mp4"></video>
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
     <Edge Weight="2.5" Type="Regular"  Node1Id="5"  Node2Id="6">
-        <video videoStart="1250" videoEnd="4500" pathTovideo="../Nav/dependencies/Videos/floor4/Lab417To412.mp4"></video>
+        <video videoStart="1250" videoEnd="4500" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor4/Lab417To412.mp4"></video>
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
     <Edge Weight="2.5" Type="Regular"  Node1Id="6"  Node2Id="7">
-        <video videoStart="4500" videoEnd="7000" pathTovideo="../Nav/dependencies/Videos/floor4/Lab417To412.mp4"></video>
+        <video videoStart="4500" videoEnd="7000" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor4/Lab417To412.mp4"></video>
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
     <Edge Weight="2"   Type="Regular"  Node1Id="7"  Node2Id="8">
-        <video videoStart="7000" videoEnd="9000" pathTovideo="../Nav/dependencies/Videos/floor4/Lab417To412.mp4"></video>
+        <video videoStart="7000" videoEnd="9000" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor4/Lab417To412.mp4"></video>
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
     <Edge Weight="2.5" Type="Regular"  Node1Id="8"  Node2Id="9">
@@ -126,11 +126,11 @@ Notice:
     </Edge>
     <Edge Weight="6"   Type="Regular"  Node1Id="21" Node2Id="4">
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
-        <video videoStart="0" videoEnd="-1" pathTovideo="../Nav/dependencies/Videos/floor4/CsLounge401ToLab417.mp4"></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor4/CsLounge401ToLab417.mp4"></video>
     </Edge>
     <Edge Weight="1"   Type="Regular"  Node1Id="4"  Node2Id="3">
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
-        <video videoStart="0" videoEnd="-1" pathTovideo="../Nav/dependencies/Videos/floor4/CsLounge401ToLab417.mp4"></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor4/CsLounge401ToLab417.mp4"></video>
     </Edge>
     <Edge Weight="2.5" Type="Regular"  Node1Id="23" Node2Id="2">
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
@@ -138,11 +138,11 @@ Notice:
     </Edge>
     <Edge Weight="2.5" Type="Regular"  Node1Id="23" Node2Id="3">
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
-        <video videoStart="2500" videoEnd="-1" pathTovideo="../Nav/dependencies/Videos/floor4/CsPrivateRoom418ToStairsf3.mp4"></video>
+        <video videoStart="2500" videoEnd="-1" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor4/CsPrivateRoom418ToStairsf3.mp4"></video>
     </Edge>
     <Edge Weight="4.5" Type="Regular"  Node1Id="3"  Node2Id="1">
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
-        <video videoStart="7000" videoEnd="-1" pathTovideo="../Nav/dependencies/Videos/floor4/CsLounge401ToLab417.mp4"></video>
+        <video videoStart="7000" videoEnd="-1" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor4/CsLounge401ToLab417.mp4"></video>
     </Edge>
 <!--Crossing Edges Floor 3 To Floor 4-->
     <Edge Weight="6"   Type="Stairs"   Node1Id="3"  Node2Id="28">
@@ -155,7 +155,7 @@ Notice:
     </Edge>
 <!--Edges Floor 3-->
     <Edge Weight="2.5" Type="Regular"  Node1Id="25" Node2Id="27">
-        <video videoStart="0" videoEnd="3000" pathTovideo="../Nav/dependencies/Videos/floor3/Lobbyf3To306.mp4"></video>
+        <video videoStart="0" videoEnd="3000" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor3/Lobbyf3To306.mp4"></video>
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
     <Edge Weight="1.5" Type="Regular"  Node1Id="27" Node2Id="26">
@@ -163,7 +163,7 @@ Notice:
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
     <Edge Weight="5"   Type="Regular"  Node1Id="25" Node2Id="24">
-        <video videoStart="0" videoEnd="-1" pathTovideo="../Nav/dependencies/Videos/floor3/EntranceToLobbyf3.mp4"></video>
+        <video videoStart="0" videoEnd="-1" pathTovideo="../2016LabNavigationInJacobs/dependencies/Videos/floor3/EntranceToLobbyf3.mp4"></video>
         <video videoStart="0" videoEnd="-1" pathTovideo=""></video>
     </Edge>
     <Edge Weight="7"   Type="Regular"  Node1Id="25" Node2Id="36">

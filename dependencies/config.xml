@@ -3,8 +3,8 @@
     <Entry Name="fontType" Value="font-family: \'Times New Roman\', Times, serif;"></Entry>
     <Entry Name="fontSize" Value="font-size: 20px;"></Entry>
     <Entry Name="border" Value="border: 1px solid black;"></Entry>
-    <Entry Name="roomsXmlPath" Value="../Nav/dependencies/rooms.xml"></Entry>
-    <Entry Name="projectLogo" Value="../Nav/dependencies/LOGO.JPG"></Entry>
+    <Entry Name="roomsXmlPath" Value="../2016LabNavigationInJacobs/dependencies/rooms.xml"></Entry>
+    <Entry Name="projectLogo" Value="../2016LabNavigationInJacobs/dependencies/LOGO.JPG"></Entry>
     <Entry Name="projectTitleLabelText" Value="Navigation in Jacobs"></Entry>
     <Entry Name="projectTitleLabelStyle" Value="background-color: yellow;"></Entry>
     <Entry Name="windowTitleText" Value="Created By Adam Anan and Gilad Eini"></Entry>

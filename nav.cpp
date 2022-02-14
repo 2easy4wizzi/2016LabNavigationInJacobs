@@ -10,7 +10,7 @@ Nav::Nav(QWidget *parent):QWidget(parent)
 
 void Nav::readRoomsFromXml()
 {
-    config = new configVars( readConfigXml("Name", "Value", "../Nav/dependencies/config.xml") );
+    config = new configVars( readConfigXml("Name", "Value", "../2016LabNavigationInJacobs/dependencies/config.xml") );
     bool succesReadingXml;
     m_graph = new Graph(config->roomsXmlPath.toUtf8().constData(), succesReadingXml);
     if (!succesReadingXml){
@@ -24,7 +24,7 @@ QMap<QString, QString> Nav::readConfigXml(QString attName, QString attValue, QSt
     QDomDocument xmlBOM;
     QFile f(xmlPath);
     if (!f.open(QIODevice::ReadOnly )){
-        exitProgramWithErrMsg("Cant find ../Nav/dependencies/config.xml");
+        exitProgramWithErrMsg("Cant find ../2016LabNavigationInJacobs/dependencies/config.xml");
     }
     xmlBOM.setContent(&f);
     f.close();

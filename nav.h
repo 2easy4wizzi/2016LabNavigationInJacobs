@@ -53,9 +53,9 @@ struct configVars{
     QString fontSize;// = "font-size: 20px;";
     QString border;// = "border: 1px solid black;";
     QString globalTextAttributes;// = fontType + fontSize + border;
-    QString roomsXmlPath;// = "../Nav/dependencies/rooms.xml";
+    QString roomsXmlPath;// = "../2016LabNavigationInJacobs/dependencies/rooms.xml";
 
-    QString projectLogo;// = "../Nav/dependencies/LOGO.JPG";
+    QString projectLogo;// = "../2016LabNavigationInJacobs/dependencies/LOGO.JPG";
     QString projectTitleLabelText;// = "Navigation in Jacobs";
     QString projectTitleLabelStyle;//  = "background-color: yellow;";
     QString windowTitleText;//  = "Created By Adam Anan & Gilad Eini";
